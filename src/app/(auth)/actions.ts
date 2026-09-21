@@ -41,7 +41,9 @@ export async function requestOtpAction(formData: FormData) {
   if (error) {
     console.error("[auth] OTP request failed", { mode, code: error.code, message: error.message });
     const message = error.message.toLowerCase();
+    if (message.includes("email address not authorized") || message.includes("not authorized")) back(path, "error", "Supabase menolak email tujuan. SMTP bawaan hanya mengirim ke anggota Team; tambahkan Gmail ini ke Team Supabase atau selesaikan Custom SMTP.");
     if (message.includes("rate limit") || message.includes("security purposes")) back(path, "error", "Terlalu banyak permintaan kode. Tunggu sekitar satu menit lalu coba lagi.");
+    if (message.includes("error sending") || message.includes("sending email")) back(path, "error", "SMTP gagal mengirim email. Cek host, port 465, username resend, API key, dan domain sender yang sudah Verified.");
     if (message.includes("user not found") || message.includes("not found")) back(path, "error", "Akun belum terdaftar. Buat akun terlebih dahulu.");
     if (message.includes("not allowed") || message.includes("signup")) back(path, "error", "Akun belum terdaftar. Buat akun terlebih dahulu.");
     back(path, "error", "Kode OTP belum dapat dikirim. Coba lagi dalam satu menit.");
