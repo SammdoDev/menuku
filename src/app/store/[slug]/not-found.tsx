@@ -1,0 +1,3 @@
+import Link from "next/link";
+
+export default function StoreUnavailable(){return <main style={{minHeight:"100vh",display:"grid",placeItems:"center",padding:"24px",background:"#f7f6f2",textAlign:"center"}}><section><p style={{color:"#ff6534",fontWeight:800,fontSize:12,letterSpacing:".1em"}}>MENUKU</p><h1 style={{fontSize:32,margin:"10px 0"}}>Halaman toko tidak tersedia</h1><p style={{color:"#716d65",maxWidth:360}}>Toko mungkin belum dipublikasikan, dinonaktifkan, atau alamatnya salah.</p><Link href="/" style={{display:"inline-block",marginTop:18,color:"#ff6534",fontWeight:800}}>Kembali ke Menuku</Link></section></main>}
