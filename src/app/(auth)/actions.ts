@@ -13,6 +13,7 @@ const emailOnly = z.string().trim().email("Masukkan alamat email yang valid.");
 
 const back = (path: string, key: "error" | "message", value: string): never => redirect(`${path}?${key}=${encodeURIComponent(value)}`);
 const applicationOrigin = async () => (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const localAuthDetail = (error: { code?: string; message: string }) => process.env.NODE_ENV === "development" ? ` [${error.code ?? "unknown"}: ${error.message}]` : "";
 
 export async function loginAction(formData: FormData) {
   const parsed = credentials.safeParse({ email: formData.get("email"), password: formData.get("password") });
@@ -41,12 +42,12 @@ export async function requestOtpAction(formData: FormData) {
   if (error) {
     console.error("[auth] OTP request failed", { mode, code: error.code, message: error.message });
     const message = error.message.toLowerCase();
-    if (message.includes("email address not authorized") || message.includes("not authorized")) back(path, "error", "Supabase menolak email tujuan. SMTP bawaan hanya mengirim ke anggota Team; tambahkan Gmail ini ke Team Supabase atau selesaikan Custom SMTP.");
+    if (message.includes("email address not authorized") || message.includes("not authorized")) back(path, "error", `Supabase menolak email tujuan. SMTP bawaan hanya mengirim ke anggota Team; tambahkan Gmail ini ke Team Supabase atau selesaikan Custom SMTP.${localAuthDetail(error)}`);
     if (message.includes("rate limit") || message.includes("security purposes")) back(path, "error", "Terlalu banyak permintaan kode. Tunggu sekitar satu menit lalu coba lagi.");
-    if (message.includes("error sending") || message.includes("sending email")) back(path, "error", "SMTP gagal mengirim email. Cek host, port 465, username resend, API key, dan domain sender yang sudah Verified.");
+    if (message.includes("error sending") || message.includes("sending email") || message.includes("failed to send") || message.includes("login link")) back(path, "error", `SMTP gagal mengirim email. Cek host, port 465, username resend, API key, dan domain sender yang sudah Verified.${localAuthDetail(error)}`);
     if (message.includes("user not found") || message.includes("not found")) back(path, "error", "Akun belum terdaftar. Buat akun terlebih dahulu.");
     if (message.includes("not allowed") || message.includes("signup")) back(path, "error", "Akun belum terdaftar. Buat akun terlebih dahulu.");
-    back(path, "error", "Kode OTP belum dapat dikirim. Coba lagi dalam satu menit.");
+    back(path, "error", `Kode OTP belum dapat dikirim. Coba lagi dalam satu menit.${localAuthDetail(error)}`);
   }
   redirect(`/verify-otp?email=${encodeURIComponent(email.data!)}&mode=${mode}`);
 }
