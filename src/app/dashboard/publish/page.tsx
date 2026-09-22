@@ -1,7 +1,84 @@
 import Link from "next/link";
 import { ExternalLink, Globe2, ShieldCheck } from "lucide-react";
+import DashboardShell from "../../../components/dashboard-shell";
+import { GlobalInput, SubmitButton } from "../../../components/ui/form-controls";
 import { getCurrentMerchant } from "../../../lib/merchant";
 import { togglePublishAction } from "../actions";
-import styles from "../management.module.css";
 
-export default async function PublishPage(){const {tenant}=await getCurrentMerchant();if(!tenant)return null;const url=`/store/${tenant.slug}`;return <main className={styles.page}><header className={styles.top}><Link className={styles.brand} href="/dashboard"><span>m</span>menuku</Link><nav><Link href="/dashboard">Dashboard</Link><Link href="/dashboard/menu">Menu</Link><Link href="/dashboard/categories">Kategori</Link><Link className={styles.active} href="/dashboard/publish">Publikasi</Link></nav></header><section className={styles.content}><div className={styles.heading}><div><h1 className="display">Publikasi halaman</h1><p>Atur kapan katalog {tenant.name} dapat dilihat pelanggan.</p></div></div><div className={styles.grid}><article className={styles.formCard}><h2 className="display">{tenant.is_published?"Halaman sedang publik":"Halaman masih draft"}</h2><p>{tenant.is_published?"Pelanggan dapat membuka halaman menu melalui link berikut.":"Saat dipublikasikan, pengunjung tanpa login dapat membuka katalog dan menu kamu."}</p><div className={styles.empty}><Globe2 size={29}/><p><b>{tenant.slug}.menuku.id</b></p></div><form className={styles.form} action={togglePublishAction}><input type="hidden" name="published" value={String(tenant.is_published)}/><button className={styles.submit} type="submit">{tenant.is_published?"Jadikan draft":"Publikasikan halaman"}</button></form>{tenant.is_published&&<Link href={url} target="_blank" className={styles.submit} style={{marginTop:10,display:"flex",alignItems:"center",justifyContent:"center",gap:7}}>Buka halaman publik <ExternalLink size={16}/></Link>}</article><article className={styles.listCard}><h2 className="display">Sebelum dibagikan</h2><p>Periksa beberapa hal berikut agar pelanggan mendapat pengalaman terbaik.</p><div className={styles.list}><div className={styles.item}><span className={styles.itemIcon}><ShieldCheck size={18}/></span><div className={styles.itemInfo}><b>Nama dan alamat halaman</b><small>{tenant.name} · {tenant.slug}.menuku.id</small></div></div><div className={styles.item}><span className={styles.itemIcon}>02</span><div className={styles.itemInfo}><b>Isi menu</b><small>Tambahkan menu dari halaman Menu sebelum membagikan link.</small></div></div></div></article></div></section></main>}
+export default async function PublishPage() {
+  const { tenant } = await getCurrentMerchant();
+  if (!tenant) return null;
+  const url = `/store/${tenant.slug}`;
+  const card = "rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-6";
+  return (
+    <DashboardShell tenant={tenant} active="publish" title="Publikasi">
+      <header className="mb-7">
+        <h1 className="display-font text-3xl font-black">Publikasi halaman</h1>
+        <p className="text-muted mt-2 text-sm">
+          Atur kapan katalog {tenant.name} dapat dilihat pelanggan.
+        </p>
+      </header>
+      <div className="grid items-start gap-5 xl:grid-cols-[.9fr_1.1fr]">
+        <article className={card}>
+          <h2 className="display-font text-xl font-black">
+            {tenant.is_published ? "Halaman sedang publik" : "Halaman masih draft"}
+          </h2>
+          <p className="text-muted my-4 text-sm leading-6">
+            {tenant.is_published
+              ? "Pelanggan dapat membuka halaman menu melalui link berikut."
+              : "Saat dipublikasikan, pengunjung tanpa login dapat membuka katalog dan menu kamu."}
+          </p>
+          <div className="border-line mb-4 rounded-xl border border-dashed p-8 text-center">
+            <Globe2 className="text-brand mx-auto mb-2" />
+            <b className="text-sm break-all">{tenant.slug}.menuku.id</b>
+          </div>
+          <form className="grid" action={togglePublishAction}>
+            <GlobalInput type="hidden" name="published" value={String(tenant.is_published)} />
+            <SubmitButton pendingLabel="Memperbarui status...">
+              {tenant.is_published ? "Jadikan draft" : "Publikasikan halaman"}
+            </SubmitButton>
+          </form>
+          {tenant.is_published && (
+            <Link
+              href={url}
+              target="_blank"
+              className="border-line mt-3 flex min-h-12 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold"
+            >
+              Buka halaman publik <ExternalLink size={16} />
+            </Link>
+          )}
+        </article>
+        <article className={card}>
+          <h2 className="display-font text-xl font-black">Sebelum dibagikan</h2>
+          <p className="text-muted mt-1 mb-5 text-xs">
+            Periksa hal berikut agar pengalaman pelanggan tetap baik.
+          </p>
+          <div className="grid gap-2">
+            <div className="border-line flex items-center gap-3 rounded-xl border p-3">
+              <span className="text-brand grid size-10 place-items-center rounded-xl bg-orange-50">
+                <ShieldCheck size={18} />
+              </span>
+              <div>
+                <b className="block text-sm">Nama dan alamat halaman</b>
+                <small className="text-muted text-xs">
+                  {tenant.name} · {tenant.slug}.menuku.id
+                </small>
+              </div>
+            </div>
+            <div className="border-line flex items-center gap-3 rounded-xl border p-3">
+              <span className="text-brand grid size-10 place-items-center rounded-xl bg-orange-50 text-xs font-black">
+                02
+              </span>
+              <div>
+                <b className="block text-sm">Isi menu</b>
+                <small className="text-muted text-xs">
+                  Tambahkan menu sebelum membagikan link.
+                </small>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </DashboardShell>
+  );
+}

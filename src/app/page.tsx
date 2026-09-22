@@ -1,22 +1,302 @@
 import Link from "next/link";
-import { ArrowRight, BarChart3, Check, Eye, Instagram, LayoutTemplate, MapPin, MenuSquare, QrCode, Search, Share2, Sparkles } from "lucide-react";
-import styles from "./home.module.css";
+import {
+  ArrowRight,
+  BarChart3,
+  Check,
+  Eye,
+  LayoutTemplate,
+  MapPin,
+  MenuSquare,
+  QrCode,
+  Search,
+  Share2,
+  Sparkles,
+} from "lucide-react";
+import Brand from "../components/brand";
 
 const plans = [
-  { name:"Free", price:"Rp0", note:"Untuk mulai menampilkan menu", features:["1 halaman katalog","Maks. 15 produk","Link WhatsApp & sosial","QR code dasar"], href:"/register?plan=free", cta:"Mulai gratis" },
-  { name:"Premium", price:"Rp29rb", note:"per bulan · untuk bisnis berkembang", features:["Produk tanpa batas","Tema dan warna brand","Analytics lengkap","Hilangkan branding Menuku"], href:"/register?plan=premium", cta:"Pilih Premium", featured:true },
-  { name:"Business", price:"Rp79rb", note:"per bulan · untuk tim", features:["Semua fitur Premium","3 anggota tim","Custom domain","Dukungan prioritas"], href:"/register?plan=business", cta:"Pilih Business" },
+  {
+    name: "Free",
+    price: "Rp0",
+    note: "Untuk mulai menampilkan menu",
+    features: ["1 halaman katalog", "Maks. 15 produk", "Link WhatsApp & sosial", "QR code dasar"],
+    href: "/register?plan=free",
+    cta: "Mulai gratis",
+  },
+  {
+    name: "Premium",
+    price: "Rp29rb",
+    note: "per bulan · untuk bisnis berkembang",
+    features: [
+      "Produk tanpa batas",
+      "Tema dan warna brand",
+      "Analytics lengkap",
+      "Hilangkan branding Menuku",
+    ],
+    href: "/register?plan=premium",
+    cta: "Pilih Premium",
+    featured: true,
+  },
+  {
+    name: "Business",
+    price: "Rp79rb",
+    note: "per bulan · untuk tim",
+    features: ["Semua fitur Premium", "3 anggota tim", "Custom domain", "Dukungan prioritas"],
+    href: "/register?plan=business",
+    cta: "Pilih Business",
+  },
 ];
+const kicker = "mb-3 text-[11px] font-black uppercase tracking-[.13em] text-brand";
 
 export default function Home() {
-  return <main className={styles.page}>
-    <header className={styles.nav}><Link href="/" className={styles.brand}><span>m</span> menuku</Link><nav><a href="#fitur">Fitur</a><a href="#harga">Harga</a><a href="#cara">Cara kerja</a></nav><div><Link href="/login">Masuk</Link><Link href="/register" className={styles.navCta}>Buat menu gratis <ArrowRight size={15}/></Link></div></header>
-    <section className={styles.hero}><div className={styles.copy}><p className={styles.kicker}><Sparkles size={14}/> Katalog digital untuk bisnis kuliner</p><h1 className="display">Menu kamu, <em>satu link</em> yang mudah dibagikan.</h1><p>Bangun halaman menu yang cantik, letakkan WhatsApp, lokasi, dan sosial media dalam satu tempat. Tanpa perlu coding.</p><div className={styles.actions}><Link href="/register" className={styles.cta}>Buat menu gratis <ArrowRight size={17}/></Link><Link href="/store/kopitemu" className={styles.demo}>Lihat contoh <Eye size={16}/></Link></div><small><Check size={14}/> Gratis selamanya · Tanpa kartu kredit</small></div><div className={styles.visual}><i className={styles.aura}/><div className={styles.phone}><div className={styles.phoneBar}>9:41 <span/></div><div className={styles.cover}><b><i/> Buka sampai 22.00</b><Share2 size={15}/></div><div className={styles.profile}><strong>KT</strong><div><h3 className="display">Kopi Temu</h3><p><MapPin size={9}/> Kemang, Jakarta</p></div></div><div className={styles.wa}>Pesan via WhatsApp <ArrowRight size={13}/></div><p className={styles.label}>FAVORIT MINGGU INI</p><div className={styles.cards}><article><MenuSquare size={22}/><b>Kopi Susu Aren</b><small>Rp24.000</small></article><article><MenuSquare size={22}/><b>Matcha Cloud</b><small>Rp35.000</small></article></div><div className={styles.search}><Search size={14}/> Cari menu...</div></div><div className={styles.stats}><BarChart3/><div><b>1.284</b><span>kunjungan minggu ini</span></div><strong>+18%</strong></div></div></section>
-    <section className={styles.trust}><p>Untuk menyajikan menu yang lebih mudah ditemukan</p><div><span>KEDAI KITA</span><span>NASI TEMAN</span><span>REMPAH SORE</span><span>BAKE & BLOOM</span><span>WARMINDO</span></div></section>
-    <section id="fitur" className={styles.features}><header><p className={styles.kicker}>SEMUA DALAM SATU TEMPAT</p><h2 className="display">Lebih dari sekadar daftar menu.</h2><p>Halaman yang dirancang supaya pelanggan mendapat informasi yang mereka butuhkan dengan cepat.</p></header><div className={styles.featureGrid}><article><span><MenuSquare/></span><h3 className="display">Katalog yang enak dilihat</h3><p>Foto produk, kategori, pencarian, harga promo, dan status habis yang jelas.</p></article><article><span><QrCode/></span><h3 className="display">Bagikan di mana saja</h3><p>Satu link dan QR code untuk meja, Instagram, WhatsApp, atau Google.</p></article><article><span><BarChart3/></span><h3 className="display">Analytics sederhana</h3><p>Lihat menu populer, sumber kunjungan, dan link yang paling banyak diklik.</p></article><article><span><LayoutTemplate/></span><h3 className="display">Terasa seperti brand kamu</h3><p>Pilih warna, tema, bentuk tombol, dan layout yang sesuai bisnismu.</p></article></div></section>
-    <section id="cara" className={styles.steps}><div><p className={styles.kicker}>MULAI DALAM HITUNGAN MENIT</p><h2 className="display">Dari dapur ke layar pelanggan.</h2></div><ol><li><b>01</b><div><h3>Buat profil bisnismu</h3><p>Tentukan nama, alamat, jam buka, dan alamat halaman unik.</p></div></li><li><b>02</b><div><h3>Masukkan menu & link</h3><p>Tambah produk, foto, WhatsApp, Instagram, dan lokasi.</p></div></li><li><b>03</b><div><h3>Bagikan ke pelanggan</h3><p>Unduh QR code atau taruh link di semua kanal bisnismu.</p></div></li></ol></section>
-    <section id="harga" className={styles.pricing}><header><p className={styles.kicker}>PILIH SESUAI KEBUTUHAN</p><h2 className="display">Mulai kecil, berkembang kapan saja.</h2><p>Semua paket dapat dimulai gratis. Upgrade ketika bisnismu membutuhkan lebih banyak.</p></header><div className={styles.planGrid}>{plans.map((plan) => <article key={plan.name} className={plan.featured ? styles.featuredPlan : styles.plan}>{plan.featured && <i>Paling populer</i>}<h3 className="display">{plan.name}</h3><div className={styles.price}><b>{plan.price}</b>{plan.name !== "Free" && <span>/bulan</span>}</div><p>{plan.note}</p><Link href={plan.href}>{plan.cta} <ArrowRight size={15}/></Link><ul>{plan.features.map((feature) => <li key={feature}><Check size={15}/>{feature}</li>)}</ul></article>)}</div><small className={styles.note}>Pilihan paket disimpan saat pendaftaran. Pembayaran/upgrade otomatis dapat diaktifkan setelah integrasi payment gateway ditambahkan.</small></section>
-    <section className={styles.final}><div><p className={styles.kicker}>SIAP UNTUK MULAI?</p><h2 className="display">Buat halaman menu yang pantas untuk bisnismu.</h2><p>Gratis, cepat, dan siap dibagikan hari ini.</p><Link href="/register" className={styles.cta}>Buat menu gratis <ArrowRight size={17}/></Link></div><aside><MapPin/><Instagram/><QrCode/></aside></section>
-    <footer className={styles.footer}><Link href="/" className={styles.brand}><span>m</span> menuku</Link><p>© 2026 Menuku. Katalog digital untuk bisnis kuliner.</p><Link href="/login">Masuk</Link></footer>
-  </main>;
+  return (
+    <main className="bg-paper text-ink overflow-hidden">
+      <header className="mx-auto flex h-18 max-w-7xl items-center px-4 sm:px-6 lg:px-10">
+        <Brand />
+        <nav className="text-muted mx-auto hidden gap-7 text-sm font-bold md:flex">
+          <a href="#fitur">Fitur</a>
+          <a href="#harga">Harga</a>
+          <a href="#cara">Cara kerja</a>
+        </nav>
+        <div className="ml-auto flex items-center gap-2">
+          <Link className="hidden px-3 py-2 text-sm font-bold sm:block" href="/login">
+            Masuk
+          </Link>
+          <Link
+            className="bg-brand inline-flex items-center gap-1 rounded-xl px-3 py-2.5 text-xs font-extrabold text-white sm:px-4"
+            href="/register"
+          >
+            Buat gratis <ArrowRight size={15} />
+          </Link>
+        </div>
+      </header>
+      <section className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:px-10 lg:py-20">
+        <div>
+          <p className={kicker}>
+            <Sparkles className="mr-1 inline" size={14} />
+            Katalog digital untuk bisnis kuliner
+          </p>
+          <h1 className="display-font max-w-2xl text-5xl leading-[.98] font-black sm:text-6xl lg:text-7xl">
+            Menu kamu, <em className="text-brand not-italic">satu link</em> yang mudah dibagikan.
+          </h1>
+          <p className="text-muted mt-6 max-w-xl text-base leading-7 sm:text-lg">
+            Bangun halaman menu yang cantik, letakkan WhatsApp, lokasi, dan sosial media dalam satu
+            tempat. Tanpa perlu coding.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link
+              className="bg-brand shadow-brand/20 inline-flex min-h-12 items-center gap-2 rounded-xl px-5 text-sm font-extrabold text-white shadow-lg"
+              href="/register"
+            >
+              Buat menu gratis <ArrowRight size={17} />
+            </Link>
+            <Link
+              className="border-line inline-flex min-h-12 items-center gap-2 rounded-xl border bg-white px-5 text-sm font-extrabold"
+              href="/store/kopitemu"
+            >
+              Lihat contoh <Eye size={16} />
+            </Link>
+          </div>
+          <small className="text-muted mt-4 flex items-center gap-1 text-xs">
+            <Check size={14} className="text-emerald-600" />
+            Gratis selamanya · Tanpa kartu kredit
+          </small>
+        </div>
+        <div className="relative mx-auto w-full max-w-md">
+          <div className="bg-brand/20 absolute inset-8 rounded-full blur-3xl" />
+          <div className="border-charcoal relative mx-auto w-[min(310px,85vw)] rounded-[34px] border-[8px] bg-white p-3 shadow-2xl">
+            <div className="h-28 rounded-2xl bg-[linear-gradient(120deg,#2c1d1760,#1a0e0960),url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=85')] bg-cover p-3">
+              <div className="flex justify-between">
+                <span className="rounded-full bg-emerald-900 px-2 py-1 text-[8px] font-bold text-white">
+                  ● Buka sampai 22.00
+                </span>
+                <Share2 size={15} className="text-white" />
+              </div>
+            </div>
+            <div className="-mt-6 flex items-end gap-2 px-2">
+              <strong className="bg-brand grid size-14 place-items-center rounded-2xl border-4 border-white text-sm text-white">
+                KT
+              </strong>
+              <div className="pb-1">
+                <h3 className="display-font text-lg font-black">Kopi Temu</h3>
+                <p className="text-muted flex items-center text-[9px]">
+                  <MapPin size={9} />
+                  Kemang, Jakarta
+                </p>
+              </div>
+            </div>
+            <div className="bg-brand mx-2 mt-4 rounded-xl py-2 text-center text-[10px] font-bold text-white">
+              Pesan via WhatsApp
+            </div>
+            <p className="text-brand mx-2 mt-4 text-[8px] font-black">FAVORIT MINGGU INI</p>
+            <div className="m-2 grid grid-cols-2 gap-2">
+              {["Kopi Susu Aren", "Matcha Cloud"].map((name, index) => (
+                <article className="rounded-xl bg-orange-50 p-3" key={name}>
+                  <MenuSquare size={20} />
+                  <b className="mt-2 block text-[9px]">{name}</b>
+                  <small className="text-brand text-[8px]">{index ? "Rp35.000" : "Rp24.000"}</small>
+                </article>
+              ))}
+            </div>
+            <div className="border-line text-muted m-2 flex items-center gap-2 rounded-xl border p-2 text-[9px]">
+              <Search size={13} />
+              Cari menu...
+            </div>
+          </div>
+          <div className="absolute -right-1 -bottom-5 flex items-center gap-2 rounded-2xl bg-white p-3 shadow-xl sm:-right-8">
+            <BarChart3 className="text-brand" />
+            <div>
+              <b className="block text-sm">1.284</b>
+              <span className="text-muted text-[9px]">kunjungan minggu ini</span>
+            </div>
+            <strong className="text-xs text-emerald-600">+18%</strong>
+          </div>
+        </div>
+      </section>
+      <section id="fitur" className="bg-white px-5 py-20 sm:px-8 lg:py-28">
+        <header className="mx-auto max-w-2xl text-center">
+          <p className={kicker}>SEMUA DALAM SATU TEMPAT</p>
+          <h2 className="display-font text-4xl font-black sm:text-5xl">
+            Lebih dari sekadar daftar menu.
+          </h2>
+          <p className="text-muted mt-4">
+            Halaman yang dirancang supaya pelanggan mendapat informasi yang mereka butuhkan dengan
+            cepat.
+          </p>
+        </header>
+        <div className="mx-auto mt-12 grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            [
+              MenuSquare,
+              "Katalog yang enak dilihat",
+              "Foto produk, kategori, pencarian, harga promo, dan status habis.",
+            ],
+            [
+              QrCode,
+              "Bagikan di mana saja",
+              "Satu link dan QR code untuk meja, Instagram, WhatsApp, atau Google.",
+            ],
+            [
+              BarChart3,
+              "Analytics sederhana",
+              "Lihat menu populer, sumber kunjungan, dan link yang paling banyak diklik.",
+            ],
+            [
+              LayoutTemplate,
+              "Terasa seperti brand kamu",
+              "Pilih warna, tema, tombol, dan layout yang sesuai bisnismu.",
+            ],
+          ].map(([Icon, title, text]) => (
+            <article
+              className="border-line rounded-2xl border p-6 transition hover:-translate-y-1 hover:shadow-lg"
+              key={title as string}
+            >
+              <span className="text-brand grid size-11 place-items-center rounded-xl bg-orange-50">
+                <Icon size={21} />
+              </span>
+              <h3 className="display-font mt-5 text-xl font-black">{title as string}</h3>
+              <p className="text-muted mt-2 text-sm leading-6">{text as string}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section
+        id="cara"
+        className="mx-auto grid max-w-6xl gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[.8fr_1.2fr] lg:py-28"
+      >
+        <div>
+          <p className={kicker}>MULAI DALAM HITUNGAN MENIT</p>
+          <h2 className="display-font text-4xl font-black sm:text-5xl">
+            Dari dapur ke layar pelanggan.
+          </h2>
+        </div>
+        <ol className="grid gap-3">
+          {[
+            [
+              "01",
+              "Buat profil bisnismu",
+              "Tentukan nama, alamat, jam buka, dan alamat halaman unik.",
+            ],
+            ["02", "Masukkan menu & link", "Tambah produk, foto, WhatsApp, Instagram, dan lokasi."],
+            ["03", "Bagikan ke pelanggan", "Taruh link di semua kanal bisnismu."],
+          ].map(([number, title, text]) => (
+            <li className="border-line flex gap-4 rounded-2xl border bg-white p-5" key={number}>
+              <b className="bg-charcoal grid size-10 shrink-0 place-items-center rounded-xl text-xs text-white">
+                {number}
+              </b>
+              <div>
+                <h3 className="font-extrabold">{title}</h3>
+                <p className="text-muted mt-1 text-sm">{text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+      <section id="harga" className="bg-white px-5 py-20 sm:px-8 lg:py-28">
+        <header className="mx-auto max-w-2xl text-center">
+          <p className={kicker}>PILIH SESUAI KEBUTUHAN</p>
+          <h2 className="display-font text-4xl font-black sm:text-5xl">
+            Mulai kecil, berkembang kapan saja.
+          </h2>
+        </header>
+        <div className="mx-auto mt-12 grid max-w-6xl gap-5 lg:grid-cols-3">
+          {plans.map((plan) => (
+            <article
+              key={plan.name}
+              className={`relative rounded-3xl border p-6 ${plan.featured ? "border-brand bg-charcoal text-white shadow-xl" : "border-line bg-paper"}`}
+            >
+              {plan.featured && (
+                <i className="bg-brand absolute -top-3 left-6 rounded-full px-3 py-1 text-[10px] font-black text-white not-italic">
+                  Paling populer
+                </i>
+              )}
+              <h3 className="display-font text-2xl font-black">{plan.name}</h3>
+              <div className="mt-5">
+                <b className="text-4xl">{plan.price}</b>
+                {plan.name !== "Free" && <span className="text-sm opacity-60">/bulan</span>}
+              </div>
+              <p className="mt-2 text-sm opacity-60">{plan.note}</p>
+              <Link
+                className={`my-6 flex min-h-12 items-center justify-center gap-2 rounded-xl text-sm font-extrabold ${plan.featured ? "bg-brand text-white" : "border-line border bg-white"}`}
+                href={plan.href}
+              >
+                {plan.cta}
+                <ArrowRight size={15} />
+              </Link>
+              <ul className="grid gap-3 text-sm">
+                {plan.features.map((feature) => (
+                  <li className="flex items-center gap-2" key={feature}>
+                    <Check size={15} className="text-brand" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
+        <div className="bg-charcoal rounded-3xl p-8 text-white sm:p-12">
+          <p className={kicker}>SIAP UNTUK MULAI?</p>
+          <h2 className="display-font max-w-2xl text-4xl font-black sm:text-5xl">
+            Buat halaman menu yang pantas untuk bisnismu.
+          </h2>
+          <p className="my-4 text-white/60">Gratis, cepat, dan siap dibagikan hari ini.</p>
+          <Link
+            className="bg-brand inline-flex min-h-12 items-center gap-2 rounded-xl px-5 text-sm font-extrabold"
+            href="/register"
+          >
+            Buat menu gratis <ArrowRight size={17} />
+          </Link>
+        </div>
+      </section>
+      <footer className="border-line text-muted mx-auto flex max-w-7xl flex-col items-center gap-3 border-t px-5 py-8 text-xs sm:flex-row">
+        <Brand compact />
+        <p className="sm:ml-auto">© 2026 Menuku. Katalog digital untuk bisnis kuliner.</p>
+        <Link className="text-ink font-bold" href="/login">
+          Masuk
+        </Link>
+      </footer>
+    </main>
+  );
 }

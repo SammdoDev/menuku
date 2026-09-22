@@ -4,7 +4,9 @@ export function hasSupabaseEnv() {
   if (!url || !key || url.includes("PASTE_") || key.includes("PASTE_")) return false;
   try {
     const parsed = new URL(url);
-    return (parsed.protocol === "https:" || parsed.protocol === "http:") && Boolean(parsed.hostname);
+    return (
+      (parsed.protocol === "https:" || parsed.protocol === "http:") && Boolean(parsed.hostname)
+    );
   } catch {
     return false;
   }

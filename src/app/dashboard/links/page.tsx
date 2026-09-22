@@ -1,18 +1,149 @@
-import Link from "next/link";
 import { ExternalLink, Link2, Tags } from "lucide-react";
-import { GlobalAutocomplete, GlobalInput, SubmitButton } from "../../../components/ui/form-controls";
+import DashboardShell from "../../../components/dashboard-shell";
+import {
+  GlobalAutocomplete,
+  GlobalInput,
+  SubmitButton,
+} from "../../../components/ui/form-controls";
 import { getCurrentMerchant } from "../../../lib/merchant";
 import { createLinkAction, deleteLinkAction, toggleLinkAction } from "../actions";
-import styles from "../management.module.css";
 
 type Props = { searchParams: Promise<{ error?: string }> };
-const linkTypes = ["whatsapp", "instagram", "tiktok", "maps", "website", "marketplace", "reservation", "custom"] as const;
-const labels: Record<(typeof linkTypes)[number], string> = { whatsapp: "WhatsApp", instagram: "Instagram", tiktok: "TikTok", maps: "Google Maps", website: "Website", marketplace: "Marketplace", reservation: "Reservasi", custom: "Link custom" };
-const linkOptions = linkTypes.map(type => ({ value: type, label: labels[type] }));
-
+const types = [
+  "whatsapp",
+  "instagram",
+  "tiktok",
+  "maps",
+  "website",
+  "marketplace",
+  "reservation",
+  "custom",
+] as const;
+const labels: Record<(typeof types)[number], string> = {
+  whatsapp: "WhatsApp",
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  maps: "Google Maps",
+  website: "Website",
+  marketplace: "Marketplace",
+  reservation: "Reservasi",
+  custom: "Link custom",
+};
 export default async function LinksPage({ searchParams }: Props) {
   const { tenant, supabase } = await getCurrentMerchant();
   if (!tenant) return null;
-  const [{ data: links }, { error }] = await Promise.all([supabase.from("custom_links").select("id,title,url,link_type,is_active").eq("tenant_id", tenant.id).order("sort_order"), searchParams]);
-  return <main className={styles.page}><header className={styles.top}><Link className={styles.brand} href="/dashboard"><span>m</span>menuku</Link><nav><Link href="/dashboard">Dashboard</Link><Link href="/dashboard/menu">Menu</Link><Link href="/dashboard/categories">Kategori</Link><Link className={styles.active} href="/dashboard/links">Links</Link></nav><Link href={`/store/${tenant.slug}`} target="_blank">Lihat halaman</Link></header><section className={styles.content}><div className={styles.heading}><div><h1 className="display">Link bisnis</h1><p>Kumpulkan WhatsApp, sosial media, lokasi, dan tautan penting dalam satu halaman.</p></div></div>{error && <p className={styles.notice}>{error}</p>}<div className={styles.grid}><article className={styles.formCard}><h2 className="display">Tambah link</h2><p>Gunakan URL lengkap agar pelanggan dapat membukanya dengan aman.</p><form className={styles.form} action={createLinkAction}><label>Jenis link<GlobalAutocomplete name="linkType" defaultValue="whatsapp" options={linkOptions} /></label><label>Judul link<GlobalInput name="title" required maxLength={100} placeholder="Contoh: Chat kami di WhatsApp" /></label><label>URL tujuan<GlobalInput name="url" type="url" required placeholder="https://..." /></label><SubmitButton className={styles.submit} pendingLabel="Menambahkan link...">Simpan link</SubmitButton></form></article><article className={styles.listCard}><h2 className="display">Daftar link</h2><p>{links?.length ?? 0} link tersimpan pada {tenant.name}</p>{links?.length ? <div className={styles.list}>{links.map(item => <div className={styles.item} key={item.id}><span className={styles.itemIcon}><Link2 size={18} /></span><div className={styles.itemInfo}><b>{item.title}</b><small className={styles.url}>{item.url}</small><span className={item.is_active ? styles.state : styles.inactive}>{item.is_active ? labels[item.link_type as keyof typeof labels] || "Aktif" : "Disembunyikan"}</span></div><a className={styles.openLink} href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Buka ${item.title}`}><ExternalLink size={15} /></a><div className={styles.itemActions}><form action={toggleLinkAction}><GlobalInput type="hidden" name="id" value={item.id} /><GlobalInput type="hidden" name="active" value={String(item.is_active)} /><button>{item.is_active ? "Sembunyikan" : "Tampilkan"}</button></form><form action={deleteLinkAction}><GlobalInput type="hidden" name="id" value={item.id} /><button className={styles.danger}>Hapus</button></form></div></div>)}</div> : <div className={styles.empty}><Tags size={25} /><p>Belum ada link. Tambahkan WhatsApp, sosial media, atau lokasi bisnismu.</p></div>}</article></div></section></main>;
+  const [{ data: links }, { error }] = await Promise.all([
+    supabase
+      .from("custom_links")
+      .select("id,title,url,link_type,is_active")
+      .eq("tenant_id", tenant.id)
+      .order("sort_order"),
+    searchParams,
+  ]);
+  const card = "rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-6";
+  return (
+    <DashboardShell tenant={tenant} active="links" title="Links">
+      <header className="mb-7">
+        <h1 className="display-font text-3xl font-black">Link bisnis</h1>
+        <p className="text-muted mt-2 text-sm">
+          Kumpulkan WhatsApp, sosial media, lokasi, dan tautan penting.
+        </p>
+      </header>
+      {error && (
+        <p className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+      <div className="grid items-start gap-5 xl:grid-cols-[380px_1fr]">
+        <article className={card}>
+          <h2 className="display-font text-xl font-black">Tambah link</h2>
+          <p className="text-muted mt-1 mb-5 text-xs">
+            Gunakan URL lengkap agar dapat dibuka dengan aman.
+          </p>
+          <form className="grid gap-4" action={createLinkAction}>
+            <div className="grid gap-2 text-sm font-bold">
+              <label htmlFor="link-type">Jenis link</label>
+              <GlobalAutocomplete
+                id="link-type"
+                name="linkType"
+                defaultValue="whatsapp"
+                options={types.map((type) => ({ value: type, label: labels[type] }))}
+              />
+            </div>
+            <label className="grid gap-2 text-sm font-bold">
+              Judul link
+              <GlobalInput
+                name="title"
+                required
+                maxLength={100}
+                placeholder="Contoh: Chat kami di WhatsApp"
+              />
+            </label>
+            <label className="grid gap-2 text-sm font-bold">
+              URL tujuan
+              <GlobalInput name="url" type="url" required placeholder="https://..." />
+            </label>
+            <SubmitButton pendingLabel="Menambahkan link...">Simpan link</SubmitButton>
+          </form>
+        </article>
+        <article className={card}>
+          <h2 className="display-font text-xl font-black">Daftar link</h2>
+          <p className="text-muted mt-1 mb-5 text-xs">{links?.length ?? 0} link tersimpan</p>
+          {links?.length ? (
+            <div className="grid gap-2">
+              {links.map((item) => (
+                <div
+                  className="border-line flex flex-wrap items-center gap-3 rounded-xl border p-3 sm:flex-nowrap"
+                  key={item.id}
+                >
+                  <span className="text-brand grid size-10 shrink-0 place-items-center rounded-xl bg-orange-50">
+                    <Link2 size={18} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <b className="block truncate text-sm">{item.title}</b>
+                    <small className="text-muted block truncate text-xs">{item.url}</small>
+                    <span
+                      className={`text-[10px] font-extrabold ${item.is_active ? "text-emerald-700" : "text-amber-700"}`}
+                    >
+                      {item.is_active
+                        ? labels[item.link_type as keyof typeof labels] || "Aktif"
+                        : "Disembunyikan"}
+                    </span>
+                  </div>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border-line grid size-8 place-items-center rounded-lg border"
+                  >
+                    <ExternalLink size={14} />
+                  </a>
+                  <div className="flex gap-2">
+                    <form action={toggleLinkAction}>
+                      <GlobalInput type="hidden" name="id" value={item.id} />
+                      <GlobalInput type="hidden" name="active" value={String(item.is_active)} />
+                      <button className="border-line rounded-lg border px-3 py-2 text-[10px] font-bold">
+                        {item.is_active ? "Sembunyikan" : "Tampilkan"}
+                      </button>
+                    </form>
+                    <form action={deleteLinkAction}>
+                      <GlobalInput type="hidden" name="id" value={item.id} />
+                      <button className="rounded-lg border border-red-200 px-3 py-2 text-[10px] font-bold text-red-600">
+                        Hapus
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="border-line text-muted rounded-xl border border-dashed p-10 text-center text-sm">
+              <Tags className="mx-auto mb-2" />
+              <p>Belum ada link.</p>
+            </div>
+          )}
+        </article>
+      </div>
+    </DashboardShell>
+  );
 }
