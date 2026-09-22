@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { ImagePlus, LoaderCircle } from "lucide-react";
+import { useState } from "react";
+import { GlobalAutocomplete, GlobalInput, GlobalTextarea, NumericInput, SubmitButton } from "../../../components/ui/form-controls";
 import { createProductAction } from "../actions";
 import styles from "./product-form.module.css";
 
@@ -17,37 +18,37 @@ export default function ProductForm({ categories, slug }: { categories: Category
     setStatus("");
     try {
       const body = new FormData();
-      body.set("image", file);
+      body.set("file", file);
       body.set("tenantSlug", slug);
       body.set("kind", "product");
       const response = await fetch("/api/images/upload", { method: "POST", body });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Gambar belum dapat diunggah.");
+      const data = await response.json() as { url?: string; error?: string };
+      if (!response.ok || !data.url) throw new Error(data.error || "Gambar belum dapat diunggah.");
       setImageUrl(data.url);
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Gambar belum dapat diunggah.");
+      setStatus("Foto menu siap dipakai.");
+    } catch (caught) {
+      setStatus(caught instanceof Error ? caught.message : "Gambar belum dapat diunggah.");
     } finally {
       setUploading(false);
     }
   }
 
+  const options = [{ value: "", label: "Tanpa kategori" }, ...categories.map(category => ({ value: category.id, label: category.name }))];
+
   return <form className={styles.form} action={createProductAction}>
-    <input type="hidden" name="imageUrl" value={imageUrl} />
-    <label className={styles.imageField}>
+    <GlobalInput type="hidden" name="imageUrl" value={imageUrl} />
+    <label className={styles.imageField} aria-busy={uploading}>
       {imageUrl ? <img src={imageUrl} alt="Preview produk" /> : <span><ImagePlus size={20} /> Tambahkan foto produk</span>}
-      <input type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading} onChange={(event) => {
-        const file = event.currentTarget.files?.[0];
-        if (file) upload(file);
-      }} />
+      <GlobalInput type="file" accept="image/jpeg,image/png,image/webp" disabled={uploading} onChange={event => { const file = event.currentTarget.files?.[0]; if (file) void upload(file); event.currentTarget.value = ""; }} />
       {uploading && <em><LoaderCircle size={14} /> Mengunggah gambar…</em>}
     </label>
-    {status && <p className={styles.error}>{status}</p>}
-    <label>Nama menu<input name="name" placeholder="Contoh: Kopi Susu Aren" required /></label>
-    <label>Kategori<select name="categoryId" defaultValue=""><option value="">Tanpa kategori</option>{categories.map(category => <option value={category.id} key={category.id}>{category.name}</option>)}</select></label>
-    <label>Deskripsi <span>(opsional)</span><textarea name="description" placeholder="Ceritakan menu ini secara singkat" /></label>
-    <label>Harga normal<input name="price" type="number" min="0" placeholder="28000" required /></label>
-    <label>Harga promo <span>(opsional)</span><input name="discountPrice" type="number" min="0" placeholder="24000" /></label>
-    <label className={styles.check}><input name="featured" type="checkbox" />Tandai sebagai rekomendasi</label>
-    <button className={styles.submit} type="submit" disabled={uploading}>{uploading ? "Menunggu upload…" : "Simpan menu"}</button>
+    {status && <p className={imageUrl ? styles.success : styles.error}>{status}</p>}
+    <label>Nama menu<GlobalInput name="name" placeholder="Contoh: Kopi Susu Aren" required /></label>
+    <label>Kategori<GlobalAutocomplete name="categoryId" defaultValue="" options={options} /></label>
+    <label>Deskripsi <span>(opsional)</span><GlobalTextarea name="description" placeholder="Ceritakan menu ini secara singkat" /></label>
+    <label>Harga normal<NumericInput name="price" placeholder="28000" required /></label>
+    <label>Harga promo <span>(opsional)</span><NumericInput name="discountPrice" placeholder="24000" /></label>
+    <label className={styles.check}><GlobalInput name="featured" type="checkbox" />Tandai sebagai rekomendasi</label>
+    <SubmitButton className={styles.submit} pendingLabel="Menambahkan menu..." disabled={uploading}>Simpan menu</SubmitButton>
   </form>;
 }
