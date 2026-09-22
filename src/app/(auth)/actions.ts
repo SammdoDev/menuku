@@ -54,7 +54,7 @@ export async function requestOtpAction(formData: FormData) {
 
 export async function verifyEmailOtpAction(formData: FormData) {
   const email = emailOnly.safeParse(formData.get("email"));
-  const token = z.string().trim().regex(/^\d{6}$/, "Masukkan 6 digit kode OTP.").safeParse(formData.get("token"));
+  const token = z.string().trim().regex(/^\d{8}$/, "Masukkan 8 digit kode OTP.").safeParse(formData.get("token"));
   if (!email.success || !token.success) back(`/verify-otp?email=${encodeURIComponent(String(formData.get("email") ?? ""))}`, "error", token.success ? "Email tidak valid." : token.error.issues[0].message);
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.verifyOtp({ email: email.data!, token: token.data!, type: "email" });
