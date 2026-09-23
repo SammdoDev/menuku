@@ -70,11 +70,16 @@ export async function POST(request: Request) {
       { error: "Konfirmasi pembayaran belum dapat dicatat." },
       { status: 500 },
     );
+  const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.digimenu.my.id"}/dashboard/billing`;
+  const paymentType = active
+    ? `Upgrade dari ${plans[active.plan as "premium" | "business"].name}`
+    : "Paket baru";
+  const invoiceHtml = `<div style="font-family:Arial,sans-serif;max-width:620px;color:#29251f"><h2 style="margin-bottom:4px">Konfirmasi pembayaran diterima</h2><p style="color:#6f675d;margin-top:0">Menuku Billing</p><hr style="border:0;border-top:1px solid #eee8e1;margin:24px 0"><p>Hai ${user.user_metadata.name || tenant.name},</p><p>Permintaan billing kamu sudah tercatat dan menunggu pembayaran.</p><table style="width:100%;border-collapse:collapse;margin:20px 0"><tr><td style="padding:8px 0;color:#756d63">Nomor invoice</td><td style="padding:8px 0;text-align:right;font-weight:bold;word-break:break-all">${orderId}</td></tr><tr><td style="padding:8px 0;color:#756d63">Paket</td><td style="padding:8px 0;text-align:right;font-weight:bold">${plans[plan].name}</td></tr><tr><td style="padding:8px 0;color:#756d63">Jenis transaksi</td><td style="padding:8px 0;text-align:right">${paymentType}</td></tr><tr><td style="padding:8px 0;color:#756d63">Durasi</td><td style="padding:8px 0;text-align:right">${months} bulan</td></tr><tr><td style="padding:12px 0;border-top:1px solid #eee8e1;font-weight:bold">Total pembayaran</td><td style="padding:12px 0;border-top:1px solid #eee8e1;text-align:right;font-size:20px;font-weight:bold;color:#ff6534">Rp${amount.toLocaleString("id-ID")}</td></tr></table><h3>Langkah pembayaran</h3><ol style="padding-left:20px;line-height:1.8"><li>Buka halaman billing Menuku.</li><li>Scan QRIS yang tersedia.</li><li>Transfer tepat sebesar Rp${amount.toLocaleString("id-ID")}.</li><li>Simpan bukti transfer jika diperlukan.</li></ol><p style="background:#fff4ee;padding:14px;border-radius:10px"><b>Penting:</b> pembayaran diverifikasi manual oleh admin. Paket baru aktif setelah pembayaran dikonfirmasi.</p><p><a href="${dashboardUrl}" style="display:inline-block;background:#ff6534;color:#fff;text-decoration:none;padding:12px 18px;border-radius:8px;font-weight:bold">Buka Billing</a></p><p style="color:#756d63;font-size:12px;margin-top:28px">Jika kamu tidak merasa membuat invoice ini, abaikan email ini atau hubungi admin Menuku.</p></div>`;
   if (user.email)
     await sendEmail({
       to: user.email,
       subject: `Invoice Menuku ${orderId}`,
-      html: `<h2>Konfirmasi pembayaran diterima</h2><p>Invoice <b>${orderId}</b> untuk paket <b>${plans[plan].name}</b> sebesar <b>Rp${amount.toLocaleString("id-ID")}</b> sudah dibuat.</p><p>Silakan selesaikan pembayaran melalui QRIS. Admin akan memverifikasi pembayaran secara manual.</p>`,
+      html: invoiceHtml,
     });
   const adminEmails = (process.env.ADMIN_EMAILS || "")
     .split(",")
@@ -87,7 +92,7 @@ export async function POST(request: Request) {
         sendEmail({
           to: adminEmail,
           subject: `Pembayaran baru Menuku: ${orderId}`,
-          html: `<h2>Ada pembayaran baru</h2><p>Tenant <b>${tenant.name}</b> mengajukan paket <b>${plans[plan].name}</b> sebesar <b>Rp${amount.toLocaleString("id-ID")}</b>.</p><p>Order: ${orderId}</p>`,
+          html: `<div style="font-family:Arial,sans-serif;max-width:620px;color:#29251f"><h2>Ada pembayaran baru</h2><p>Tenant <b>${tenant.name}</b> membuat invoice billing baru.</p><table style="width:100%;border-collapse:collapse"><tr><td style="padding:8px 0;color:#756d63">Order</td><td style="padding:8px 0;text-align:right;word-break:break-all">${orderId}</td></tr><tr><td style="padding:8px 0;color:#756d63">Paket</td><td style="padding:8px 0;text-align:right">${plans[plan].name}</td></tr><tr><td style="padding:8px 0;color:#756d63">Durasi</td><td style="padding:8px 0;text-align:right">${months} bulan</td></tr><tr><td style="padding:8px 0;font-weight:bold">Total</td><td style="padding:8px 0;text-align:right;font-weight:bold">Rp${amount.toLocaleString("id-ID")}</td></tr></table><p>Silakan cek pembayaran dari Admin Console Menuku.</p></div>`,
         }),
       ),
   );
