@@ -1,5 +1,6 @@
 import { Clock3, ExternalLink, Instagram, MapPin, MessageCircle, Share2 } from "lucide-react";
 import type { PublicStore } from "../../../lib/store";
+import { normalizeImageUrl } from "../../../lib/image-url";
 import { waUrl } from "./types";
 
 export default function StorefrontHeader({
@@ -26,7 +27,7 @@ export default function StorefrontHeader({
         style={
           store.tenant.banner_url
             ? {
-                backgroundImage: `linear-gradient(105deg,#3a251d60,#1a0e0950),url(${store.tenant.banner_url})`,
+                backgroundImage: `linear-gradient(105deg,#3a251d60,#1a0e0950),url("${normalizeImageUrl(store.tenant.banner_url)}")`,
               }
             : undefined
         }
@@ -46,10 +47,10 @@ export default function StorefrontHeader({
         </div>
       </div>
       <header className="flex gap-3 px-5 sm:gap-5 sm:px-12">
-        {store.tenant.logo_url ? (
+        {normalizeImageUrl(store.tenant.logo_url) ? (
           <img
             className="-mt-8 size-[76px] shrink-0 rounded-2xl border-4 border-white object-cover sm:-mt-10 sm:size-24 sm:rounded-[26px] sm:border-[5px]"
-            src={store.tenant.logo_url}
+            src={normalizeImageUrl(store.tenant.logo_url)}
             alt={store.tenant.name}
           />
         ) : (

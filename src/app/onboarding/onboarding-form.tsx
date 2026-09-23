@@ -10,6 +10,7 @@ import {
 } from "../../components/ui/form-controls";
 import { createTenantAction } from "./actions";
 import { MAX_IMAGE_SIZE, readImageUploadResponse } from "../../lib/image-upload";
+import { normalizeImageUrl } from "../../lib/image-url";
 import { PUBLIC_SITE_URL } from "../../lib/site";
 
 type UploadKind = "logo" | "banner";
@@ -60,9 +61,16 @@ export default function OnboardingForm() {
       <section className="border-line rounded-2xl border bg-[#fbfaf8] p-3 sm:p-4">
         <p className="text-brand mb-3 text-[10px] font-black tracking-[.12em]">IDENTITAS VISUAL</p>
         <div
-          className="flex h-32 items-center justify-center rounded-xl bg-gradient-to-br from-[#2d2924] to-[#665849] bg-cover bg-center"
-          style={banner ? { backgroundImage: `url(${banner})` } : undefined}
+          className="relative flex h-32 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-[#2d2924] to-[#665849] bg-cover bg-center"
+          style={banner ? { backgroundImage: `url("${banner}")` } : undefined}
         >
+          {banner && (
+            <img
+              src={normalizeImageUrl(banner)}
+              alt="Preview background"
+              className="absolute inset-0 size-full object-cover"
+            />
+          )}
           <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-white/90 px-3 py-2 text-xs font-extrabold text-[#4f4942]">
             {uploading === "banner" ? (
               <LoaderCircle size={16} className="animate-spin" />

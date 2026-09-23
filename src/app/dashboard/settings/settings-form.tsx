@@ -11,6 +11,7 @@ import {
 } from "../../../components/ui/form-controls";
 import { updateStoreSettingsAction } from "../actions";
 import { MAX_IMAGE_SIZE, readImageUploadResponse } from "../../../lib/image-upload";
+import { normalizeImageUrl } from "../../../lib/image-url";
 
 type UploadKind = "logo" | "banner";
 
@@ -39,8 +40,8 @@ export default function SettingsForm({
   tenant: Tenant;
   siteOrigin: string;
 }) {
-  const [logo, setLogo] = useState(tenant.logo_url || "");
-  const [banner, setBanner] = useState(tenant.banner_url || "");
+  const [logo, setLogo] = useState(normalizeImageUrl(tenant.logo_url));
+  const [banner, setBanner] = useState(normalizeImageUrl(tenant.banner_url));
   const [slug, setSlug] = useState(tenant.slug);
   const [primaryColor, setPrimaryColor] = useState(tenant.primary_color || "#FF6534");
   const [backgroundColor, setBackgroundColor] = useState(tenant.background_color || "#F7F6F2");
@@ -110,9 +111,16 @@ export default function SettingsForm({
 
           <div
             className="relative flex h-40 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-[#2d2924] to-[#665849] bg-cover bg-center"
-            style={banner ? { backgroundImage: `url(${banner})` } : undefined}
+            style={banner ? { backgroundImage: `url("${banner}")` } : undefined}
           >
             {banner && <span className="absolute inset-0 bg-black/20" aria-hidden="true" />}
+            {banner && (
+              <img
+                src={banner}
+                alt="Preview background"
+                className="absolute inset-0 size-full object-cover"
+              />
+            )}
             <label className="relative inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white/95 px-4 py-2.5 text-xs font-extrabold text-[#4f4942] shadow-lg">
               {uploading === "banner" ? (
                 <LoaderCircle size={17} className="text-brand animate-spin" />

@@ -95,6 +95,8 @@ export default function Storefront({ store }: { store: PublicStore }) {
         onSearch={focusSearch}
         onShare={share}
         whatsapp={whatsapp}
+        primaryColor={store.tenant.primary_color || "#FF6534"}
+        backgroundColor={store.tenant.background_color || "#EEECE5"}
       />
       <StorefrontToast message={notice} />
     </main>

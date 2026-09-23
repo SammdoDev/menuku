@@ -35,14 +35,15 @@ export function GlobalLoadingProvider({ children }: { children: React.ReactNode 
     <LoadingContext.Provider value={{ startLoading, stopLoading }}>
       {children}
       {loading && (
-        <div className="pointer-events-auto fixed inset-0 z-[100] grid place-items-center bg-white/35 backdrop-blur-[2px]">
+        <div className="pointer-events-none fixed inset-0 z-[100]">
+          <div className="bg-brand absolute top-0 left-0 h-1 w-full animate-pulse" />
           <div
-            className="border-line text-ink flex items-center gap-3 rounded-2xl border bg-white/95 px-5 py-4 text-sm font-extrabold shadow-2xl"
+            className="border-line text-ink pointer-events-auto fixed top-4 right-4 flex items-center gap-2 rounded-xl border bg-white/95 px-3 py-2.5 text-xs font-extrabold shadow-xl"
             role="status"
             aria-live="polite"
           >
-            <LoaderCircle className="text-brand animate-spin" size={21} />
-            Memuat halaman...
+            <LoaderCircle className="text-brand animate-spin" size={17} />
+            Memuat...
           </div>
         </div>
       )}

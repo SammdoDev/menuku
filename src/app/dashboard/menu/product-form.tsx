@@ -11,6 +11,7 @@ import {
 } from "../../../components/ui/form-controls";
 import { createProductAction, updateProductAction } from "../actions";
 import { MAX_IMAGE_SIZE, readImageUploadResponse } from "../../../lib/image-upload";
+import { normalizeImageUrl } from "../../../lib/image-url";
 
 type Category = { id: string; name: string };
 type Product = {
@@ -34,7 +35,7 @@ export default function ProductForm({
   product?: Product;
   onCancel?: () => void;
 }) {
-  const [imageUrl, setImageUrl] = useState(product?.image_url || "");
+  const [imageUrl, setImageUrl] = useState(normalizeImageUrl(product?.image_url));
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   async function upload(file: File) {
@@ -72,11 +73,21 @@ export default function ProductForm({
       {product && <GlobalInput type="hidden" name="id" value={product.id} />}
       <div
         className="border-brand/30 relative flex h-44 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed bg-gradient-to-br from-orange-50 to-[#eee7df] bg-cover bg-center"
-        style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
+        style={imageUrl ? { backgroundImage: `url("${imageUrl}")` } : undefined}
         role={imageUrl ? "img" : undefined}
         aria-label={imageUrl ? "Preview foto produk" : undefined}
       >
         {imageUrl && <span className="absolute inset-0 bg-black/20" aria-hidden="true" />}
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt="Preview foto produk"
+            className="absolute inset-0 size-full object-cover"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
+          />
+        )}
         <label className="relative inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white/95 px-4 py-2.5 text-xs font-extrabold text-[#4f4942] shadow-lg transition hover:bg-white">
           {uploading ? (
             <LoaderCircle size={17} className="text-brand animate-spin" />
