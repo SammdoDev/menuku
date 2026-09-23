@@ -54,16 +54,16 @@ export default function BillingButtons({
       {code !== "free" && currentPlan !== "business" && (
         <label className="mb-4 grid gap-2 text-xs font-bold">
           Durasi paket
-        <GlobalAutocomplete
-          value={months}
-          onValueChange={setMonths}
-          options={[
-            { value: "1", label: "1 bulan" },
-            { value: "3", label: "3 bulan" },
-            { value: "6", label: "6 bulan" },
-            { value: "12", label: "12 bulan" },
-          ]}
-        />
+          <GlobalAutocomplete
+            value={months}
+            onValueChange={setMonths}
+            options={[
+              { value: "1", label: "1 bulan" },
+              { value: "3", label: "3 bulan" },
+              { value: "6", label: "6 bulan" },
+              { value: "12", label: "12 bulan" },
+            ]}
+          />
         </label>
       )}
       <button
