@@ -5,6 +5,7 @@ import { useState, type ChangeEvent } from "react";
 import {
   GlobalAutocomplete,
   GlobalInput,
+  GlobalSlugInput,
   GlobalTextarea,
   SubmitButton,
 } from "../../components/ui/form-controls";
@@ -140,20 +141,18 @@ export default function OnboardingForm() {
         </div>
         <label className={label}>
           Alamat halaman
-          <div className="border-line focus-within:border-brand/60 focus-within:ring-brand/10 flex overflow-hidden rounded-xl border focus-within:ring-4">
-            <GlobalInput
-              className="rounded-none border-0 focus:ring-0"
-              name="slug"
-              value={slug}
-              onChange={(event) =>
-                setSlug(event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
-              }
-              placeholder="kopitemu"
-              required
-              minLength={3}
-              maxLength={30}
-            />
-          </div>
+          <GlobalSlugInput
+            prefix={`${PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}/store/`}
+            name="slug"
+            value={slug}
+            onChange={(event) =>
+              setSlug(event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
+            }
+            placeholder="kopitemu"
+            required
+            minLength={3}
+            maxLength={30}
+          />
         </label>
         <label className={label}>
           Deskripsi singkat <span className="text-muted font-normal">(opsional)</span>

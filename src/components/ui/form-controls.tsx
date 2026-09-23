@@ -24,6 +24,21 @@ export function GlobalInput({ className = "", ...props }: InputHTMLAttributes<HT
   return <input {...props} className={`${visual} ${className}`} />;
 }
 
+export function GlobalSlugInput({
+  prefix,
+  className = "",
+  ...props
+}: InputHTMLAttributes<HTMLInputElement> & { prefix: string }) {
+  return (
+    <div className="border-line focus-within:border-brand/60 focus-within:ring-brand/10 flex overflow-hidden rounded-xl border bg-white focus-within:ring-4">
+      <span className="text-muted border-line hidden items-center border-r bg-[#faf8f5] px-3 text-xs sm:flex">
+        {prefix}
+      </span>
+      <GlobalInput {...props} className={`rounded-none border-0 focus:ring-0 ${className}`} />
+    </div>
+  );
+}
+
 export function GlobalTextarea({
   className = "",
   ...props
