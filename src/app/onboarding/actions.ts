@@ -1,6 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { createClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "../../lib/supabase/server";
 
 const reserved = [
@@ -64,7 +65,7 @@ export async function createTenantAction(formData: FormData) {
     .eq("owner_id", user.id)
     .maybeSingle();
   if (existing) redirect("/dashboard");
-  const { error } = await supabase.from("tenants").insert({
+  const tenantInput = {
     owner_id: user.id,
     name: value.name,
     slug: value.slug,
@@ -73,7 +74,22 @@ export async function createTenantAction(formData: FormData) {
     whatsapp: value.whatsapp || null,
     logo_url: value.logoUrl || null,
     banner_url: value.bannerUrl || null,
-  });
+  };
+  let { error } = await supabase.from("tenants").insert(tenantInput);
+  if (error?.code === "23503" && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const admin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      { auth: { autoRefreshToken: false, persistSession: false } },
+    );
+    await admin
+      .from("profiles")
+      .upsert(
+        { id: user.id, email: user.email || "", name: user.user_metadata.name || "" },
+        { onConflict: "id" },
+      );
+    ({ error } = await supabase.from("tenants").insert(tenantInput));
+  }
   if (error?.code === "23505") fail("Alamat tersebut sudah dipakai. Coba yang lain.");
   if (error?.code === "23503")
     fail(
