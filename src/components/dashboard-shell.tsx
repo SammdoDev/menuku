@@ -69,21 +69,8 @@ export default function DashboardShell({
               {label}
             </LoadingLink>
           ))}
-          <LoadingLink
-            href="/dashboard/billing"
-            className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition hover:bg-white/[.08] hover:text-white"
-          >
-            <CreditCard size={18} /> Paket & pembayaran
-          </LoadingLink>
         </nav>
         <div className="mt-auto border-t border-white/10 pt-4">
-          <LoadingLink
-            href="/dashboard/settings"
-            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm hover:bg-white/[.08] hover:text-white"
-          >
-            <Settings size={18} />
-            Pengaturan
-          </LoadingLink>
           <form action={logoutAction}>
             <button className="px-3 py-2 text-xs font-bold text-[#f6aa94]">Keluar</button>
           </form>

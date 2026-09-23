@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, CheckCircle2, Clock3, Copy, FileText } from "lucide-react";
 import { getCurrentMerchant } from "../../../../lib/merchant";
 import { plans, rupiah, type PlanCode } from "../../../../lib/plans";
+import { supportWhatsAppUrl } from "../../../../lib/site";
 import Countdown from "./countdown";
 
 export default async function BillingConfirmationPage({
@@ -86,6 +87,16 @@ export default async function BillingConfirmationPage({
             juga akan dikirim ke email akun.
           </p>
         </div>
+        <a
+          href={supportWhatsAppUrl(
+            `Halo admin Menuku, saya sudah transfer untuk invoice ${invoice?.order_id || order}.`,
+          )}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-5 flex min-h-11 items-center justify-center rounded-xl bg-emerald-600 px-4 text-sm font-extrabold text-white"
+        >
+          Sudah transfer? Chat admin via WhatsApp
+        </a>
         <Link
           href="/dashboard/billing"
           className="border-line mt-7 flex min-h-12 items-center justify-center gap-2 rounded-xl border text-sm font-extrabold"

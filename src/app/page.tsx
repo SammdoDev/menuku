@@ -5,6 +5,7 @@ import {
   Check,
   Eye,
   LayoutTemplate,
+  MessageCircle,
   MapPin,
   MenuSquare,
   QrCode,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import Brand from "../components/brand";
 import { plans, rupiah } from "../lib/plans";
+import { supportWhatsAppUrl } from "../lib/site";
 
 const marketingPlans = [
   {
@@ -58,6 +60,7 @@ export default function Home() {
           <a href="#fitur">Fitur</a>
           <a href="#harga">Harga</a>
           <a href="#cara">Cara kerja</a>
+          <a href="#faq">FAQ</a>
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <Link className="hidden px-3 py-2 text-sm font-bold sm:block" href="/login">
@@ -71,14 +74,15 @@ export default function Home() {
           </Link>
         </div>
       </header>
-      <section className="mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl items-center gap-12 px-5 py-14 sm:px-8 lg:grid-cols-2 lg:px-10 lg:py-20">
+      <section className="relative mx-auto grid min-h-[calc(100dvh-72px)] max-w-7xl items-center gap-12 overflow-hidden rounded-b-[2.5rem] bg-[#f7eee7] px-5 py-14 sm:px-8 lg:grid-cols-2 lg:px-10 lg:py-20">
+        <div className="pointer-events-none absolute -top-40 -right-40 size-[30rem] rounded-full bg-orange-200/40 blur-3xl" />
         <div>
           <p className={kicker}>
             <Sparkles className="mr-1 inline" size={14} />
             Katalog digital untuk bisnis kuliner
           </p>
           <h1 className="display-font max-w-2xl text-5xl leading-[.98] font-black sm:text-6xl lg:text-7xl">
-            Menu kamu, <em className="text-brand not-italic">satu link</em> yang mudah dibagikan.
+            Satu link untuk membuat menu kamu <em className="text-brand not-italic">lebih laku.</em>
           </h1>
           <p className="text-muted mt-6 max-w-xl text-base leading-7 sm:text-lg">
             Bangun halaman menu yang cantik, letakkan WhatsApp, lokasi, dan sosial media dalam satu
@@ -153,6 +157,18 @@ export default function Home() {
             <strong className="text-xs text-emerald-600">+18%</strong>
           </div>
         </div>
+      </section>
+      <section className="mx-auto grid max-w-6xl gap-3 px-5 py-8 sm:grid-cols-3 sm:px-8">
+        {[
+          ["1 link", "untuk menu, lokasi, dan kontak"],
+          ["4 produk", "sudah cukup untuk mulai gratis"],
+          ["15 menit", "dari daftar sampai siap dibagikan"],
+        ].map(([value, label]) => (
+          <div className="border-line rounded-2xl border bg-white p-5" key={value}>
+            <b className="display-font text-2xl font-black">{value}</b>
+            <p className="text-muted mt-1 text-sm">{label}</p>
+          </div>
+        ))}
       </section>
       <section id="fitur" className="bg-white px-5 py-20 sm:px-8 lg:py-28">
         <header className="mx-auto max-w-2xl text-center">
@@ -276,6 +292,69 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <section
+        id="faq"
+        className="mx-auto grid max-w-6xl gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[.75fr_1.25fr] lg:py-28"
+      >
+        <div>
+          <p className={kicker}>PERTANYAAN UMUM</p>
+          <h2 className="display-font text-4xl font-black sm:text-5xl">
+            Semua yang perlu kamu tahu sebelum mulai.
+          </h2>
+          <p className="text-muted mt-4 leading-7">
+            Masih bingung soal paket, pembayaran, atau cara mengelola menu? Jawabannya ada di sini.
+          </p>
+          <a
+            href={supportWhatsAppUrl()}
+            target="_blank"
+            rel="noreferrer"
+            className="text-brand mt-6 inline-flex items-center gap-2 text-sm font-extrabold"
+          >
+            <MessageCircle size={17} /> Tanya admin langsung
+          </a>
+        </div>
+        <div className="grid gap-3">
+          {[
+            [
+              "Apa itu Menuku?",
+              "Menuku adalah halaman katalog digital untuk bisnis kuliner. Kamu bisa menampilkan kategori, produk, foto, harga, WhatsApp, lokasi, dan link penting dalam satu URL.",
+            ],
+            [
+              "Apa batas paket Free, Premium, dan Business?",
+              "Free cocok untuk mulai: maksimal 2 kategori dan 4 produk. Premium memberi 6 kategori, 30 produk, 5 link, analytics dasar, dan custom style. Business membuka kebutuhan yang lebih besar, termasuk akses tim dan custom domain sesuai konfigurasi akun.",
+            ],
+            [
+              "Bagaimana cara membayar paket?",
+              "Pilih paket dan durasi di halaman Billing. Menuku membuat invoice dan menampilkan QRIS. Transfer sesuai nominal invoice, lalu kirim bukti transfer melalui WhatsApp agar admin bisa memverifikasi.",
+            ],
+            [
+              "Apakah pembayaran otomatis aktif?",
+              "Belum. Pembayaran QRIS saat ini diverifikasi manual oleh admin. Paket aktif setelah transfer cocok dengan invoice dan status subscription diperbarui.",
+            ],
+            [
+              "Kalau ingin upgrade saat paket masih berjalan bagaimana?",
+              "Sistem menghitung kredit sisa masa aktif paket lama untuk mengurangi tagihan upgrade. Karena itu total upgrade bisa lebih kecil dari harga paket baru penuh.",
+            ],
+            [
+              "Berapa lama invoice harus dibayar?",
+              "Invoice memiliki countdown pembayaran selama 1 jam. Jika kedaluwarsa atau pembayaran belum terverifikasi, hubungi admin untuk konfirmasi dan pembuatan invoice baru.",
+            ],
+            [
+              "Bisa mengubah isi menu setelah dipublikasikan?",
+              "Bisa. Masuk ke Dashboard, ubah kategori atau produk, lalu simpan. Perubahan akan tampil di link storefront yang sama.",
+            ],
+            [
+              "Bagaimana cara menghubungi admin?",
+              "Klik tombol WhatsApp di halaman billing, email invoice, atau FAQ ini. Admin Menuku bisa membantu pengecekan pembayaran, paket, dan kendala akun.",
+            ],
+          ].map(([question, answer]) => (
+            <details className="border-line group rounded-2xl border bg-white p-5" key={question}>
+              <summary className="cursor-pointer list-none pr-6 font-extrabold">{question}</summary>
+              <p className="text-muted mt-3 text-sm leading-6">{answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
       <section className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
         <div className="bg-charcoal rounded-3xl p-8 text-white sm:p-12">
           <p className={kicker}>SIAP UNTUK MULAI?</p>
@@ -297,6 +376,14 @@ export default function Home() {
         <Link className="text-ink font-bold" href="/login">
           Masuk
         </Link>
+        <a
+          className="text-ink font-bold"
+          href={supportWhatsAppUrl()}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Hubungi admin
+        </a>
       </footer>
     </main>
   );
