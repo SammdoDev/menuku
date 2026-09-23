@@ -3,15 +3,25 @@
 import { useState } from "react";
 import type { PlanCode } from "../../../lib/plans";
 
-export default function BillingButtons({ code, price }: { code: PlanCode; price: number }) {
+export default function BillingButtons({
+  code,
+  price,
+  currentPlan,
+}: {
+  code: PlanCode;
+  price: number;
+  currentPlan: PlanCode;
+  currentExpiresAt?: string | null;
+}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [months, setMonths] = useState("1");
   async function pay() {
     if (code === "free") return;
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("/api/payments/manual", {
+      const response = await fetch(`/api/payments/manual?months=${months}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ plan: code }),
@@ -40,6 +50,21 @@ export default function BillingButtons({ code, price }: { code: PlanCode; price:
           </p>
         </div>
       )}
+      {code !== "free" && currentPlan !== "business" && (
+        <label className="mb-4 grid gap-2 text-xs font-bold">
+          Durasi paket
+          <select
+            value={months}
+            onChange={(event) => setMonths(event.target.value)}
+            className="border-line rounded-xl border bg-white px-3 py-3 text-sm"
+          >
+            <option value="1">1 bulan</option>
+            <option value="3">3 bulan</option>
+            <option value="6">6 bulan</option>
+            <option value="12">12 bulan</option>
+          </select>
+        </label>
+      )}
       <button
         type="button"
         onClick={() => void pay()}
@@ -50,7 +75,13 @@ export default function BillingButtons({ code, price }: { code: PlanCode; price:
           ? "Mengirim konfirmasi..."
           : code === "free"
             ? "Pilih Free Demo"
-            : "Saya sudah transfer"}
+            : currentPlan === "business"
+              ? "Sudah termasuk Business"
+              : currentPlan === "premium" && code === "premium"
+                ? "Perpanjang Premium"
+                : currentPlan === "premium"
+                  ? "Upgrade prorata ke Business"
+                  : "Saya sudah transfer"}
       </button>
       {error && <p className="mt-2 text-xs text-emerald-700">{error}</p>}
     </div>

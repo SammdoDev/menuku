@@ -69,9 +69,19 @@ export default async function BillingPage() {
                   <CreditCard size={16} /> Paket aktif
                 </span>
               ) : code === "free" ? (
-                <BillingButtons code={code} price={plan.price} />
+                <BillingButtons
+                  code={code}
+                  price={plan.price}
+                  currentPlan={current}
+                  currentExpiresAt={subscription?.expires_at}
+                />
               ) : (
-                <BillingButtons code={code} price={plan.price} />
+                <BillingButtons
+                  code={code}
+                  price={plan.price}
+                  currentPlan={current}
+                  currentExpiresAt={subscription?.expires_at}
+                />
               )}
             </article>
           );

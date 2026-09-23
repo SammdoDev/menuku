@@ -16,7 +16,7 @@ export default async function BillingConfirmationPage({
   const plan = params.plan === "premium" || params.plan === "business" ? params.plan : "premium";
   const { data: invoice } = await supabase
     .from("subscriptions")
-    .select("order_id,plan,amount,status,created_at")
+    .select("order_id,plan,previous_plan,months,amount,status,created_at")
     .eq("tenant_id", tenant.id)
     .eq("order_id", order)
     .maybeSingle();
@@ -54,6 +54,12 @@ export default async function BillingConfirmationPage({
           <div className="flex justify-between">
             <span className="text-muted">Paket</span>
             <b className="capitalize">{plans[selectedPlan].name}</b>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted">Durasi</span>
+            <b>
+              {invoice?.months || 1} bulan{invoice?.previous_plan ? " · upgrade prorata" : ""}
+            </b>
           </div>
           <div className="flex justify-between text-base">
             <span className="font-bold">Total</span>
