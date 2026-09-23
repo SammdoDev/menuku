@@ -1,4 +1,4 @@
-import { LayoutGrid, MessageCircle, Search, Share2 } from "lucide-react";
+import { LayoutGrid, MessageCircle, Search } from "lucide-react";
 import { trackStorefront } from "../../../lib/analytics";
 
 export default function StorefrontBottomNav({
@@ -22,7 +22,7 @@ export default function StorefrontBottomNav({
     "grid min-h-12 place-items-center gap-0.5 rounded-xl text-[9px] font-extrabold transition hover:bg-black/[.04]";
   return (
     <nav
-      className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-4 items-center rounded-2xl border p-1.5 shadow-2xl backdrop-blur-xl sm:hidden"
+      className={`fixed inset-x-3 bottom-3 z-40 grid ${whatsapp ? "grid-cols-3" : "grid-cols-2"} items-center rounded-2xl border p-1.5 shadow-2xl backdrop-blur-xl sm:hidden`}
       style={{
         borderColor: `${primaryColor}35`,
         backgroundColor: `${backgroundColor}F2`,
@@ -48,12 +48,7 @@ export default function StorefrontBottomNav({
           <MessageCircle size={20} />
           <span>Chat</span>
         </a>
-      ) : (
-        <button className={`${item} text-[var(--color-brand)]`} onClick={onShare}>
-          <Share2 size={19} />
-          <span>Bagikan</span>
-        </button>
-      )}
+      ) : null}
     </nav>
   );
 }
