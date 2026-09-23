@@ -75,6 +75,10 @@ export async function createTenantAction(formData: FormData) {
     banner_url: value.bannerUrl || null,
   });
   if (error?.code === "23505") fail("Alamat tersebut sudah dipakai. Coba yang lain.");
+  if (error?.code === "23503")
+    fail(
+      "Profil akun belum siap. Jalankan migration 0006_backfill_profiles di Supabase, lalu coba lagi.",
+    );
   if (error) fail("Bisnis belum dapat dibuat. Coba lagi.");
   redirect("/dashboard");
 }
