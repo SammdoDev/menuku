@@ -21,7 +21,9 @@ export async function POST(request: Request) {
         .replace(/^-|-$/g, "")
         .slice(0, 30) || "draft";
     const requestedKind = String(body.get("kind"));
-    const kind = ["logo", "banner", "product"].includes(requestedKind) ? requestedKind : "product";
+    const kind = ["logo", "banner", "promo", "product"].includes(requestedKind)
+      ? requestedKind
+      : "product";
     if (!(file instanceof File))
       return NextResponse.json({ error: "File gambar tidak ditemukan." }, { status: 400 });
     if (!allowed.has(file.type))

@@ -16,7 +16,7 @@ import { normalizeImageUrl } from "../../../lib/image-url";
 import ImageCropDialog from "../../../components/image-crop-dialog";
 import PersistentForm from "../../../components/ui/persistent-form";
 
-type UploadKind = "logo" | "banner";
+type UploadKind = "logo" | "banner" | "promo";
 
 const businessTypes = [
   "Kedai kopi",
@@ -45,6 +45,7 @@ export default function SettingsForm({
 }) {
   const [logo, setLogo] = useState(normalizeImageUrl(tenant.logo_url));
   const [banner, setBanner] = useState(normalizeImageUrl(tenant.banner_url));
+  const [promoImage, setPromoImage] = useState(normalizeImageUrl(tenant.promo_image_url));
   const [slug, setSlug] = useState(tenant.slug);
   const [primaryColor, setPrimaryColor] = useState(tenant.primary_color || "#FF6534");
   const [backgroundColor, setBackgroundColor] = useState(tenant.background_color || "#F7F6F2");
@@ -65,7 +66,8 @@ export default function SettingsForm({
       const data = await readImageUploadResponse(response);
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       if (kind === "logo") setLogo(data.url);
-      else setBanner(data.url);
+      else if (kind === "banner") setBanner(data.url);
+      else setPromoImage(data.url);
     } catch (caught) {
       setUploadError(caught instanceof Error ? caught.message : "Upload gambar gagal.");
     } finally {
@@ -313,6 +315,79 @@ export default function SettingsForm({
             </b>
           </p>
         </section>
+
+        <section className={card}>
+          <div className="mb-5">
+            <p className="text-brand text-[10px] font-black tracking-[.12em] uppercase">
+              Event & promo
+            </p>
+            <h2 className="display-font mt-1 text-xl font-black">Banner spesial</h2>
+            <p className="text-muted mt-1 text-xs">
+              Tampilkan promo, event, atau pengumuman penting di storefront.
+            </p>
+          </div>
+          <GlobalInput type="hidden" name="promoImageUrl" value={promoImage} />
+          <label className="border-line relative flex min-h-40 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-dashed bg-[#f6f3ef] p-4 text-center">
+            {promoImage && (
+              <img
+                src={promoImage}
+                alt="Preview banner promo"
+                className="absolute inset-0 size-full object-cover"
+              />
+            )}
+            {promoImage && <span className="absolute inset-0 bg-black/35" />}
+            <span
+              className={`relative rounded-xl px-4 py-3 text-xs font-extrabold ${promoImage ? "text-ink bg-white" : "text-brand bg-white shadow-sm"}`}
+            >
+              {promoImage ? "Ganti gambar event" : "Upload gambar event"}
+              <GlobalInput
+                className="hidden"
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                disabled={Boolean(uploading)}
+                onChange={(event) => selectFile(event, "promo")}
+              />
+            </span>
+          </label>
+          <div className="mt-4 grid gap-4">
+            <label className={field}>
+              Judul event / promo
+              <GlobalInput
+                name="promoTitle"
+                defaultValue={tenant.promo_title || ""}
+                maxLength={120}
+                placeholder="Contoh: Promo akhir pekan"
+              />
+            </label>
+            <label className={field}>
+              Deskripsi singkat
+              <GlobalTextarea
+                name="promoDescription"
+                defaultValue={tenant.promo_description || ""}
+                maxLength={300}
+                placeholder="Contoh: Diskon 20% untuk semua minuman."
+              />
+            </label>
+            <label className={field}>
+              Link tombol (opsional)
+              <GlobalInput
+                name="promoLinkUrl"
+                type="url"
+                defaultValue={tenant.promo_link_url || ""}
+                placeholder="https://..."
+              />
+            </label>
+            <label className="border-line flex items-center justify-between rounded-xl border px-3 py-3 text-sm font-bold">
+              Tampilkan banner di storefront
+              <GlobalInput
+                className="accent-brand size-4"
+                type="checkbox"
+                name="promoEnabled"
+                defaultChecked={tenant.promo_enabled}
+              />
+            </label>
+          </div>
+        </section>
       </div>
 
       <aside className="grid gap-5 xl:sticky xl:top-24">
@@ -473,7 +548,7 @@ export default function SettingsForm({
         </SubmitButton>
         <ImageCropDialog
           file={crop?.file || null}
-          aspect={crop?.kind === "logo" ? 1 : 16 / 9}
+          aspect={crop?.kind === "logo" ? 1 : crop?.kind === "promo" ? 2.2 : 16 / 9}
           onCancel={() => setCrop(null)}
           onConfirm={(cropped) => {
             const kind = crop?.kind;

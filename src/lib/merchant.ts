@@ -11,6 +11,11 @@ export type Tenant = {
   business_type: string | null;
   logo_url: string | null;
   banner_url: string | null;
+  promo_enabled: boolean;
+  promo_title: string | null;
+  promo_description: string | null;
+  promo_image_url: string | null;
+  promo_link_url: string | null;
   whatsapp: string | null;
   instagram: string | null;
   address: string | null;
@@ -35,7 +40,7 @@ export const getCurrentMerchant = cache(async function getCurrentMerchant() {
   let { data: tenant, error } = await supabase
     .from("tenants")
     .select(
-      "id,owner_id,name,slug,description,business_type,logo_url,banner_url,whatsapp,instagram,address,maps_url,is_published,is_active,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours,plan",
+      "id,owner_id,name,slug,description,business_type,logo_url,banner_url,promo_enabled,promo_title,promo_description,promo_image_url,promo_link_url,whatsapp,instagram,address,maps_url,is_published,is_active,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours,plan",
     )
     .eq("owner_id", user.id)
     .maybeSingle<Tenant>();
@@ -54,7 +59,7 @@ export const getCurrentMerchant = cache(async function getCurrentMerchant() {
     const fallback = await admin
       .from("tenants")
       .select(
-        "id,owner_id,name,slug,description,business_type,logo_url,banner_url,whatsapp,instagram,address,maps_url,is_published,is_active,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours,plan",
+        "id,owner_id,name,slug,description,business_type,logo_url,banner_url,promo_enabled,promo_title,promo_description,promo_image_url,promo_link_url,whatsapp,instagram,address,maps_url,is_published,is_active,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours,plan",
       )
       .eq("owner_id", user.id)
       .maybeSingle<Tenant>();

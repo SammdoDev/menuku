@@ -48,8 +48,13 @@ export default function ImageCropDialog({ file, aspect, onCancel, onConfirm }: P
     setDrag({ x: event.clientX - offset.x, y: event.clientY - offset.y });
   }
   function moveDrag(event: React.PointerEvent<HTMLDivElement>) {
-    if (!drag) return;
-    setOffset({ x: event.clientX - drag.x, y: event.clientY - drag.y });
+    if (!drag || !display) return;
+    const maxX = Math.max(0, (display.width - viewportWidth) / 2);
+    const maxY = Math.max(0, (display.height - viewportHeight) / 2);
+    setOffset({
+      x: Math.min(maxX, Math.max(-maxX, event.clientX - drag.x)),
+      y: Math.min(maxY, Math.max(-maxY, event.clientY - drag.y)),
+    });
   }
   function stopDrag() {
     setDrag(null);

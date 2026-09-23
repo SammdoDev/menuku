@@ -34,7 +34,7 @@ export default function StorefrontFeatured({
             key={item.id}
             onClick={() => onSelect(item)}
           >
-            <img className="h-28 w-full object-cover sm:h-32" src={item.image} alt="" />
+            <img className="aspect-[4/3] w-full object-cover" src={item.image} alt="" />
             <div className="flex justify-between gap-2 p-3 text-xs font-bold">
               <span className="truncate">{item.name}</span>
               {showPrice && (

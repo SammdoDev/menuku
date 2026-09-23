@@ -7,6 +7,7 @@ import StorefrontDetail from "./components/storefront-detail";
 import StorefrontFeatured from "./components/storefront-featured";
 import StorefrontHeader from "./components/storefront-header";
 import StorefrontMenu from "./components/storefront-menu";
+import StorefrontPromo from "./components/storefront-promo";
 import StorefrontToast from "./components/storefront-toast";
 import { mapProducts, waUrl, type Item } from "./components/types";
 import { trackStorefront } from "../../lib/analytics";
@@ -68,6 +69,7 @@ export default function Storefront({ store }: { store: PublicStore }) {
             void share();
           }}
         />
+        <StorefrontPromo tenant={store.tenant} />
         <StorefrontFeatured
           items={items}
           showPrice={store.tenant.show_price}
