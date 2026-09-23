@@ -39,11 +39,22 @@ export default async function BillingConfirmationPage({
             <Clock3 className="text-brand" size={22} />
             <div>
               <p className="text-xs font-bold text-orange-900">Selesaikan pembayaran dalam</p>
-              <Countdown />
+              <Countdown startedAt={invoice?.created_at} />
             </div>
           </div>
         </div>
-        <div className="border-line my-6 grid gap-3 border-y py-5 text-sm">
+        <div className="my-6 rounded-2xl bg-[#faf8f4] p-4 text-center">
+          <p className="mb-3 text-xs font-bold">Scan QRIS untuk menyelesaikan pembayaran</p>
+          <img
+            src="/qris.jpeg"
+            alt="QRIS pembayaran Menuku"
+            className="mx-auto size-56 rounded-xl object-contain"
+          />
+          <p className="text-muted mt-2 text-[11px]">
+            Pastikan nominal transfer sesuai total invoice.
+          </p>
+        </div>
+        <div className="border-line grid gap-3 border-y py-5 text-sm">
           <div className="flex justify-between">
             <span className="text-muted">Nomor invoice</span>
             <b className="flex items-center gap-1 text-xs">

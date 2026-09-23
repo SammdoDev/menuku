@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { PlanCode } from "../../../lib/plans";
+import { GlobalAutocomplete } from "../../../components/ui/form-controls";
 
 export default function BillingButtons({
   code,
@@ -53,16 +54,16 @@ export default function BillingButtons({
       {code !== "free" && currentPlan !== "business" && (
         <label className="mb-4 grid gap-2 text-xs font-bold">
           Durasi paket
-          <select
-            value={months}
-            onChange={(event) => setMonths(event.target.value)}
-            className="border-line rounded-xl border bg-white px-3 py-3 text-sm"
-          >
-            <option value="1">1 bulan</option>
-            <option value="3">3 bulan</option>
-            <option value="6">6 bulan</option>
-            <option value="12">12 bulan</option>
-          </select>
+        <GlobalAutocomplete
+          value={months}
+          onValueChange={setMonths}
+          options={[
+            { value: "1", label: "1 bulan" },
+            { value: "3", label: "3 bulan" },
+            { value: "6", label: "6 bulan" },
+            { value: "12", label: "12 bulan" },
+          ]}
+        />
         </label>
       )}
       <button

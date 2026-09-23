@@ -14,7 +14,7 @@ import { publicStoreUrl } from "../lib/site";
 import Brand from "./brand";
 import { LoadingLink } from "./global-loading";
 
-type Active = "dashboard" | "menu" | "categories" | "links" | "publish" | "settings";
+type Active = "dashboard" | "menu" | "categories" | "links" | "publish" | "billing" | "settings";
 type Tenant = { name: string; slug: string };
 
 const links = [
@@ -23,6 +23,7 @@ const links = [
   { key: "categories", href: "/dashboard/categories", label: "Kategori", icon: Layers3 },
   { key: "links", href: "/dashboard/links", label: "Links", icon: Link2 },
   { key: "publish", href: "/dashboard/publish", label: "Publikasi", icon: QrCode },
+  { key: "billing", href: "/dashboard/billing", label: "Paket & billing", icon: CreditCard },
   { key: "settings", href: "/dashboard/settings", label: "Settings", icon: Settings },
 ] as const;
 

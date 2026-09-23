@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentMerchant } from "../../../../lib/merchant";
 import { plans } from "../../../../lib/plans";
+import { sendEmail } from "../../../../lib/email";
 
 const rank = { free: 0, premium: 1, business: 2 } as const;
 function addMonths(date: Date, months: number) {
@@ -69,5 +70,26 @@ export async function POST(request: Request) {
       { error: "Konfirmasi pembayaran belum dapat dicatat." },
       { status: 500 },
     );
+  if (user.email)
+    await sendEmail({
+      to: user.email,
+      subject: `Invoice Menuku ${orderId}`,
+      html: `<h2>Konfirmasi pembayaran diterima</h2><p>Invoice <b>${orderId}</b> untuk paket <b>${plans[plan].name}</b> sebesar <b>Rp${amount.toLocaleString("id-ID")}</b> sudah dibuat.</p><p>Silakan selesaikan pembayaran melalui QRIS. Admin akan memverifikasi pembayaran secara manual.</p>`,
+    });
+  const adminEmails = (process.env.ADMIN_EMAILS || "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  await Promise.all(
+    adminEmails
+      .filter((adminEmail) => adminEmail !== user.email)
+      .map((adminEmail) =>
+        sendEmail({
+          to: adminEmail,
+          subject: `Pembayaran baru Menuku: ${orderId}`,
+          html: `<h2>Ada pembayaran baru</h2><p>Tenant <b>${tenant.name}</b> mengajukan paket <b>${plans[plan].name}</b> sebesar <b>Rp${amount.toLocaleString("id-ID")}</b>.</p><p>Order: ${orderId}</p>`,
+        }),
+      ),
+  );
   return NextResponse.json({ ok: true, orderId });
 }

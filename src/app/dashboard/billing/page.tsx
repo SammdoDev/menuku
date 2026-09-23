@@ -16,7 +16,7 @@ export default async function BillingPage() {
     .limit(1)
     .maybeSingle();
   return (
-    <DashboardShell tenant={tenant} active="settings" title="Paket & pembayaran">
+    <DashboardShell tenant={tenant} active="billing" title="Paket & pembayaran">
       <section className="mb-7">
         <p className="text-brand mb-2 flex items-center gap-1.5 text-[10px] font-black tracking-[.14em]">
           <Sparkles size={14} /> PAKET MENUKU
