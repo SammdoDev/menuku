@@ -82,14 +82,28 @@ export async function createTenantAction(formData: FormData) {
       process.env.SUPABASE_SERVICE_ROLE_KEY,
       { auth: { autoRefreshToken: false, persistSession: false } },
     );
-    await admin
+    const { error: profileError } = await admin
       .from("profiles")
       .upsert(
         { id: user.id, email: user.email || "", name: user.user_metadata.name || "" },
         { onConflict: "id" },
       );
+    if (profileError)
+      console.error("[onboarding] profile recovery failed", {
+        code: profileError.code,
+        message: profileError.message,
+        details: profileError.details,
+        hint: profileError.hint,
+      });
     ({ error } = await admin.from("tenants").insert(tenantInput));
   }
+  if (error)
+    console.error("[onboarding] tenant creation failed", {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
   if (error?.code === "23505") fail("Alamat tersebut sudah dipakai. Coba yang lain.");
   if (error?.code === "23503")
     fail(
