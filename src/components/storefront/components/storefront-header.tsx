@@ -2,6 +2,7 @@ import { Clock3, ExternalLink, Instagram, MapPin, MessageCircle, Share2 } from "
 import type { PublicStore } from "../../../lib/store";
 import { normalizeImageUrl } from "../../../lib/image-url";
 import { waUrl } from "./types";
+import { trackStorefront } from "../../../lib/analytics";
 
 export default function StorefrontHeader({
   store,
@@ -86,6 +87,7 @@ export default function StorefrontHeader({
           <a
             className="bg-brand hover:bg-brand-dark inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-3 text-sm font-extrabold text-white transition sm:flex-none"
             href={whatsapp}
+            onClick={() => trackStorefront(store.tenant.slug, "whatsapp_click")}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -97,6 +99,7 @@ export default function StorefrontHeader({
           <a
             className="grid size-12 place-items-center rounded-xl bg-[#f6f4f0]"
             href={instagram}
+            onClick={() => trackStorefront(store.tenant.slug, "instagram_click")}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -108,6 +111,7 @@ export default function StorefrontHeader({
           <a
             className="grid size-12 place-items-center rounded-xl bg-[#f6f4f0]"
             href={store.tenant.maps_url}
+            onClick={() => trackStorefront(store.tenant.slug, "maps_click")}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Lokasi"
@@ -119,6 +123,7 @@ export default function StorefrontHeader({
           <a
             className="grid size-12 place-items-center rounded-xl bg-[#f6f4f0]"
             href={link.url}
+            onClick={() => trackStorefront(store.tenant.slug, "link_click", { linkId: link.id })}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={link.title}

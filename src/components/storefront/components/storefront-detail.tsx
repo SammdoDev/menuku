@@ -4,6 +4,7 @@ import { ExternalLink, MessageCircle, X } from "lucide-react";
 import type { PublicStore } from "../../../lib/store";
 import { rupiah } from "../../../lib/demo-data";
 import { waUrl, type Item } from "./types";
+import { trackStorefront } from "../../../lib/analytics";
 
 export default function StorefrontDetail({
   product,
@@ -71,6 +72,9 @@ export default function StorefrontDetail({
               <a
                 className="bg-brand flex min-h-12 items-center justify-center gap-2 rounded-xl text-sm font-extrabold text-white"
                 href={url}
+                onClick={() =>
+                  trackStorefront(store.tenant.slug, "whatsapp_click", { productId: product.id })
+                }
                 target="_blank"
                 rel="noopener noreferrer"
               >

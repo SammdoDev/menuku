@@ -1,4 +1,5 @@
 import { LayoutGrid, MessageCircle, Search, Share2 } from "lucide-react";
+import { trackStorefront } from "../../../lib/analytics";
 
 export default function StorefrontBottomNav({
   onMenu,
@@ -7,6 +8,7 @@ export default function StorefrontBottomNav({
   whatsapp,
   primaryColor,
   backgroundColor,
+  slug,
 }: {
   onMenu: () => void;
   onSearch: () => void;
@@ -14,6 +16,7 @@ export default function StorefrontBottomNav({
   whatsapp: string;
   primaryColor: string;
   backgroundColor: string;
+  slug: string;
 }) {
   const item =
     "grid min-h-12 place-items-center gap-0.5 rounded-xl text-[9px] font-extrabold transition hover:bg-black/[.04]";
@@ -38,6 +41,7 @@ export default function StorefrontBottomNav({
           className="-mt-3 grid min-h-13 place-items-center gap-0.5 rounded-xl text-[9px] font-extrabold text-white shadow-lg"
           style={{ backgroundColor: primaryColor, boxShadow: `0 10px 24px ${primaryColor}55` }}
           href={whatsapp}
+          onClick={() => trackStorefront(slug, "whatsapp_click")}
           target="_blank"
           rel="noopener noreferrer"
         >

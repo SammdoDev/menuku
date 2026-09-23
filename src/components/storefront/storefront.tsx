@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { PublicStore } from "../../lib/store";
 import StorefrontBottomNav from "./components/storefront-bottom-nav";
 import StorefrontDetail from "./components/storefront-detail";
@@ -9,6 +9,7 @@ import StorefrontHeader from "./components/storefront-header";
 import StorefrontMenu from "./components/storefront-menu";
 import StorefrontToast from "./components/storefront-toast";
 import { mapProducts, waUrl, type Item } from "./components/types";
+import { trackStorefront } from "../../lib/analytics";
 
 export default function Storefront({ store }: { store: PublicStore }) {
   const [active, setActive] = useState("Semua");
@@ -17,6 +18,7 @@ export default function Storefront({ store }: { store: PublicStore }) {
   const [notice, setNotice] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
   const items = useMemo(() => mapProducts(store), [store]);
+  useEffect(() => trackStorefront(store.tenant.slug, "page_view"), [store.tenant.slug]);
   const categories = [
     "Semua",
     ...store.categories.map((category) => category.name),
@@ -55,11 +57,20 @@ export default function Storefront({ store }: { store: PublicStore }) {
   return (
     <main className="min-h-dvh sm:p-8" style={themeStyle}>
       <section className="mx-auto max-w-5xl overflow-hidden bg-[var(--store-background)] shadow-[0_22px_65px_#433d3022] sm:rounded-sm">
-        <StorefrontHeader store={store} onShare={share} />
+        <StorefrontHeader
+          store={store}
+          onShare={() => {
+            trackStorefront(store.tenant.slug, "share_click");
+            void share();
+          }}
+        />
         <StorefrontFeatured
           items={items}
           showPrice={store.tenant.show_price}
-          onSelect={setSelected}
+          onSelect={(item) => {
+            trackStorefront(store.tenant.slug, "product_view", { productId: item.id });
+            setSelected(item);
+          }}
           onSeeAll={() => {
             setActive("Semua");
             setQuery("");
@@ -72,9 +83,15 @@ export default function Storefront({ store }: { store: PublicStore }) {
           categories={categories}
           active={active}
           query={query}
-          onActiveChange={setActive}
+          onActiveChange={(value) => {
+            trackStorefront(store.tenant.slug, "category_click");
+            setActive(value);
+          }}
           onQueryChange={setQuery}
-          onSelect={setSelected}
+          onSelect={(item) => {
+            trackStorefront(store.tenant.slug, "product_view", { productId: item.id });
+            setSelected(item);
+          }}
           layout={store.tenant.layout_type === "list" ? "list" : "grid"}
           showPrice={store.tenant.show_price}
         />
@@ -93,10 +110,14 @@ export default function Storefront({ store }: { store: PublicStore }) {
       <StorefrontBottomNav
         onMenu={goToMenu}
         onSearch={focusSearch}
-        onShare={share}
+        onShare={() => {
+          trackStorefront(store.tenant.slug, "share_click");
+          void share();
+        }}
         whatsapp={whatsapp}
         primaryColor={store.tenant.primary_color || "#FF6534"}
         backgroundColor={store.tenant.background_color || "#EEECE5"}
+        slug={store.tenant.slug}
       />
       <StorefrontToast message={notice} />
     </main>
