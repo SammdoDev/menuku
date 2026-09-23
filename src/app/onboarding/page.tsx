@@ -4,7 +4,12 @@ import Brand from "../../components/brand";
 import { getCurrentMerchant } from "../../lib/merchant";
 import OnboardingForm from "./onboarding-form";
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
   const { user, tenant } = await getCurrentMerchant();
   if (!user) redirect("/login");
   if (tenant) redirect("/dashboard");
@@ -44,6 +49,14 @@ export default async function OnboardingPage() {
             Tambahkan foto profil serta background dahulu, seperti menyiapkan halaman bisnis
             profesional.
           </p>
+          {error && (
+            <div
+              className="mb-5 rounded-xl bg-red-50 p-3 text-xs leading-5 text-red-700"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
           <OnboardingForm />
         </article>
       </section>

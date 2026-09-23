@@ -31,12 +31,18 @@ export const getCurrentMerchant = cache(async function getCurrentMerchant() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { user: null, tenant: null, supabase };
-  const { data: tenant } = await supabase
+  const { data: tenant, error } = await supabase
     .from("tenants")
     .select(
       "id,owner_id,name,slug,description,business_type,logo_url,banner_url,whatsapp,instagram,address,maps_url,is_published,is_active,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours,plan",
     )
     .eq("owner_id", user.id)
     .maybeSingle<Tenant>();
+  if (error)
+    console.error("[merchant] failed to load tenant", {
+      userId: user.id,
+      code: error.code,
+      message: error.message,
+    });
   return { user, tenant, supabase };
 });
