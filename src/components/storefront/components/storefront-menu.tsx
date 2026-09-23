@@ -1,5 +1,5 @@
 import { forwardRef, useMemo } from "react";
-import { Search, X } from "lucide-react";
+import { ChevronRight, Search, X } from "lucide-react";
 import { rupiah } from "../../../lib/demo-data";
 import type { Item } from "./types";
 
@@ -93,7 +93,7 @@ const StorefrontMenu = forwardRef<
               <button
                 className={`min-w-0 text-left ${
                   layout === "list"
-                    ? "border-line grid grid-cols-[92px_1fr] gap-3 rounded-2xl border p-2 sm:grid-cols-[120px_1fr]"
+                    ? "border-line group grid grid-cols-[92px_1fr] gap-3 rounded-2xl border bg-white p-2.5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:grid-cols-[124px_1fr] sm:gap-4 sm:p-3"
                     : ""
                 } ${!item.available ? "opacity-60 grayscale" : ""}`}
                 key={item.id}
@@ -129,12 +129,21 @@ const StorefrontMenu = forwardRef<
                   <p className="text-muted line-clamp-2 min-h-8 text-[11px] leading-4">
                     {item.description || "Menu pilihan"}
                   </p>
-                  {showPrice && (
-                    <div className="mt-1 flex items-center gap-2 text-xs">
-                      {item.promo && <s className="text-muted">{rupiah(item.price)}</s>}
-                      <strong className="text-brand">{rupiah(item.promo ?? item.price)}</strong>
-                    </div>
-                  )}
+                  <div className="mt-2 flex items-end justify-between gap-2">
+                    {showPrice ? (
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
+                        {item.promo && <s className="text-muted">{rupiah(item.price)}</s>}
+                        <strong className="text-brand">{rupiah(item.promo ?? item.price)}</strong>
+                      </div>
+                    ) : (
+                      <span />
+                    )}
+                    {layout === "list" && (
+                      <span className="text-brand group-hover:bg-brand grid size-7 shrink-0 place-items-center rounded-full bg-orange-50 transition group-hover:text-white">
+                        <ChevronRight size={16} />
+                      </span>
+                    )}
+                  </div>
                 </div>
               </button>
             ))}
