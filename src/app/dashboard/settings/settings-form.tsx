@@ -12,6 +12,7 @@ import {
 import { updateStoreSettingsAction } from "../actions";
 import { optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
 import { normalizeImageUrl } from "../../../lib/image-url";
+import ImageCropDialog from "../../../components/image-crop-dialog";
 
 type UploadKind = "logo" | "banner";
 
@@ -48,6 +49,7 @@ export default function SettingsForm({
   const [layout, setLayout] = useState(tenant.layout_type === "list" ? "list" : "grid");
   const [uploading, setUploading] = useState<UploadKind | null>(null);
   const [uploadError, setUploadError] = useState("");
+  const [crop, setCrop] = useState<{ file: File; kind: UploadKind } | null>(null);
 
   async function upload(file: File, kind: UploadKind) {
     setUploadError("");
@@ -71,7 +73,7 @@ export default function SettingsForm({
 
   function selectFile(event: ChangeEvent<HTMLInputElement>, kind: UploadKind) {
     const file = event.currentTarget.files?.[0];
-    if (file) void upload(file, kind);
+    if (file) setCrop({ file, kind });
     event.currentTarget.value = "";
   }
 
@@ -464,6 +466,16 @@ export default function SettingsForm({
         <SubmitButton pendingLabel="Menyimpan pengaturan..." disabled={Boolean(uploading)}>
           Simpan semua perubahan
         </SubmitButton>
+        <ImageCropDialog
+          file={crop?.file || null}
+          aspect={crop?.kind === "logo" ? 1 : 16 / 9}
+          onCancel={() => setCrop(null)}
+          onConfirm={(cropped) => {
+            const kind = crop?.kind;
+            setCrop(null);
+            if (kind) void upload(cropped, kind);
+          }}
+        />
       </aside>
     </form>
   );

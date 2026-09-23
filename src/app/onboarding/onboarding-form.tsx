@@ -12,6 +12,7 @@ import { createTenantAction } from "./actions";
 import { optimizeImage, readImageUploadResponse } from "../../lib/image-upload";
 import { normalizeImageUrl } from "../../lib/image-url";
 import { PUBLIC_SITE_URL } from "../../lib/site";
+import ImageCropDialog from "../../components/image-crop-dialog";
 
 type UploadKind = "logo" | "banner";
 const businessTypes = [
@@ -30,6 +31,7 @@ export default function OnboardingForm() {
   const [slug, setSlug] = useState("");
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState<UploadKind | null>(null);
+  const [crop, setCrop] = useState<{ file: File; kind: UploadKind } | null>(null);
   async function upload(file: File, kind: UploadKind) {
     setError("");
     setUploading(kind);
@@ -51,7 +53,7 @@ export default function OnboardingForm() {
   }
   function selectFile(event: ChangeEvent<HTMLInputElement>, kind: UploadKind) {
     const file = event.currentTarget.files?.[0];
-    if (file) void upload(file, kind);
+    if (file) setCrop({ file, kind });
     event.currentTarget.value = "";
   }
   const label = "grid gap-2 text-sm font-bold";
@@ -169,6 +171,16 @@ export default function OnboardingForm() {
       <SubmitButton pendingLabel="Membuat halaman..." disabled={Boolean(uploading)}>
         Lanjut ke menu
       </SubmitButton>
+      <ImageCropDialog
+        file={crop?.file || null}
+        aspect={crop?.kind === "logo" ? 1 : 16 / 9}
+        onCancel={() => setCrop(null)}
+        onConfirm={(cropped) => {
+          const kind = crop?.kind;
+          setCrop(null);
+          if (kind) void upload(cropped, kind);
+        }}
+      />
     </form>
   );
 }

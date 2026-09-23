@@ -12,6 +12,7 @@ import {
 import { createProductAction, updateProductAction } from "../actions";
 import { optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
 import { normalizeImageUrl } from "../../../lib/image-url";
+import ImageCropDialog from "../../../components/image-crop-dialog";
 
 type Category = { id: string; name: string };
 type Product = {
@@ -38,6 +39,7 @@ export default function ProductForm({
   const [imageUrl, setImageUrl] = useState(normalizeImageUrl(product?.image_url));
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [cropFile, setCropFile] = useState<File | null>(null);
   async function upload(file: File) {
     setError("");
     setUploading(true);
@@ -58,7 +60,7 @@ export default function ProductForm({
   }
   function selectFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files?.[0];
-    if (file) void upload(file);
+    if (file) setCropFile(file);
     event.currentTarget.value = "";
   }
   const field = "grid gap-2 text-sm font-bold";
@@ -182,6 +184,15 @@ export default function ProductForm({
           </button>
         )}
       </div>
+      <ImageCropDialog
+        file={cropFile}
+        aspect={4 / 3}
+        onCancel={() => setCropFile(null)}
+        onConfirm={(cropped) => {
+          setCropFile(null);
+          void upload(cropped);
+        }}
+      />
     </form>
   );
 }
