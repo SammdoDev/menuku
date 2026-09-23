@@ -43,6 +43,7 @@ export default function SettingsForm({
   tenant: Tenant;
   siteOrigin: string;
 }) {
+  const canUsePromo = tenant.plan !== "free";
   const [logo, setLogo] = useState(normalizeImageUrl(tenant.logo_url));
   const [banner, setBanner] = useState(normalizeImageUrl(tenant.banner_url));
   const [promoImage, setPromoImage] = useState(normalizeImageUrl(tenant.promo_image_url));
@@ -316,7 +317,7 @@ export default function SettingsForm({
           </p>
         </section>
 
-        <section className={card}>
+        <section className={`${card} ${!canUsePromo ? "opacity-75" : ""}`}>
           <div className="mb-5">
             <p className="text-brand text-[10px] font-black tracking-[.12em] uppercase">
               Event & promo
@@ -327,7 +328,9 @@ export default function SettingsForm({
             </p>
           </div>
           <GlobalInput type="hidden" name="promoImageUrl" value={promoImage} />
-          <label className="border-line relative flex min-h-40 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-dashed bg-[#f6f3ef] p-4 text-center">
+          <label
+            className={`border-line relative flex min-h-40 items-center justify-center overflow-hidden rounded-2xl border border-dashed bg-[#f6f3ef] p-4 text-center ${canUsePromo ? "cursor-pointer" : "cursor-not-allowed"}`}
+          >
             {promoImage && (
               <img
                 src={promoImage}
@@ -344,7 +347,7 @@ export default function SettingsForm({
                 className="hidden"
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
-                disabled={Boolean(uploading)}
+                disabled={!canUsePromo || Boolean(uploading)}
                 onChange={(event) => selectFile(event, "promo")}
               />
             </span>
@@ -357,6 +360,7 @@ export default function SettingsForm({
                 defaultValue={tenant.promo_title || ""}
                 maxLength={120}
                 placeholder="Contoh: Promo akhir pekan"
+                disabled={!canUsePromo}
               />
             </label>
             <label className={field}>
@@ -366,6 +370,7 @@ export default function SettingsForm({
                 defaultValue={tenant.promo_description || ""}
                 maxLength={300}
                 placeholder="Contoh: Diskon 20% untuk semua minuman."
+                disabled={!canUsePromo}
               />
             </label>
             <label className={field}>
@@ -375,6 +380,7 @@ export default function SettingsForm({
                 type="url"
                 defaultValue={tenant.promo_link_url || ""}
                 placeholder="https://..."
+                disabled={!canUsePromo}
               />
             </label>
             <label className="border-line flex items-center justify-between rounded-xl border px-3 py-3 text-sm font-bold">
@@ -384,8 +390,15 @@ export default function SettingsForm({
                 type="checkbox"
                 name="promoEnabled"
                 defaultChecked={tenant.promo_enabled}
+                disabled={!canUsePromo}
               />
             </label>
+            {!canUsePromo && (
+              <p className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-bold text-amber-800">
+                Fitur Event & Promo tersedia mulai paket Premium. Upgrade paket untuk
+                mengaktifkannya.
+              </p>
+            )}
           </div>
         </section>
       </div>

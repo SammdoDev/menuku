@@ -3,7 +3,12 @@ import type { PublicStore } from "../../../lib/store";
 import { normalizeImageUrl } from "../../../lib/image-url";
 
 export default function StorefrontPromo({ tenant }: { tenant: PublicStore["tenant"] }) {
-  if (!tenant.promo_enabled || (!tenant.promo_title && !tenant.promo_image_url)) return null;
+  if (
+    tenant.plan === "free" ||
+    !tenant.promo_enabled ||
+    (!tenant.promo_title && !tenant.promo_image_url)
+  )
+    return null;
   const content = (
     <div className="relative min-h-36 overflow-hidden rounded-2xl bg-[#2c2924] text-white shadow-sm">
       {normalizeImageUrl(tenant.promo_image_url) && (

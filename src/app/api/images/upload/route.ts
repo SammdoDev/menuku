@@ -24,6 +24,18 @@ export async function POST(request: Request) {
     const kind = ["logo", "banner", "promo", "product"].includes(requestedKind)
       ? requestedKind
       : "product";
+    if (kind === "promo") {
+      const { data: tenant } = await supabase
+        .from("tenants")
+        .select("plan")
+        .eq("owner_id", user.id)
+        .maybeSingle();
+      if (tenant?.plan === "free")
+        return NextResponse.json(
+          { error: "Event & Promo tersedia mulai paket Premium." },
+          { status: 403 },
+        );
+    }
     if (!(file instanceof File))
       return NextResponse.json({ error: "File gambar tidak ditemukan." }, { status: 400 });
     if (!allowed.has(file.type))

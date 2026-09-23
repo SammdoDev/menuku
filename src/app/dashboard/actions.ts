@@ -414,6 +414,7 @@ export async function updateStoreSettingsAction(formData: FormData) {
 
   const { tenant, supabase } = await requireTenant();
   const rules = getPlanRules(tenant!.plan);
+  const promoAllowed = tenant!.plan !== "free";
   const previousSlug = tenant!.slug;
   const { error } = await supabase
     .from("tenants")
@@ -428,11 +429,11 @@ export async function updateStoreSettingsAction(formData: FormData) {
       maps_url: value.mapsUrl || null,
       logo_url: value.logoUrl || null,
       banner_url: value.bannerUrl || null,
-      promo_enabled: value.promoEnabled ?? false,
-      promo_title: value.promoTitle || null,
-      promo_description: value.promoDescription || null,
-      promo_image_url: value.promoImageUrl || null,
-      promo_link_url: value.promoLinkUrl || null,
+      promo_enabled: promoAllowed ? (value.promoEnabled ?? false) : false,
+      promo_title: promoAllowed ? value.promoTitle || null : tenant!.promo_title,
+      promo_description: promoAllowed ? value.promoDescription || null : tenant!.promo_description,
+      promo_image_url: promoAllowed ? value.promoImageUrl || null : tenant!.promo_image_url,
+      promo_link_url: promoAllowed ? value.promoLinkUrl || null : tenant!.promo_link_url,
       primary_color: rules.customStyle ? value.primaryColor.toUpperCase() : "#FF6534",
       background_color: rules.customStyle ? value.backgroundColor.toUpperCase() : "#F7F6F2",
       layout_type: rules.customStyle ? value.layoutType : "grid",
