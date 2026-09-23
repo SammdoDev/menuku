@@ -18,7 +18,9 @@ export default function BillingButtons({ code, price }: { code: PlanCode; price:
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || "Pembayaran belum dapat dibuat.");
-      setError("Konfirmasi terkirim. Paket aktif setelah admin memverifikasi pembayaran.");
+      window.location.assign(
+        `/dashboard/billing/confirmation?order=${encodeURIComponent(data.orderId)}&plan=${code}`,
+      );
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Pembayaran gagal dibuat.");
       setLoading(false);

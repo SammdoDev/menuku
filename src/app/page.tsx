@@ -33,12 +33,7 @@ const marketingPlans = [
     name: "Premium",
     price: rupiah(plans.premium.price),
     note: "per bulan · untuk bisnis berkembang",
-    features: [
-      "Produk tanpa batas",
-      "Tema dan warna brand",
-      "Analytics lengkap",
-      "Hilangkan branding Menuku",
-    ],
+    features: ["Maks. 6 kategori & 30 produk", "5 custom link", "Analytics dasar", "Custom style"],
     href: "/register?plan=premium",
     cta: "Pilih Premium",
     featured: true,

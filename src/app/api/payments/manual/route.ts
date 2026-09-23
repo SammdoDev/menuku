@@ -26,5 +26,5 @@ export async function POST(request: Request) {
       { error: "Konfirmasi pembayaran belum dapat dicatat." },
       { status: 500 },
     );
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, orderId });
 }
