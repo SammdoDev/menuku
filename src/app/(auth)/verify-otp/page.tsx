@@ -4,10 +4,13 @@ import { requestOtpAction, verifyEmailOtpAction } from "../actions";
 import AuthShell from "../auth-shell";
 import AuthToast from "../auth-toast";
 
-type Props = { searchParams: Promise<{ email?: string; mode?: string; error?: string }> };
+type Props = {
+  searchParams: Promise<{ email?: string; mode?: string; type?: string; error?: string }>;
+};
 export default async function VerifyOtpPage({ searchParams }: Props) {
-  const { email = "", mode, error } = await searchParams;
+  const { email = "", mode, type, error } = await searchParams;
   const isRegister = mode === "register";
+  const otpType = type === "signup" ? "signup" : "email";
   return (
     <>
       <AuthToast error={error} />
@@ -23,6 +26,7 @@ export default async function VerifyOtpPage({ searchParams }: Props) {
         <form className="grid gap-4" action={verifyEmailOtpAction}>
           <GlobalInput type="hidden" name="email" value={email} />
           <GlobalInput type="hidden" name="mode" value={isRegister ? "register" : "login"} />
+          <GlobalInput type="hidden" name="otpType" value={otpType} />
           <label className="grid gap-2 text-sm font-bold">
             Kode OTP
             <GlobalInput

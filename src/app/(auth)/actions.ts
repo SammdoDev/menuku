@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
+import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { PUBLIC_SITE_URL } from "../../lib/site";
 import { createSupabaseServerClient } from "../../lib/supabase/server";
@@ -63,10 +64,37 @@ export async function requestOtpAction(formData: FormData) {
   if (!email.success) back(path, "error", email.error.issues[0].message);
   if (mode === "register" && !name.success) back(path, "error", name.error.issues[0].message);
   const supabase = await createSupabaseServerClient();
+  let otpType: "email" | "signup" = mode === "register" ? "signup" : "email";
+  let shouldCreateUser = mode === "register";
+  if (
+    mode === "register" &&
+    process.env.SUPABASE_SERVICE_ROLE_KEY &&
+    process.env.NEXT_PUBLIC_SUPABASE_URL
+  ) {
+    const admin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      { auth: { autoRefreshToken: false, persistSession: false } },
+    );
+    const { error: createError } = await admin.auth.admin.createUser({
+      email: email.data!,
+      email_confirm: true,
+      user_metadata: { name: name.data, selected_plan: plan },
+    });
+    if (createError && !createError.message.toLowerCase().includes("already registered")) {
+      console.error("[auth] pre-create user failed", {
+        code: createError.code,
+        message: createError.message,
+      });
+      back(path, "error", "Akun belum dapat dibuat. Coba lagi beberapa saat.");
+    }
+    shouldCreateUser = false;
+    otpType = "email";
+  }
   const { error } = await supabase.auth.signInWithOtp({
     email: email.data!,
     options: {
-      shouldCreateUser: mode === "register",
+      shouldCreateUser,
       data: mode === "register" ? { name: name.data, selected_plan: plan } : undefined,
     },
   });
@@ -106,12 +134,13 @@ export async function requestOtpAction(formData: FormData) {
       `Kode OTP belum dapat dikirim. Coba lagi dalam satu menit.${localAuthDetail(error)}`,
     );
   }
-  redirect(`/verify-otp?email=${encodeURIComponent(email.data!)}&mode=${mode}`);
+  redirect(`/verify-otp?email=${encodeURIComponent(email.data!)}&mode=${mode}&type=${otpType}`);
 }
 
 export async function verifyEmailOtpAction(formData: FormData) {
   const email = emailOnly.safeParse(formData.get("email"));
   const mode = formData.get("mode") === "register" ? "register" : "login";
+  const otpType = formData.get("otpType") === "signup" ? "signup" : "email";
   const token = z
     .string()
     .trim()
@@ -119,7 +148,7 @@ export async function verifyEmailOtpAction(formData: FormData) {
     .safeParse(formData.get("token"));
   if (!email.success || !token.success)
     back(
-      `/verify-otp?email=${encodeURIComponent(String(formData.get("email") ?? ""))}&mode=${mode}`,
+      `/verify-otp?email=${encodeURIComponent(String(formData.get("email") ?? ""))}&mode=${mode}&type=${otpType}`,
       "error",
       token.success ? "Email tidak valid." : token.error.issues[0].message,
     );
@@ -127,12 +156,12 @@ export async function verifyEmailOtpAction(formData: FormData) {
   const { error } = await supabase.auth.verifyOtp({
     email: email.data!,
     token: token.data!,
-    type: mode === "register" ? "signup" : "email",
+    type: otpType,
   });
   if (error) {
     console.error("[auth] OTP verification failed", { code: error.code, message: error.message });
     back(
-      `/verify-otp?email=${encodeURIComponent(email.data!)}&mode=${mode}`,
+      `/verify-otp?email=${encodeURIComponent(email.data!)}&mode=${mode}&type=${otpType}`,
       "error",
       "Kode OTP salah atau sudah kedaluwarsa. Minta kode baru.",
     );
