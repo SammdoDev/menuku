@@ -50,6 +50,7 @@ export default function ProductForm({
       const data = await readImageUploadResponse(response);
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       setImageUrl(data.url);
+      if (data.albumWarning) setError(data.albumWarning);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Upload gambar gagal.");
     } finally {

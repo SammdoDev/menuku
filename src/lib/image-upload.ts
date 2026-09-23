@@ -1,4 +1,4 @@
-export type ImageUploadResponse = { url?: string; error?: string };
+export type ImageUploadResponse = { url?: string; error?: string; albumWarning?: string };
 export const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
 const OPTIMIZED_IMAGE_SIZE = 3.5 * 1024 * 1024;
 

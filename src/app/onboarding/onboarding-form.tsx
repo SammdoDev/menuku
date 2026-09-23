@@ -43,6 +43,7 @@ export default function OnboardingForm() {
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       if (kind === "logo") setLogo(data.url);
       else setBanner(data.url);
+      if (data.albumWarning) setError(data.albumWarning);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Upload gambar gagal.");
     } finally {

@@ -62,6 +62,7 @@ export default function SettingsForm({
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       if (kind === "logo") setLogo(data.url);
       else setBanner(data.url);
+      if (data.albumWarning) setUploadError(data.albumWarning);
     } catch (caught) {
       setUploadError(caught instanceof Error ? caught.message : "Upload gambar gagal.");
     } finally {
