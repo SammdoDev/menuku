@@ -7,10 +7,20 @@ export type Tenant = {
   slug: string;
   description: string | null;
   business_type: string | null;
+  logo_url: string | null;
+  banner_url: string | null;
   whatsapp: string | null;
+  instagram: string | null;
+  address: string | null;
+  maps_url: string | null;
   is_published: boolean;
   is_active: boolean;
   primary_color: string;
+  background_color: string;
+  layout_type: string;
+  show_price: boolean;
+  show_address: boolean;
+  show_opening_hours: boolean;
 };
 
 export async function getCurrentMerchant() {
@@ -22,7 +32,7 @@ export async function getCurrentMerchant() {
   const { data: tenant } = await supabase
     .from("tenants")
     .select(
-      "id,owner_id,name,slug,description,business_type,whatsapp,is_published,is_active,primary_color",
+      "id,owner_id,name,slug,description,business_type,logo_url,banner_url,whatsapp,instagram,address,maps_url,is_published,is_active,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours",
     )
     .eq("owner_id", user.id)
     .maybeSingle<Tenant>();

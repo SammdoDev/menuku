@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type CSSProperties } from "react";
 import type { PublicStore } from "../../lib/store";
 import StorefrontBottomNav from "./components/storefront-bottom-nav";
 import StorefrontDetail from "./components/storefront-detail";
@@ -47,12 +47,18 @@ export default function Storefront({ store }: { store: PublicStore }) {
     goToMenu();
     window.setTimeout(() => searchRef.current?.focus(), 450);
   };
+  const themeStyle = {
+    "--color-brand": store.tenant.primary_color || "#FF6534",
+    "--store-background": store.tenant.background_color || "#EEECE5",
+    backgroundColor: store.tenant.background_color || "#EEECE5",
+  } as CSSProperties;
   return (
-    <main className="min-h-dvh bg-[#eeece5] sm:p-8">
-      <section className="mx-auto max-w-5xl overflow-hidden bg-white shadow-[0_22px_65px_#433d3022] sm:rounded-sm">
+    <main className="min-h-dvh sm:p-8" style={themeStyle}>
+      <section className="mx-auto max-w-5xl overflow-hidden bg-[var(--store-background)] shadow-[0_22px_65px_#433d3022] sm:rounded-sm">
         <StorefrontHeader store={store} onShare={share} />
         <StorefrontFeatured
           items={items}
+          showPrice={store.tenant.show_price}
           onSelect={setSelected}
           onSeeAll={() => {
             setActive("Semua");
@@ -69,6 +75,8 @@ export default function Storefront({ store }: { store: PublicStore }) {
           onActiveChange={setActive}
           onQueryChange={setQuery}
           onSelect={setSelected}
+          layout={store.tenant.layout_type === "list" ? "list" : "grid"}
+          showPrice={store.tenant.show_price}
         />
         <footer className="border-line text-muted mx-5 mb-20 flex items-center justify-between border-t py-6 text-[10px] sm:mx-12 sm:mb-0 sm:text-xs">
           <p>

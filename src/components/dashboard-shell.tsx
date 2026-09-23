@@ -11,7 +11,7 @@ import {
 import { logoutAction } from "../app/(auth)/actions";
 import Brand from "./brand";
 
-type Active = "dashboard" | "menu" | "categories" | "links" | "publish";
+type Active = "dashboard" | "menu" | "categories" | "links" | "publish" | "settings";
 type Tenant = { name: string; slug: string };
 
 const links = [
@@ -20,7 +20,10 @@ const links = [
   { key: "categories", href: "/dashboard/categories", label: "Kategori", icon: Layers3 },
   { key: "links", href: "/dashboard/links", label: "Links", icon: Link2 },
   { key: "publish", href: "/dashboard/publish", label: "Publikasi", icon: QrCode },
+  { key: "settings", href: "/dashboard/settings", label: "Settings", icon: Settings },
 ] as const;
+
+const mobileLinks = links.filter(({ key }) => key !== "publish");
 
 export default function DashboardShell({
   tenant,
@@ -47,7 +50,7 @@ export default function DashboardShell({
           <div className="min-w-0">
             <b className="block truncate text-sm text-white">{tenant.name}</b>
             <small className="block truncate text-[10px] text-[#aaa39a]">
-              {tenant.slug}.menuku.id
+              www.digimenu.my.id/store/{tenant.slug}
             </small>
           </div>
         </div>
@@ -65,7 +68,7 @@ export default function DashboardShell({
         </nav>
         <div className="mt-auto border-t border-white/10 pt-4">
           <Link
-            href="/dashboard/publish"
+            href="/dashboard/settings"
             className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm hover:bg-white/[.08] hover:text-white"
           >
             <Settings size={18} />
@@ -96,7 +99,7 @@ export default function DashboardShell({
       <div className="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-10">{children}</div>
 
       <nav className="bg-charcoal/95 fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-2xl border border-white/10 p-1.5 text-white shadow-2xl backdrop-blur-xl lg:hidden">
-        {links.map(({ key, href, label, icon: Icon }) => (
+        {mobileLinks.map(({ key, href, label, icon: Icon }) => (
           <Link
             key={key}
             href={href}

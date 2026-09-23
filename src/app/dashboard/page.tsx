@@ -153,8 +153,9 @@ export default async function DashboardPage() {
           <p className="mb-2 text-[10px] font-black tracking-[.12em] text-[#ff9c79]">
             ALAMAT HALAMAN
           </p>
-          <h2 className="display-font max-w-[85%] text-2xl font-black break-all">
-            {tenant.slug}.<em className="text-[#ff9c79] not-italic">menuku.id</em>
+          <h2 className="display-font max-w-[85%] text-xl font-black break-all sm:text-2xl">
+            www.digimenu.my.id/store/
+            <em className="text-[#ff9c79] not-italic">{tenant.slug}</em>
           </h2>
           <p className="my-4 max-w-xs text-xs leading-5 text-white/60">
             {tenant.is_published

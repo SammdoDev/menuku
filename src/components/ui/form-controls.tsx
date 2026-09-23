@@ -40,10 +40,14 @@ export function GlobalAutocomplete({
   id,
   onChange,
   onValueChange,
+  inline = false,
+  searchable,
   ...props
 }: SelectHTMLAttributes<HTMLSelectElement> & {
   options: SelectOption[];
   onValueChange?: (value: string) => void;
+  inline?: boolean;
+  searchable?: boolean;
 }) {
   const generatedId = useId();
   const controlId = id || `global-autocomplete-${generatedId.replace(/:/g, "")}`;
@@ -73,11 +77,15 @@ export function GlobalAutocomplete({
       ),
     [options, query],
   );
-  const showSearch = options.filter((option) => !option.disabled).length > 5;
+  const showSearch = searchable ?? options.filter((option) => !option.disabled).length > 5;
 
   function updatePosition() {
     const trigger = buttonRef.current;
     if (!trigger) return;
+    if (inline) {
+      setMobile(false);
+      return;
+    }
     const isMobile = window.innerWidth < 640;
     setMobile(isMobile);
     if (isMobile) return;
@@ -177,21 +185,25 @@ export function GlobalAutocomplete({
 
   const dropdown = open && mounted && (
     <>
-      <button
-        type="button"
-        aria-label="Tutup pilihan"
-        className="fixed inset-0 z-[70] cursor-default bg-black/25 backdrop-blur-[1px] sm:bg-transparent sm:backdrop-blur-none"
-        onClick={() => closeDropdown(true)}
-      />
+      {!inline && (
+        <button
+          type="button"
+          aria-label="Tutup pilihan"
+          className="fixed inset-0 z-[70] cursor-default bg-black/25 backdrop-blur-[1px] sm:hidden"
+          onClick={() => closeDropdown(true)}
+        />
+      )}
       <div
         ref={menuRef}
         id={listboxId}
         role="listbox"
         aria-label={props.name ? `Pilihan ${props.name}` : "Daftar pilihan"}
-        className={`fixed z-[80] overflow-hidden border border-[#e5ddd4] bg-white shadow-[0_24px_70px_rgba(43,36,29,.24)] sm:rounded-2xl ${
-          mobile ? "inset-x-3 bottom-3 rounded-3xl" : ""
+        className={`z-[80] overflow-hidden border border-[#e5ddd4] bg-white shadow-[0_24px_70px_rgba(43,36,29,.24)] sm:rounded-2xl ${
+          inline
+            ? "absolute top-full right-0 left-0 mt-2 rounded-2xl"
+            : `fixed ${mobile ? "inset-x-3 bottom-3 rounded-3xl" : ""}`
         }`}
-        style={mobile ? undefined : menuStyle}
+        style={inline || mobile ? undefined : menuStyle}
       >
         <div className="flex items-center justify-between border-b border-[#eee8e1] px-4 py-3 sm:hidden">
           <div>
@@ -319,7 +331,7 @@ export function GlobalAutocomplete({
         size={17}
         className={`text-brand pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 transition ${open ? "rotate-180" : ""}`}
       />
-      {dropdown && createPortal(dropdown, document.body)}
+      {dropdown && (inline ? dropdown : createPortal(dropdown, document.body))}
     </div>
   );
 }

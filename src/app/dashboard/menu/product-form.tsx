@@ -1,7 +1,7 @@
 "use client";
 
 import { ImagePlus, LoaderCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import {
   GlobalAutocomplete,
   GlobalInput,
@@ -20,11 +20,11 @@ export default function ProductForm({
   slug: string;
 }) {
   const [imageUrl, setImageUrl] = useState("");
-  const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   async function upload(file: File) {
+    setError("");
     setUploading(true);
-    setStatus("");
     try {
       const body = new FormData();
       body.set("file", file);
@@ -32,14 +32,18 @@ export default function ProductForm({
       body.set("kind", "product");
       const response = await fetch("/api/images/upload", { method: "POST", body });
       const data = (await response.json()) as { url?: string; error?: string };
-      if (!response.ok || !data.url) throw new Error(data.error || "Gambar belum dapat diunggah.");
+      if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       setImageUrl(data.url);
-      setStatus("Foto menu siap dipakai.");
     } catch (caught) {
-      setStatus(caught instanceof Error ? caught.message : "Gambar belum dapat diunggah.");
+      setError(caught instanceof Error ? caught.message : "Upload gambar gagal.");
     } finally {
       setUploading(false);
     }
+  }
+  function selectFile(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.currentTarget.files?.[0];
+    if (file) void upload(file);
+    event.currentTarget.value = "";
   }
   const field = "grid gap-2 text-sm font-bold";
   const options = [
@@ -49,38 +53,37 @@ export default function ProductForm({
   return (
     <form className="grid gap-4" action={createProductAction}>
       <GlobalInput type="hidden" name="imageUrl" value={imageUrl} />
-      <label className="border-brand/30 text-brand relative grid min-h-36 cursor-pointer place-items-center overflow-hidden rounded-xl border-2 border-dashed bg-orange-50/50">
-        {imageUrl ? (
-          <img className="h-40 w-full object-cover" src={imageUrl} alt="Preview produk" />
-        ) : (
-          <span className="flex items-center gap-2 text-sm font-extrabold">
-            <ImagePlus size={20} />
-            Tambahkan foto produk
+      <div
+        className="border-brand/30 relative flex h-44 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed bg-gradient-to-br from-orange-50 to-[#eee7df] bg-cover bg-center"
+        style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
+        role={imageUrl ? "img" : undefined}
+        aria-label={imageUrl ? "Preview foto produk" : undefined}
+      >
+        {imageUrl && <span className="absolute inset-0 bg-black/20" aria-hidden="true" />}
+        <label className="relative inline-flex cursor-pointer items-center gap-2 rounded-xl bg-white/95 px-4 py-2.5 text-xs font-extrabold text-[#4f4942] shadow-lg transition hover:bg-white">
+          {uploading ? (
+            <LoaderCircle size={17} className="text-brand animate-spin" />
+          ) : (
+            <ImagePlus size={17} className="text-brand" />
+          )}
+          {uploading ? "Mengunggah..." : imageUrl ? "Ganti foto produk" : "Upload foto produk"}
+          <GlobalInput
+            className="hidden"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            disabled={uploading}
+            onChange={selectFile}
+          />
+        </label>
+        {imageUrl && !uploading && (
+          <span className="absolute right-2 bottom-2 rounded-lg bg-emerald-600/90 px-2 py-1 text-[10px] font-bold text-white shadow-sm">
+            Foto siap dipakai
           </span>
         )}
-        <GlobalInput
-          className="absolute inset-0 size-full cursor-pointer opacity-0"
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          disabled={uploading}
-          onChange={(event) => {
-            const file = event.currentTarget.files?.[0];
-            if (file) void upload(file);
-            event.currentTarget.value = "";
-          }}
-        />
-        {uploading && (
-          <em className="bg-charcoal/90 absolute right-2 bottom-2 flex items-center gap-1 rounded-lg px-2 py-1 text-[10px] text-white not-italic">
-            <LoaderCircle size={14} className="animate-spin" />
-            Mengunggah…
-          </em>
-        )}
-      </label>
-      {status && (
-        <p
-          className={`rounded-xl p-3 text-xs ${imageUrl ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}`}
-        >
-          {status}
+      </div>
+      {error && (
+        <p className="rounded-xl bg-red-50 p-3 text-xs text-red-700" role="alert">
+          {error}
         </p>
       )}
       <label className={field}>

@@ -65,16 +65,18 @@ export default function StorefrontHeader({
             {store.tenant.description || "Selamat datang di halaman menu kami."}
           </p>
           <div className="mt-2 grid gap-1 text-[11px] text-[#605b54] sm:flex sm:gap-4 sm:text-sm">
-            {store.tenant.address && (
+            {store.tenant.show_address && store.tenant.address && (
               <span className="flex items-center gap-1">
                 <MapPin size={14} />
                 {store.tenant.address}
               </span>
             )}
-            <span className="flex items-center gap-1">
-              <Clock3 size={14} />
-              Lihat menu terbaru kami
-            </span>
+            {store.tenant.show_opening_hours && (
+              <span className="flex items-center gap-1">
+                <Clock3 size={14} />
+                Lihat menu terbaru kami
+              </span>
+            )}
           </div>
         </div>
       </header>

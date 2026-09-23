@@ -67,6 +67,8 @@ export default async function LinksPage({ searchParams }: Props) {
                 id="link-type"
                 name="linkType"
                 defaultValue="whatsapp"
+                inline
+                searchable={false}
                 options={types.map((type) => ({ value: type, label: labels[type] }))}
               />
             </div>

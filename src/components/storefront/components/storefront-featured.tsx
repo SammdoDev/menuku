@@ -5,15 +5,17 @@ export default function StorefrontFeatured({
   items,
   onSelect,
   onSeeAll,
+  showPrice,
 }: {
   items: Item[];
   onSelect: (item: Item) => void;
   onSeeAll: () => void;
+  showPrice: boolean;
 }) {
   const featured = items.filter((item) => item.featured);
   if (!featured.length) return null;
   return (
-    <section className="bg-[#f8f7f4] px-5 py-7 sm:px-12 sm:py-9">
+    <section className="bg-black/[.025] px-5 py-7 sm:px-12 sm:py-9">
       <header className="mb-4 flex items-end justify-between">
         <div>
           <span className="text-brand text-[10px] font-black tracking-[.12em] uppercase">
@@ -35,7 +37,9 @@ export default function StorefrontFeatured({
             <img className="h-28 w-full object-cover sm:h-32" src={item.image} alt="" />
             <div className="flex justify-between gap-2 p-3 text-xs font-bold">
               <span className="truncate">{item.name}</span>
-              <strong className="text-brand shrink-0">{rupiah(item.promo ?? item.price)}</strong>
+              {showPrice && (
+                <strong className="text-brand shrink-0">{rupiah(item.promo ?? item.price)}</strong>
+              )}
             </div>
           </button>
         ))}

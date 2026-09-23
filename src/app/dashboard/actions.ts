@@ -217,3 +217,106 @@ export async function togglePublishAction(formData: FormData) {
   revalidatePath(`/store/${tenant!.slug}`);
   revalidatePath("/dashboard/publish");
 }
+
+const reservedSlugs = new Set([
+  "www",
+  "app",
+  "admin",
+  "api",
+  "dashboard",
+  "login",
+  "register",
+  "support",
+  "help",
+  "pricing",
+  "settings",
+]);
+
+const optionalUrl = z.preprocess(
+  (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+  z.string().trim().url("URL harus diawali http:// atau https://.").optional(),
+);
+
+export async function updateStoreSettingsAction(formData: FormData) {
+  const parsed = z
+    .object({
+      name: z.string().trim().min(2, "Nama bisnis minimal 2 karakter.").max(120),
+      slug: z
+        .string()
+        .trim()
+        .toLowerCase()
+        .regex(
+          /^[a-z0-9]([a-z0-9-]{1,28})[a-z0-9]$/,
+          "Alamat harus 3-30 karakter: huruf kecil, angka, atau tanda hubung.",
+        ),
+      businessType: z.string().trim().max(60).optional(),
+      description: z.string().trim().max(300).optional(),
+      whatsapp: z
+        .string()
+        .trim()
+        .regex(/^[0-9+\-\s()]*$/, "Nomor WhatsApp tidak valid.")
+        .max(30)
+        .optional(),
+      instagram: z.string().trim().max(100).optional(),
+      address: z.string().trim().max(500).optional(),
+      mapsUrl: optionalUrl,
+      logoUrl: optionalUrl,
+      bannerUrl: optionalUrl,
+      primaryColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Warna utama tidak valid."),
+      backgroundColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Warna latar tidak valid."),
+      layoutType: z.enum(["grid", "list"]),
+    })
+    .safeParse({
+      name: formData.get("name"),
+      slug: formData.get("slug"),
+      businessType: formData.get("businessType") || undefined,
+      description: formData.get("description") || undefined,
+      whatsapp: formData.get("whatsapp") || undefined,
+      instagram: formData.get("instagram") || undefined,
+      address: formData.get("address") || undefined,
+      mapsUrl: formData.get("mapsUrl") || undefined,
+      logoUrl: formData.get("logoUrl") || undefined,
+      bannerUrl: formData.get("bannerUrl") || undefined,
+      primaryColor: formData.get("primaryColor"),
+      backgroundColor: formData.get("backgroundColor"),
+      layoutType: formData.get("layoutType"),
+    });
+  const fail = (message: string): never =>
+    redirect(`/dashboard/settings?error=${encodeURIComponent(message)}`);
+  if (!parsed.success) fail(parsed.error.issues[0].message);
+  const value = parsed.data!;
+  if (reservedSlugs.has(value.slug)) fail("Alamat tersebut tidak dapat digunakan.");
+
+  const { tenant, supabase } = await requireTenant();
+  const previousSlug = tenant!.slug;
+  const { error } = await supabase
+    .from("tenants")
+    .update({
+      name: value.name,
+      slug: value.slug,
+      business_type: value.businessType || null,
+      description: value.description || null,
+      whatsapp: value.whatsapp || null,
+      instagram: value.instagram?.replace(/^@/, "") || null,
+      address: value.address || null,
+      maps_url: value.mapsUrl || null,
+      logo_url: value.logoUrl || null,
+      banner_url: value.bannerUrl || null,
+      primary_color: value.primaryColor.toUpperCase(),
+      background_color: value.backgroundColor.toUpperCase(),
+      layout_type: value.layoutType,
+      show_price: formData.get("showPrice") === "on",
+      show_address: formData.get("showAddress") === "on",
+      show_opening_hours: formData.get("showOpeningHours") === "on",
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", tenant!.id)
+    .eq("owner_id", tenant!.owner_id);
+  if (error?.code === "23505") fail("Alamat tersebut sudah digunakan bisnis lain.");
+  if (error) fail("Pengaturan belum dapat disimpan. Coba lagi.");
+
+  revalidatePath("/dashboard", "layout");
+  revalidatePath(`/store/${previousSlug}`);
+  revalidatePath(`/store/${value.slug}`);
+  redirect("/dashboard/settings?success=Pengaturan+berhasil+disimpan.");
+}

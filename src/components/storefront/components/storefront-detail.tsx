@@ -57,12 +57,16 @@ export default function StorefrontDetail({
             {product.description || `Menu pilihan dari ${store.tenant.name}.`}
           </p>
           <div className="border-line mt-6 border-t pt-5 sm:mt-auto">
-            <div className="mb-3">
-              {product.promo && <s className="text-muted block text-xs">{rupiah(product.price)}</s>}
-              <strong className="text-brand text-xl">
-                {rupiah(product.promo ?? product.price)}
-              </strong>
-            </div>
+            {store.tenant.show_price && (
+              <div className="mb-3">
+                {product.promo && (
+                  <s className="text-muted block text-xs">{rupiah(product.price)}</s>
+                )}
+                <strong className="text-brand text-xl">
+                  {rupiah(product.promo ?? product.price)}
+                </strong>
+              </div>
+            )}
             {product.available && url ? (
               <a
                 className="bg-brand flex min-h-12 items-center justify-center gap-2 rounded-xl text-sm font-extrabold text-white"

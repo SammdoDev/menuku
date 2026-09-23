@@ -67,6 +67,9 @@ export default function OnboardingForm() {
               <ImagePlus size={16} />
             )}{" "}
             {uploading === "banner" ? "Mengunggah..." : "Upload background"}
+            <b className="border-line text-muted hidden place-items-center border-r px-3 text-xs sm:grid">
+              digimenu.my.id/store/
+            </b>
             <GlobalInput
               className="hidden"
               type="file"
@@ -138,9 +141,6 @@ export default function OnboardingForm() {
               minLength={3}
               maxLength={30}
             />
-            <b className="border-line text-muted grid place-items-center border-l px-3 text-xs">
-              .menuku.id
-            </b>
           </div>
         </label>
         <label className={label}>

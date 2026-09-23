@@ -14,6 +14,11 @@ export type PublicStore = {
     maps_url: string | null;
     opening_hours: unknown;
     primary_color: string;
+    background_color: string;
+    layout_type: string;
+    show_price: boolean;
+    show_address: boolean;
+    show_opening_hours: boolean;
     is_published: boolean;
     is_active: boolean;
   };
@@ -38,7 +43,7 @@ export async function getStoreBySlug(slug: string): Promise<PublicStore | null> 
   const { data: tenant } = await supabase
     .from("tenants")
     .select(
-      "id,name,slug,description,logo_url,banner_url,whatsapp,instagram,address,maps_url,opening_hours,primary_color,is_published,is_active",
+      "id,name,slug,description,logo_url,banner_url,whatsapp,instagram,address,maps_url,opening_hours,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours,is_published,is_active",
     )
     .eq("slug", slug)
     .maybeSingle<PublicStore["tenant"]>();
