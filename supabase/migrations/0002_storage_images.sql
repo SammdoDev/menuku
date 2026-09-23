@@ -18,9 +18,9 @@ create policy "images: owner upload" on storage.objects
 
 create policy "images: owner update" on storage.objects
   for update to authenticated
-  using (bucket_id = 'images' and owner_id = (select auth.uid()))
-  with check (bucket_id = 'images' and owner_id = (select auth.uid()));
+  using (bucket_id = 'images' and owner_id = (select auth.uid()::text))
+  with check (bucket_id = 'images' and owner_id = (select auth.uid()::text));
 
 create policy "images: owner delete" on storage.objects
   for delete to authenticated
-  using (bucket_id = 'images' and owner_id = (select auth.uid()));
+  using (bucket_id = 'images' and owner_id = (select auth.uid()::text));
