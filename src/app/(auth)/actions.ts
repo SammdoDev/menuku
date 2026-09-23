@@ -111,14 +111,15 @@ export async function requestOtpAction(formData: FormData) {
 
 export async function verifyEmailOtpAction(formData: FormData) {
   const email = emailOnly.safeParse(formData.get("email"));
+  const mode = formData.get("mode") === "register" ? "register" : "login";
   const token = z
     .string()
     .trim()
-    .regex(/^\d{8}$/, "Masukkan 8 digit kode OTP.")
+    .regex(/^\d{6,8}$/, "Masukkan 6-8 digit kode OTP.")
     .safeParse(formData.get("token"));
   if (!email.success || !token.success)
     back(
-      `/verify-otp?email=${encodeURIComponent(String(formData.get("email") ?? ""))}`,
+      `/verify-otp?email=${encodeURIComponent(String(formData.get("email") ?? ""))}&mode=${mode}`,
       "error",
       token.success ? "Email tidak valid." : token.error.issues[0].message,
     );
@@ -126,12 +127,12 @@ export async function verifyEmailOtpAction(formData: FormData) {
   const { error } = await supabase.auth.verifyOtp({
     email: email.data!,
     token: token.data!,
-    type: "email",
+    type: mode === "register" ? "signup" : "email",
   });
   if (error) {
     console.error("[auth] OTP verification failed", { code: error.code, message: error.message });
     back(
-      `/verify-otp?email=${encodeURIComponent(email.data!)}`,
+      `/verify-otp?email=${encodeURIComponent(email.data!)}&mode=${mode}`,
       "error",
       "Kode OTP salah atau sudah kedaluwarsa. Minta kode baru.",
     );

@@ -16,12 +16,13 @@ export default async function VerifyOtpPage({ searchParams }: Props) {
         title="Masukkan kode OTP"
         intro={
           <>
-            Kode 8 digit dikirim ke <b>{email || "email kamu"}</b>. Kode berlaku selama satu jam.
+            Kode OTP dikirim ke <b>{email || "email kamu"}</b>. Kode berlaku selama satu jam.
           </>
         }
       >
         <form className="grid gap-4" action={verifyEmailOtpAction}>
           <GlobalInput type="hidden" name="email" value={email} />
+          <GlobalInput type="hidden" name="mode" value={isRegister ? "register" : "login"} />
           <label className="grid gap-2 text-sm font-bold">
             Kode OTP
             <GlobalInput
@@ -29,9 +30,10 @@ export default async function VerifyOtpPage({ searchParams }: Props) {
               name="token"
               inputMode="numeric"
               autoComplete="one-time-code"
-              pattern="[0-9]{8}"
+              pattern="[0-9]{6,8}"
+              minLength={6}
               maxLength={8}
-              placeholder="00000000"
+              placeholder="000000"
               required
               autoFocus
             />
