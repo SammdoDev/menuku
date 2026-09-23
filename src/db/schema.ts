@@ -112,7 +112,6 @@ export const products = pgTable(
     discountPrice: integer("discount_price"),
     imageUrl: text("image_url"),
     imageThumbnailUrl: text("image_thumbnail_url"),
-    imgbbImageId: varchar("imgbb_image_id", { length: 100 }),
     isFeatured: boolean("is_featured").notNull().default(false),
     isAvailable: boolean("is_available").notNull().default(true),
     isActive: boolean("is_active").notNull().default(true),

@@ -10,7 +10,7 @@ import {
   SubmitButton,
 } from "../../../components/ui/form-controls";
 import { createProductAction, updateProductAction } from "../actions";
-import { MAX_IMAGE_SIZE, optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
+import { optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
 import { normalizeImageUrl } from "../../../lib/image-url";
 
 type Category = { id: string; name: string };
@@ -50,7 +50,6 @@ export default function ProductForm({
       const data = await readImageUploadResponse(response);
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       setImageUrl(data.url);
-      if (data.albumWarning) setError(data.albumWarning);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Upload gambar gagal.");
     } finally {
@@ -59,8 +58,7 @@ export default function ProductForm({
   }
   function selectFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files?.[0];
-    if (file && file.size > MAX_IMAGE_SIZE) setError("Ukuran gambar maksimal 4 MB.");
-    else if (file) void upload(file);
+    if (file) void upload(file);
     event.currentTarget.value = "";
   }
   const field = "grid gap-2 text-sm font-bold";

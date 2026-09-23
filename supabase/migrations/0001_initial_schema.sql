@@ -37,7 +37,7 @@ create table public.categories (
 create table public.products (
   id uuid primary key default gen_random_uuid(), tenant_id uuid not null references public.tenants(id) on delete cascade,
   category_id uuid references public.categories(id) on delete set null, name varchar(120) not null, slug varchar(140) not null,
-  description text, price integer not null, discount_price integer, image_url text, image_thumbnail_url text, imgbb_image_id varchar(100),
+  description text, price integer not null, discount_price integer, image_url text, image_thumbnail_url text,
   is_featured boolean not null default false, is_available boolean not null default true, is_active boolean not null default true,
   sort_order integer not null default 0, created_at timestamptz not null default now(), updated_at timestamptz not null default now(),
   unique(tenant_id, slug), constraint product_price_valid check (price >= 0 and (discount_price is null or (discount_price >= 0 and discount_price <= price)))

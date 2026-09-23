@@ -9,7 +9,7 @@ import {
   SubmitButton,
 } from "../../components/ui/form-controls";
 import { createTenantAction } from "./actions";
-import { MAX_IMAGE_SIZE, optimizeImage, readImageUploadResponse } from "../../lib/image-upload";
+import { optimizeImage, readImageUploadResponse } from "../../lib/image-upload";
 import { normalizeImageUrl } from "../../lib/image-url";
 import { PUBLIC_SITE_URL } from "../../lib/site";
 
@@ -43,7 +43,6 @@ export default function OnboardingForm() {
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       if (kind === "logo") setLogo(data.url);
       else setBanner(data.url);
-      if (data.albumWarning) setError(data.albumWarning);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Upload gambar gagal.");
     } finally {
@@ -52,8 +51,7 @@ export default function OnboardingForm() {
   }
   function selectFile(event: ChangeEvent<HTMLInputElement>, kind: UploadKind) {
     const file = event.currentTarget.files?.[0];
-    if (file && file.size > MAX_IMAGE_SIZE) setError("Ukuran gambar maksimal 4 MB.");
-    else if (file) void upload(file, kind);
+    if (file) void upload(file, kind);
     event.currentTarget.value = "";
   }
   const label = "grid gap-2 text-sm font-bold";

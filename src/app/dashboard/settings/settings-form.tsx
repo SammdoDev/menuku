@@ -10,7 +10,7 @@ import {
   SubmitButton,
 } from "../../../components/ui/form-controls";
 import { updateStoreSettingsAction } from "../actions";
-import { MAX_IMAGE_SIZE, optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
+import { optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
 import { normalizeImageUrl } from "../../../lib/image-url";
 
 type UploadKind = "logo" | "banner";
@@ -62,7 +62,6 @@ export default function SettingsForm({
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       if (kind === "logo") setLogo(data.url);
       else setBanner(data.url);
-      if (data.albumWarning) setUploadError(data.albumWarning);
     } catch (caught) {
       setUploadError(caught instanceof Error ? caught.message : "Upload gambar gagal.");
     } finally {
@@ -72,8 +71,7 @@ export default function SettingsForm({
 
   function selectFile(event: ChangeEvent<HTMLInputElement>, kind: UploadKind) {
     const file = event.currentTarget.files?.[0];
-    if (file && file.size > MAX_IMAGE_SIZE) setUploadError("Ukuran gambar maksimal 4 MB.");
-    else if (file) void upload(file, kind);
+    if (file) void upload(file, kind);
     event.currentTarget.value = "";
   }
 

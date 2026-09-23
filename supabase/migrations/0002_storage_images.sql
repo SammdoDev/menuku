@@ -1,0 +1,26 @@
+-- Public image storage used by the dashboard uploads.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('images', 'images', true, 2097152, array['image/jpeg', 'image/png', 'image/webp']::text[])
+on conflict (id) do update set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+create policy "images: public read" on storage.objects
+  for select using (bucket_id = 'images');
+
+create policy "images: owner upload" on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = 'images'
+    and (storage.foldername(name))[1] = (select auth.uid()::text)
+  );
+
+create policy "images: owner update" on storage.objects
+  for update to authenticated
+  using (bucket_id = 'images' and owner_id = (select auth.uid()))
+  with check (bucket_id = 'images' and owner_id = (select auth.uid()));
+
+create policy "images: owner delete" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'images' and owner_id = (select auth.uid()));
