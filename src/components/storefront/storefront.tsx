@@ -16,6 +16,7 @@ export default function Storefront({ store }: { store: PublicStore }) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Item | null>(null);
   const [notice, setNotice] = useState("");
+  const [navActive, setNavActive] = useState<"menu" | "search">("menu");
   const searchRef = useRef<HTMLInputElement>(null);
   const items = useMemo(() => mapProducts(store), [store]);
   useEffect(() => trackStorefront(store.tenant.slug, "page_view"), [store.tenant.slug]);
@@ -43,10 +44,13 @@ export default function Storefront({ store }: { store: PublicStore }) {
     }
     await copy();
   };
-  const goToMenu = () =>
+  const goToMenu = () => {
+    setNavActive("menu");
     document.getElementById("menu")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   const focusSearch = () => {
     goToMenu();
+    setNavActive("search");
     window.setTimeout(() => searchRef.current?.focus(), 450);
   };
   const themeStyle = {
@@ -110,6 +114,7 @@ export default function Storefront({ store }: { store: PublicStore }) {
       <StorefrontBottomNav
         onMenu={goToMenu}
         onSearch={focusSearch}
+        active={navActive}
         onShare={() => {
           trackStorefront(store.tenant.slug, "share_click");
           void share();

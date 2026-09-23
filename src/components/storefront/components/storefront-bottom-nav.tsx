@@ -9,6 +9,7 @@ export default function StorefrontBottomNav({
   primaryColor,
   backgroundColor,
   slug,
+  active,
 }: {
   onMenu: () => void;
   onSearch: () => void;
@@ -17,6 +18,7 @@ export default function StorefrontBottomNav({
   primaryColor: string;
   backgroundColor: string;
   slug: string;
+  active: "menu" | "search";
 }) {
   const item =
     "grid min-h-12 place-items-center gap-0.5 rounded-xl text-[9px] font-extrabold transition hover:bg-black/[.04]";
@@ -28,11 +30,19 @@ export default function StorefrontBottomNav({
         backgroundColor: `${backgroundColor}F2`,
       }}
     >
-      <button className={`${item} text-[var(--color-brand)]`} onClick={onMenu}>
+      <button
+        className={`${item} ${active === "menu" ? "bg-[var(--color-brand)] text-white shadow-md" : "text-[var(--color-brand)]"}`}
+        onClick={onMenu}
+        aria-current={active === "menu" ? "page" : undefined}
+      >
         <LayoutGrid size={19} />
         <span>Menu</span>
       </button>
-      <button className={`${item} text-[var(--color-brand)]`} onClick={onSearch}>
+      <button
+        className={`${item} ${active === "search" ? "bg-[var(--color-brand)] text-white shadow-md" : "text-[var(--color-brand)]"}`}
+        onClick={onSearch}
+        aria-current={active === "search" ? "page" : undefined}
+      >
         <Search size={19} />
         <span>Cari</span>
       </button>
