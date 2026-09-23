@@ -10,7 +10,7 @@ import {
   SubmitButton,
 } from "../../../components/ui/form-controls";
 import { createProductAction, updateProductAction } from "../actions";
-import { MAX_IMAGE_SIZE, readImageUploadResponse } from "../../../lib/image-upload";
+import { MAX_IMAGE_SIZE, optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
 import { normalizeImageUrl } from "../../../lib/image-url";
 
 type Category = { id: string; name: string };
@@ -43,7 +43,7 @@ export default function ProductForm({
     setUploading(true);
     try {
       const body = new FormData();
-      body.set("file", file);
+      body.set("file", await optimizeImage(file));
       body.set("tenantSlug", slug);
       body.set("kind", "product");
       const response = await fetch("/api/images/upload", { method: "POST", body });

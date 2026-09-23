@@ -9,7 +9,7 @@ import {
   SubmitButton,
 } from "../../components/ui/form-controls";
 import { createTenantAction } from "./actions";
-import { MAX_IMAGE_SIZE, readImageUploadResponse } from "../../lib/image-upload";
+import { MAX_IMAGE_SIZE, optimizeImage, readImageUploadResponse } from "../../lib/image-upload";
 import { normalizeImageUrl } from "../../lib/image-url";
 import { PUBLIC_SITE_URL } from "../../lib/site";
 
@@ -35,7 +35,7 @@ export default function OnboardingForm() {
     setUploading(kind);
     try {
       const body = new FormData();
-      body.set("file", file);
+      body.set("file", await optimizeImage(file));
       body.set("tenantSlug", slug || "draft");
       body.set("kind", kind);
       const response = await fetch("/api/images/upload", { method: "POST", body });

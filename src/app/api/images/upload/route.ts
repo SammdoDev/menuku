@@ -33,7 +33,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Gunakan JPG, PNG, atau WebP." }, { status: 400 });
     if (file.size > MAX_IMAGE_SIZE)
       return NextResponse.json({ error: "Ukuran gambar maksimal 4 MB." }, { status: 400 });
-    const image = Buffer.from(await file.arrayBuffer()).toString("base64");
     const upload = new FormData();
     const extension =
       file.name
@@ -42,7 +41,7 @@ export async function POST(request: Request) {
         ?.toLowerCase()
         .replace(/[^a-z0-9]/g, "") || "image";
     upload.set("key", key);
-    upload.set("image", image);
+    upload.set("image", file);
     upload.set("name", `menuku--${tenantSlug}--${kind}--${Date.now()}.${extension}`);
     const albumEnvKey = albumByKind[kind as keyof typeof albumByKind];
     const albumId = albumEnvKey ? process.env[albumEnvKey] : undefined;
