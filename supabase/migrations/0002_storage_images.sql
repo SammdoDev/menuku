@@ -6,6 +6,11 @@ on conflict (id) do update set
   file_size_limit = excluded.file_size_limit,
   allowed_mime_types = excluded.allowed_mime_types;
 
+drop policy if exists "images: public read" on storage.objects;
+drop policy if exists "images: owner upload" on storage.objects;
+drop policy if exists "images: owner update" on storage.objects;
+drop policy if exists "images: owner delete" on storage.objects;
+
 create policy "images: public read" on storage.objects
   for select using (bucket_id = 'images');
 
@@ -17,6 +22,7 @@ create policy "images: owner upload" on storage.objects
   );
 
 create policy "images: owner update" on storage.objects
+
   for update to authenticated
   using (bucket_id = 'images' and owner_id = (select auth.uid()::text))
   with check (bucket_id = 'images' and owner_id = (select auth.uid()::text));
