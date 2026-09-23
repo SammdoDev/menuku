@@ -38,6 +38,12 @@ export async function POST(request: Request) {
     .eq("is_active", true)
     .maybeSingle();
   if (!tenant) return NextResponse.json({ ok: true });
+  const { data: plan } = await supabase
+    .from("tenants")
+    .select("plan")
+    .eq("id", tenant.id)
+    .maybeSingle();
+  if (plan?.plan === "free") return NextResponse.json({ ok: true });
   const { error } = await supabase.from("analytics_events").insert({
     tenant_id: tenant.id,
     event_type: value.eventType,

@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getCurrentMerchant } from "../../lib/merchant";
+import { getPlanRules } from "../../lib/plans";
 
 const slugify = (value: string) =>
   value
@@ -31,6 +32,15 @@ export async function createCategoryAction(formData: FormData) {
   if (!parsed.success)
     redirect(`/dashboard/categories?error=${encodeURIComponent(parsed.error.issues[0].message)}`);
   const { tenant, supabase } = await requireTenant();
+  const rules = getPlanRules(tenant!.plan);
+  const { count: categoryCount } = await supabase
+    .from("categories")
+    .select("id", { count: "exact", head: true })
+    .eq("tenant_id", tenant!.id);
+  if ((categoryCount || 0) >= rules.categories)
+    redirect(
+      "/dashboard/categories?error=Paket+Free+Demo+dibatasi+2+kategori.+Upgrade+untuk+menambah+lebih+banyak.",
+    );
   const value = parsed.data!;
   const { error } = await supabase.from("categories").insert({
     tenant_id: tenant!.id,
@@ -127,6 +137,15 @@ export async function createProductAction(formData: FormData) {
   if (value.discountPrice !== undefined && value.discountPrice > value.price)
     redirect("/dashboard/menu?error=Harga+promo+tidak+boleh+lebih+besar+dari+harga+normal.");
   const { tenant, supabase } = await requireTenant();
+  const rules = getPlanRules(tenant!.plan);
+  const { count: productCount } = await supabase
+    .from("products")
+    .select("id", { count: "exact", head: true })
+    .eq("tenant_id", tenant!.id);
+  if ((productCount || 0) >= rules.products)
+    redirect(
+      "/dashboard/menu?error=Paket+Free+Demo+dibatasi+4+produk.+Upgrade+untuk+menambah+lebih+banyak.",
+    );
   if (value.categoryId) {
     const { data: category } = await supabase
       .from("categories")
@@ -264,6 +283,8 @@ export async function createLinkAction(formData: FormData) {
   if (!parsed.success)
     redirect(`/dashboard/links?error=${encodeURIComponent(parsed.error.issues[0].message)}`);
   const { tenant, supabase } = await requireTenant();
+  if (getPlanRules(tenant!.plan).links === 0)
+    redirect("/dashboard/links?error=Custom+link+tersedia+mulai+paket+Premium.");
   const value = parsed.data!;
   const { error } = await supabase.from("custom_links").insert({
     tenant_id: tenant!.id,
@@ -382,6 +403,7 @@ export async function updateStoreSettingsAction(formData: FormData) {
   if (reservedSlugs.has(value.slug)) fail("Alamat tersebut tidak dapat digunakan.");
 
   const { tenant, supabase } = await requireTenant();
+  const rules = getPlanRules(tenant!.plan);
   const previousSlug = tenant!.slug;
   const { error } = await supabase
     .from("tenants")
@@ -396,9 +418,9 @@ export async function updateStoreSettingsAction(formData: FormData) {
       maps_url: value.mapsUrl || null,
       logo_url: value.logoUrl || null,
       banner_url: value.bannerUrl || null,
-      primary_color: value.primaryColor.toUpperCase(),
-      background_color: value.backgroundColor.toUpperCase(),
-      layout_type: value.layoutType,
+      primary_color: rules.customStyle ? value.primaryColor.toUpperCase() : "#FF6534",
+      background_color: rules.customStyle ? value.backgroundColor.toUpperCase() : "#F7F6F2",
+      layout_type: rules.customStyle ? value.layoutType : "grid",
       show_price: formData.get("showPrice") === "on",
       show_address: formData.get("showAddress") === "on",
       show_opening_hours: formData.get("showOpeningHours") === "on",

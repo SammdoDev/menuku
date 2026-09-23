@@ -7,6 +7,7 @@ import {
   MenuSquare,
   QrCode,
   Settings,
+  CreditCard,
 } from "lucide-react";
 import { logoutAction } from "../app/(auth)/actions";
 import { publicStoreUrl } from "../lib/site";
@@ -67,6 +68,12 @@ export default function DashboardShell({
               {label}
             </LoadingLink>
           ))}
+          <LoadingLink
+            href="/dashboard/billing"
+            className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition hover:bg-white/[.08] hover:text-white"
+          >
+            <CreditCard size={18} /> Paket & pembayaran
+          </LoadingLink>
         </nav>
         <div className="mt-auto border-t border-white/10 pt-4">
           <LoadingLink

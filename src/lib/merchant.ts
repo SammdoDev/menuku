@@ -22,6 +22,7 @@ export type Tenant = {
   show_price: boolean;
   show_address: boolean;
   show_opening_hours: boolean;
+  plan: "free" | "premium" | "business";
 };
 
 export const getCurrentMerchant = cache(async function getCurrentMerchant() {
@@ -33,7 +34,7 @@ export const getCurrentMerchant = cache(async function getCurrentMerchant() {
   const { data: tenant } = await supabase
     .from("tenants")
     .select(
-      "id,owner_id,name,slug,description,business_type,logo_url,banner_url,whatsapp,instagram,address,maps_url,is_published,is_active,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours",
+      "id,owner_id,name,slug,description,business_type,logo_url,banner_url,whatsapp,instagram,address,maps_url,is_published,is_active,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours,plan",
     )
     .eq("owner_id", user.id)
     .maybeSingle<Tenant>();

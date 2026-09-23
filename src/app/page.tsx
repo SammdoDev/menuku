@@ -13,19 +13,25 @@ import {
   Sparkles,
 } from "lucide-react";
 import Brand from "../components/brand";
+import { plans, rupiah } from "../lib/plans";
 
-const plans = [
+const marketingPlans = [
   {
     name: "Free",
-    price: "Rp0",
+    price: rupiah(plans.free.price),
     note: "Untuk mulai menampilkan menu",
-    features: ["1 halaman katalog", "Maks. 15 produk", "Link WhatsApp & sosial", "QR code dasar"],
+    features: [
+      "Maks. 2 kategori",
+      "Maks. 4 produk",
+      "Halaman katalog dasar",
+      "Tanpa custom link & analytics",
+    ],
     href: "/register?plan=free",
     cta: "Mulai gratis",
   },
   {
     name: "Premium",
-    price: "Rp29rb",
+    price: rupiah(plans.premium.price),
     note: "per bulan · untuk bisnis berkembang",
     features: [
       "Produk tanpa batas",
@@ -39,7 +45,7 @@ const plans = [
   },
   {
     name: "Business",
-    price: "Rp79rb",
+    price: rupiah(plans.business.price),
     note: "per bulan · untuk tim",
     features: ["Semua fitur Premium", "3 anggota tim", "Custom domain", "Dukungan prioritas"],
     href: "/register?plan=business",
@@ -240,7 +246,7 @@ export default function Home() {
           </h2>
         </header>
         <div className="mx-auto mt-12 grid max-w-6xl gap-5 lg:grid-cols-3">
-          {plans.map((plan) => (
+          {marketingPlans.map((plan) => (
             <article
               key={plan.name}
               className={`relative rounded-3xl border p-6 ${plan.featured ? "border-brand bg-charcoal text-white shadow-xl" : "border-line bg-paper"}`}

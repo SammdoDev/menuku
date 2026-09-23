@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Activity, ArrowUpRight, Eye, Store, Users } from "lucide-react";
 import { getAdminContext } from "../../lib/admin";
+import { approveSubscriptionAction, remindSubscriptionAction } from "./actions";
 
 type Tenant = {
   id: string;
@@ -20,7 +21,13 @@ const date = (value: string) =>
 export default async function AdminPage() {
   const admin = await getAdminContext();
   if (!admin) return null;
-  const [{ data: tenants }, { data: profiles }, { data: events }] = await Promise.all([
+  const [
+    { data: tenants },
+    { data: profiles },
+    { data: events },
+    { data: subscriptions },
+    { data: expiring },
+  ] = await Promise.all([
     admin.supabase
       .from("tenants")
       .select("id,name,slug,owner_id,plan,is_published,is_active,created_at")
@@ -34,10 +41,24 @@ export default async function AdminPage() {
       .select("event_type,created_at,tenant_id")
       .order("created_at", { ascending: false })
       .limit(1000),
+    admin.supabase
+      .from("subscriptions")
+      .select("id,tenant_id,plan,amount,order_id,created_at,expires_at,reminder_sent_at")
+      .eq("status", "pending")
+      .order("created_at", { ascending: false }),
+    admin.supabase
+      .from("subscriptions")
+      .select("id,tenant_id,plan,expires_at,reminder_sent_at")
+      .eq("status", "active")
+      .not("expires_at", "is", null)
+      .lte("expires_at", new Date(Date.now() + 7 * 86400000).toISOString())
+      .order("expires_at"),
   ]);
   const businesses = (tenants ?? []) as Tenant[];
   const users = (profiles ?? []) as Profile[];
   const activity = events ?? [];
+  const pendingPayments = subscriptions ?? [];
+  const expiringPayments = expiring ?? [];
   const today = new Date().toISOString().slice(0, 10);
   const todayEvents = activity.filter((event) => event.created_at.startsWith(today));
   const metrics = [
@@ -142,6 +163,93 @@ export default async function AdminPage() {
             </tbody>
           </table>
         </div>
+      </section>
+      <section className="border-line mt-6 overflow-hidden rounded-2xl border bg-white shadow-sm">
+        <header className="p-5 sm:p-6">
+          <p className="text-brand mb-1 text-[10px] font-black tracking-[.14em]">
+            VERIFIKASI MANUAL
+          </p>
+          <h2 className="display-font text-xl font-black">Pembayaran menunggu konfirmasi</h2>
+        </header>
+        {pendingPayments.length ? (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[680px] text-left text-sm">
+              <thead className="bg-[#faf8f4] text-[10px] font-black tracking-[.1em] text-[#8f877c] uppercase">
+                <tr>
+                  <th className="px-5 py-3">Order</th>
+                  <th className="px-5 py-3">Bisnis</th>
+                  <th className="px-5 py-3">Paket</th>
+                  <th className="px-5 py-3">Nominal</th>
+                  <th className="px-5 py-3">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingPayments.map((payment) => {
+                  const business = businesses.find((item) => item.id === payment.tenant_id);
+                  return (
+                    <tr key={payment.id} className="border-line border-t">
+                      <td className="px-5 py-4 text-xs">{payment.order_id}</td>
+                      <td className="px-5 py-4">{business?.name || "-"}</td>
+                      <td className="px-5 py-4 capitalize">{payment.plan}</td>
+                      <td className="px-5 py-4">
+                        Rp{Number(payment.amount).toLocaleString("id-ID")}
+                      </td>
+                      <td className="px-5 py-4">
+                        <form action={approveSubscriptionAction}>
+                          <input type="hidden" name="id" value={payment.id} />
+                          <button className="bg-brand rounded-lg px-3 py-2 text-xs font-extrabold text-white">
+                            Aktifkan paket
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-muted p-6 text-sm">Belum ada pembayaran yang menunggu verifikasi.</p>
+        )}
+      </section>
+      <section className="border-line mt-6 overflow-hidden rounded-2xl border bg-white shadow-sm">
+        <header className="p-5 sm:p-6">
+          <p className="text-brand mb-1 text-[10px] font-black tracking-[.14em]">RETENSI</p>
+          <h2 className="display-font text-xl font-black">Paket segera habis</h2>
+        </header>
+        {expiringPayments.length ? (
+          <div className="grid gap-2 p-5 pt-0">
+            {expiringPayments.map((payment) => {
+              const business = businesses.find((item) => item.id === payment.tenant_id);
+              return (
+                <div
+                  key={payment.id}
+                  className="border-line flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center"
+                >
+                  <div className="min-w-0 flex-1">
+                    <b>{business?.name || "-"}</b>
+                    <p className="text-muted text-xs">
+                      {payment.plan} · berakhir{" "}
+                      {new Date(payment.expires_at).toLocaleDateString("id-ID")}
+                    </p>
+                  </div>
+                  {payment.reminder_sent_at ? (
+                    <span className="text-xs font-bold text-emerald-700">Reminder terkirim</span>
+                  ) : (
+                    <form action={remindSubscriptionAction}>
+                      <input type="hidden" name="id" value={payment.id} />
+                      <button className="border-brand text-brand rounded-lg border px-3 py-2 text-xs font-extrabold">
+                        Kirim reminder
+                      </button>
+                    </form>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-muted p-6 text-sm">Belum ada paket yang habis dalam 7 hari.</p>
+        )}
       </section>
     </>
   );
