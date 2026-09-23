@@ -68,8 +68,7 @@ export default async function BillingConfirmationPage({
         </div>
         <div className="grid gap-3 text-sm">
           <p className="flex items-center gap-2 font-bold">
-            <CheckCircle2 className="text-emerald-600" size={18} /> QRIS sudah ditampilkan
-            sebelumnya
+            <CheckCircle2 className="text-emerald-600" size={18} /> Konfirmasi pembayaran tercatat
           </p>
           <p className="text-muted leading-6">
             Setelah transfer, admin akan memeriksa pembayaran dan mengaktifkan paket kamu. Invoice

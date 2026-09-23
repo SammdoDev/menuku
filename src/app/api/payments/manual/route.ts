@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentMerchant } from "../../../../lib/merchant";
@@ -39,19 +40,19 @@ export async function POST(request: Request) {
     );
   const now = new Date();
   const isUpgrade = Boolean(active && rank[plan] > rank[active.plan as keyof typeof rank]);
-  const months = isUpgrade
+  const months = requestedMonths;
+  const remainingMonths = active
     ? Math.max(
         1,
-        Math.ceil((new Date(active!.expires_at).getTime() - now.getTime()) / (30 * 86400000)),
+        Math.ceil((new Date(active.expires_at).getTime() - now.getTime()) / (30 * 86400000)),
       )
-    : requestedMonths;
-  const amount = isUpgrade
-    ? Math.ceil((plans[plan].price - plans[active!.plan as "premium" | "business"].price) * months)
-    : plans[plan].price * months;
-  const expiresAt = isUpgrade
-    ? active!.expires_at
-    : addMonths(active ? new Date(active.expires_at) : now, months).toISOString();
-  const orderId = `MANUAL-${tenant.id.slice(0, 8)}-${Date.now()}`;
+    : 0;
+  const credit = isUpgrade
+    ? plans[active!.plan as "premium" | "business"].price * remainingMonths
+    : 0;
+  const amount = Math.max(0, plans[plan].price * months - credit);
+  const expiresAt = addMonths(now, months).toISOString();
+  const orderId = `menuku-trx-billing-${tenant.slug}-${plan}-${crypto.randomUUID()}`;
   const { error } = await supabase.from("subscriptions").insert({
     tenant_id: tenant.id,
     owner_id: user.id,
