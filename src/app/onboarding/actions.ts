@@ -76,7 +76,7 @@ export async function createTenantAction(formData: FormData) {
     banner_url: value.bannerUrl || null,
   };
   let { error } = await supabase.from("tenants").insert(tenantInput);
-  if (error?.code === "23503" && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  if (error && process.env.SUPABASE_SERVICE_ROLE_KEY) {
     const admin = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -88,7 +88,7 @@ export async function createTenantAction(formData: FormData) {
         { id: user.id, email: user.email || "", name: user.user_metadata.name || "" },
         { onConflict: "id" },
       );
-    ({ error } = await supabase.from("tenants").insert(tenantInput));
+    ({ error } = await admin.from("tenants").insert(tenantInput));
   }
   if (error?.code === "23505") fail("Alamat tersebut sudah dipakai. Coba yang lain.");
   if (error?.code === "23503")
