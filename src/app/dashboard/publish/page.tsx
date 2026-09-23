@@ -3,12 +3,13 @@ import { ExternalLink, Globe2, ShieldCheck } from "lucide-react";
 import DashboardShell from "../../../components/dashboard-shell";
 import { GlobalInput, SubmitButton } from "../../../components/ui/form-controls";
 import { getCurrentMerchant } from "../../../lib/merchant";
+import { publicStoreUrl } from "../../../lib/site";
 import { togglePublishAction } from "../actions";
 
 export default async function PublishPage() {
   const { tenant } = await getCurrentMerchant();
   if (!tenant) return null;
-  const url = `/store/${tenant.slug}`;
+  const url = publicStoreUrl(tenant.slug);
   const card = "rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-6";
   return (
     <DashboardShell tenant={tenant} active="publish" title="Publikasi">

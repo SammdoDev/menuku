@@ -9,7 +9,9 @@ import {
   Settings,
 } from "lucide-react";
 import { logoutAction } from "../app/(auth)/actions";
+import { publicStoreUrl } from "../lib/site";
 import Brand from "./brand";
+import { LoadingLink } from "./global-loading";
 
 type Active = "dashboard" | "menu" | "categories" | "links" | "publish" | "settings";
 type Tenant = { name: string; slug: string };
@@ -36,7 +38,7 @@ export default function DashboardShell({
   title: string;
   children: React.ReactNode;
 }) {
-  const storeUrl = `/store/${tenant.slug}`;
+  const storeUrl = publicStoreUrl(tenant.slug);
   return (
     <main className="bg-paper min-h-dvh pb-24 lg:pb-0 lg:pl-72">
       <aside className="fixed inset-y-4 left-4 z-30 hidden w-64 flex-col rounded-3xl border border-white/10 bg-gradient-to-b from-[#2c2924] to-[#1d1b18] p-4 text-[#bdb5ac] shadow-2xl lg:flex">
@@ -56,24 +58,24 @@ export default function DashboardShell({
         </div>
         <nav className="grid gap-1.5">
           {links.map(({ key, href, label, icon: Icon }) => (
-            <Link
+            <LoadingLink
               key={key}
               href={href}
               className={`flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition ${active === key ? "bg-brand shadow-brand/20 font-extrabold text-white shadow-lg" : "hover:bg-white/[.08] hover:text-white"}`}
             >
               <Icon size={18} />
               {label}
-            </Link>
+            </LoadingLink>
           ))}
         </nav>
         <div className="mt-auto border-t border-white/10 pt-4">
-          <Link
+          <LoadingLink
             href="/dashboard/settings"
             className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm hover:bg-white/[.08] hover:text-white"
           >
             <Settings size={18} />
             Pengaturan
-          </Link>
+          </LoadingLink>
           <form action={logoutAction}>
             <button className="px-3 py-2 text-xs font-bold text-[#f6aa94]">Keluar</button>
           </form>
@@ -100,7 +102,7 @@ export default function DashboardShell({
 
       <nav className="bg-charcoal/95 fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-2xl border border-white/10 p-1.5 text-white shadow-2xl backdrop-blur-xl lg:hidden">
         {mobileLinks.map(({ key, href, label, icon: Icon }) => (
-          <Link
+          <LoadingLink
             key={key}
             href={href}
             aria-label={label}
@@ -108,7 +110,7 @@ export default function DashboardShell({
           >
             <Icon size={19} />
             <span className="text-[8px] font-bold">{label}</span>
-          </Link>
+          </LoadingLink>
         ))}
       </nav>
     </main>

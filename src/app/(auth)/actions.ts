@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { z } from "zod";
+import { PUBLIC_SITE_URL } from "../../lib/site";
 import { createSupabaseServerClient } from "../../lib/supabase/server";
 
 const credentials = z.object({
@@ -14,7 +15,10 @@ const emailOnly = z.string().trim().email("Masukkan alamat email yang valid.");
 const back = (path: string, key: "error" | "message", value: string): never =>
   redirect(`${path}?${key}=${encodeURIComponent(value)}`);
 const applicationOrigin = async () =>
-  (await headers()).get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  PUBLIC_SITE_URL ||
+  (await headers()).get("origin") ||
+  "http://localhost:3000";
 const localAuthDetail = (error: { code?: string; message: string }) =>
   process.env.NODE_ENV === "development" ? ` [${error.code ?? "unknown"}: ${error.message}]` : "";
 

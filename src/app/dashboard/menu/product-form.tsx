@@ -9,17 +9,32 @@ import {
   NumericInput,
   SubmitButton,
 } from "../../../components/ui/form-controls";
-import { createProductAction } from "../actions";
+import { createProductAction, updateProductAction } from "../actions";
+import { MAX_IMAGE_SIZE, readImageUploadResponse } from "../../../lib/image-upload";
 
 type Category = { id: string; name: string };
+type Product = {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  discount_price: number | null;
+  image_url: string | null;
+  is_featured: boolean;
+  category_id: string | null;
+};
 export default function ProductForm({
   categories,
   slug,
+  product,
+  onCancel,
 }: {
   categories: Category[];
   slug: string;
+  product?: Product;
+  onCancel?: () => void;
 }) {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState(product?.image_url || "");
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   async function upload(file: File) {
@@ -31,7 +46,7 @@ export default function ProductForm({
       body.set("tenantSlug", slug);
       body.set("kind", "product");
       const response = await fetch("/api/images/upload", { method: "POST", body });
-      const data = (await response.json()) as { url?: string; error?: string };
+      const data = await readImageUploadResponse(response);
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       setImageUrl(data.url);
     } catch (caught) {
@@ -42,7 +57,8 @@ export default function ProductForm({
   }
   function selectFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files?.[0];
-    if (file) void upload(file);
+    if (file && file.size > MAX_IMAGE_SIZE) setError("Ukuran gambar maksimal 4 MB.");
+    else if (file) void upload(file);
     event.currentTarget.value = "";
   }
   const field = "grid gap-2 text-sm font-bold";
@@ -51,8 +67,9 @@ export default function ProductForm({
     ...categories.map((category) => ({ value: category.id, label: category.name })),
   ];
   return (
-    <form className="grid gap-4" action={createProductAction}>
+    <form className="grid gap-4" action={product ? updateProductAction : createProductAction}>
       <GlobalInput type="hidden" name="imageUrl" value={imageUrl} />
+      {product && <GlobalInput type="hidden" name="id" value={product.id} />}
       <div
         className="border-brand/30 relative flex h-44 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed bg-gradient-to-br from-orange-50 to-[#eee7df] bg-cover bg-center"
         style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
@@ -88,36 +105,73 @@ export default function ProductForm({
       )}
       <label className={field}>
         Nama menu
-        <GlobalInput name="name" placeholder="Contoh: Kopi Susu Aren" required />
+        <GlobalInput
+          name="name"
+          defaultValue={product?.name || ""}
+          placeholder="Contoh: Kopi Susu Aren"
+          required
+        />
       </label>
       <div className={field}>
         <label htmlFor="product-category">Kategori</label>
         <GlobalAutocomplete
           id="product-category"
           name="categoryId"
-          defaultValue=""
+          defaultValue={product?.category_id || ""}
           options={options}
         />
       </div>
       <label className={field}>
         Deskripsi <span className="text-muted font-normal">(opsional)</span>
-        <GlobalTextarea name="description" placeholder="Ceritakan menu ini secara singkat" />
+        <GlobalTextarea
+          name="description"
+          defaultValue={product?.description || ""}
+          placeholder="Ceritakan menu ini secara singkat"
+        />
       </label>
       <label className={field}>
         Harga normal
-        <NumericInput name="price" placeholder="28000" required />
+        <NumericInput
+          name="price"
+          defaultValue={product?.price || ""}
+          placeholder="28000"
+          required
+        />
       </label>
       <label className={field}>
         Harga promo <span className="text-muted font-normal">(opsional)</span>
-        <NumericInput name="discountPrice" placeholder="24000" />
+        <NumericInput
+          name="discountPrice"
+          defaultValue={product?.discount_price || ""}
+          placeholder="24000"
+        />
       </label>
       <label className="flex items-center gap-2 text-sm">
-        <GlobalInput className="accent-brand size-4" name="featured" type="checkbox" />
+        <GlobalInput
+          className="accent-brand size-4"
+          name="featured"
+          type="checkbox"
+          defaultChecked={product?.is_featured || false}
+        />
         Tandai sebagai rekomendasi
       </label>
-      <SubmitButton pendingLabel="Menambahkan menu..." disabled={uploading}>
-        Simpan menu
-      </SubmitButton>
+      <div className="flex gap-2">
+        <SubmitButton
+          pendingLabel={product ? "Menyimpan perubahan..." : "Menambahkan menu..."}
+          disabled={uploading}
+        >
+          {product ? "Simpan perubahan" : "Simpan menu"}
+        </SubmitButton>
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="border-line min-h-12 rounded-xl border px-4 text-sm font-extrabold"
+          >
+            Batal
+          </button>
+        )}
+      </div>
     </form>
   );
 }

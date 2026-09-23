@@ -1,6 +1,7 @@
 import { CheckCircle2, CircleAlert } from "lucide-react";
 import DashboardShell from "../../../components/dashboard-shell";
 import { getCurrentMerchant } from "../../../lib/merchant";
+import { PUBLIC_SITE_URL } from "../../../lib/site";
 import SettingsForm from "./settings-form";
 
 type Props = { searchParams: Promise<{ error?: string; success?: string }> };
@@ -8,10 +9,7 @@ type Props = { searchParams: Promise<{ error?: string; success?: string }> };
 export default async function SettingsPage({ searchParams }: Props) {
   const [{ tenant }, notice] = await Promise.all([getCurrentMerchant(), searchParams]);
   if (!tenant) return null;
-  const siteOrigin = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.digimenu.my.id").replace(
-    /\/$/,
-    "",
-  );
+  const siteOrigin = PUBLIC_SITE_URL;
   return (
     <DashboardShell tenant={tenant} active="settings" title="Settings">
       <header className="mb-7">

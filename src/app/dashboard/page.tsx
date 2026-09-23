@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import DashboardShell from "../../components/dashboard-shell";
 import { getCurrentMerchant } from "../../lib/merchant";
+import { publicStoreUrl } from "../../lib/site";
 
 type Daily = {
   page_views: number;
@@ -171,7 +172,7 @@ export default async function DashboardPage() {
             </Link>
             <Link
               className="grid size-10 place-items-center rounded-xl bg-white/10"
-              href={`/store/${tenant.slug}`}
+              href={publicStoreUrl(tenant.slug)}
               target="_blank"
             >
               <ExternalLink size={16} />

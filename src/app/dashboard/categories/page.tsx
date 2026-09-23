@@ -3,6 +3,7 @@ import DashboardShell from "../../../components/dashboard-shell";
 import { GlobalInput, GlobalTextarea, SubmitButton } from "../../../components/ui/form-controls";
 import { getCurrentMerchant } from "../../../lib/merchant";
 import { createCategoryAction, deleteCategoryAction, toggleCategoryAction } from "../actions";
+import CategoryEditButton from "./category-edit-button";
 
 type Props = { searchParams: Promise<{ error?: string }> };
 export default async function CategoriesPage({ searchParams }: Props) {
@@ -76,6 +77,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
                     </span>
                   </div>
                   <div className="ml-13 flex w-full gap-2 sm:ml-0 sm:w-auto">
+                    <CategoryEditButton category={category} />
                     <form action={toggleCategoryAction}>
                       <GlobalInput type="hidden" name="id" value={category.id} />
                       <GlobalInput type="hidden" name="active" value={String(category.is_active)} />

@@ -3,6 +3,7 @@ import DashboardShell from "../../../components/dashboard-shell";
 import { GlobalInput } from "../../../components/ui/form-controls";
 import { getCurrentMerchant } from "../../../lib/merchant";
 import { deleteProductAction, toggleProductAction } from "../actions";
+import ProductEditButton from "./product-edit-button";
 import ProductForm from "./product-form";
 
 type Props = { searchParams: Promise<{ error?: string }> };
@@ -90,6 +91,14 @@ export default async function MenuPage({ searchParams }: Props) {
                     </span>
                   </div>
                   <div className="ml-14 flex w-full flex-wrap gap-1.5 sm:ml-0 sm:w-auto">
+                    <ProductEditButton
+                      product={product}
+                      categories={(categories ?? []).map((category) => ({
+                        id: category.id,
+                        name: category.name,
+                      }))}
+                      slug={tenant.slug}
+                    />
                     {[
                       [
                         toggleProductAction,

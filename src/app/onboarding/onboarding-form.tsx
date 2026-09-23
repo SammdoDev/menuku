@@ -9,6 +9,8 @@ import {
   SubmitButton,
 } from "../../components/ui/form-controls";
 import { createTenantAction } from "./actions";
+import { MAX_IMAGE_SIZE, readImageUploadResponse } from "../../lib/image-upload";
+import { PUBLIC_SITE_URL } from "../../lib/site";
 
 type UploadKind = "logo" | "banner";
 const businessTypes = [
@@ -36,7 +38,7 @@ export default function OnboardingForm() {
       body.set("tenantSlug", slug || "draft");
       body.set("kind", kind);
       const response = await fetch("/api/images/upload", { method: "POST", body });
-      const data = (await response.json()) as { url?: string; error?: string };
+      const data = await readImageUploadResponse(response);
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       if (kind === "logo") setLogo(data.url);
       else setBanner(data.url);
@@ -48,7 +50,8 @@ export default function OnboardingForm() {
   }
   function selectFile(event: ChangeEvent<HTMLInputElement>, kind: UploadKind) {
     const file = event.currentTarget.files?.[0];
-    if (file) void upload(file, kind);
+    if (file && file.size > MAX_IMAGE_SIZE) setError("Ukuran gambar maksimal 4 MB.");
+    else if (file) void upload(file, kind);
     event.currentTarget.value = "";
   }
   const label = "grid gap-2 text-sm font-bold";
@@ -68,7 +71,7 @@ export default function OnboardingForm() {
             )}{" "}
             {uploading === "banner" ? "Mengunggah..." : "Upload background"}
             <b className="border-line text-muted hidden place-items-center border-r px-3 text-xs sm:grid">
-              digimenu.my.id/store/
+              {PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}/store/
             </b>
             <GlobalInput
               className="hidden"

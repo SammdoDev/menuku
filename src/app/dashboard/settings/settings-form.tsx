@@ -10,6 +10,7 @@ import {
   SubmitButton,
 } from "../../../components/ui/form-controls";
 import { updateStoreSettingsAction } from "../actions";
+import { MAX_IMAGE_SIZE, readImageUploadResponse } from "../../../lib/image-upload";
 
 type UploadKind = "logo" | "banner";
 
@@ -56,7 +57,7 @@ export default function SettingsForm({
       body.set("tenantSlug", slug || tenant.slug);
       body.set("kind", kind);
       const response = await fetch("/api/images/upload", { method: "POST", body });
-      const data = (await response.json()) as { url?: string; error?: string };
+      const data = await readImageUploadResponse(response);
       if (!response.ok || !data.url) throw new Error(data.error || "Upload gambar gagal.");
       if (kind === "logo") setLogo(data.url);
       else setBanner(data.url);
@@ -69,7 +70,8 @@ export default function SettingsForm({
 
   function selectFile(event: ChangeEvent<HTMLInputElement>, kind: UploadKind) {
     const file = event.currentTarget.files?.[0];
-    if (file) void upload(file, kind);
+    if (file && file.size > MAX_IMAGE_SIZE) setUploadError("Ukuran gambar maksimal 4 MB.");
+    else if (file) void upload(file, kind);
     event.currentTarget.value = "";
   }
 

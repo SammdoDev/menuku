@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "./supabase/server";
+import { cache } from "react";
 
 export type Tenant = {
   id: string;
@@ -23,7 +24,7 @@ export type Tenant = {
   show_opening_hours: boolean;
 };
 
-export async function getCurrentMerchant() {
+export const getCurrentMerchant = cache(async function getCurrentMerchant() {
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
@@ -37,4 +38,4 @@ export async function getCurrentMerchant() {
     .eq("owner_id", user.id)
     .maybeSingle<Tenant>();
   return { user, tenant, supabase };
-}
+});
