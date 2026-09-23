@@ -7,6 +7,8 @@ import {
 } from "../../../components/ui/form-controls";
 import { getCurrentMerchant } from "../../../lib/merchant";
 import { createLinkAction, deleteLinkAction, toggleLinkAction } from "../actions";
+import AuthToast from "../../(auth)/auth-toast";
+import PersistentForm from "../../../components/ui/persistent-form";
 
 type Props = { searchParams: Promise<{ error?: string }> };
 const types = [
@@ -49,18 +51,18 @@ export default async function LinksPage({ searchParams }: Props) {
           Kumpulkan WhatsApp, sosial media, lokasi, dan tautan penting.
         </p>
       </header>
-      {error && (
-        <p className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </p>
-      )}
+      <AuthToast error={error} />
       <div className="grid items-start gap-5 xl:grid-cols-[380px_1fr]">
         <article className={card}>
           <h2 className="display-font text-xl font-black">Tambah link</h2>
           <p className="text-muted mt-1 mb-5 text-xs">
             Gunakan URL lengkap agar dapat dibuka dengan aman.
           </p>
-          <form className="grid gap-4" action={createLinkAction}>
+          <PersistentForm
+            storageKey="menuku-link-create"
+            className="grid gap-4"
+            action={createLinkAction}
+          >
             <div className="grid gap-2 text-sm font-bold">
               <label htmlFor="link-type">Jenis link</label>
               <GlobalAutocomplete
@@ -86,7 +88,7 @@ export default async function LinksPage({ searchParams }: Props) {
               <GlobalInput name="url" type="url" required placeholder="https://..." />
             </label>
             <SubmitButton pendingLabel="Menambahkan link...">Simpan link</SubmitButton>
-          </form>
+          </PersistentForm>
         </article>
         <article className={card}>
           <h2 className="display-font text-xl font-black">Daftar link</h2>

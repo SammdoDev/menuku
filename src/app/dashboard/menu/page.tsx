@@ -5,6 +5,7 @@ import { getCurrentMerchant } from "../../../lib/merchant";
 import { deleteProductAction, toggleProductAction } from "../actions";
 import ProductEditButton from "./product-edit-button";
 import ProductForm from "./product-form";
+import AuthToast from "../../(auth)/auth-toast";
 
 type Props = { searchParams: Promise<{ error?: string }> };
 export default async function MenuPage({ searchParams }: Props) {
@@ -35,11 +36,7 @@ export default async function MenuPage({ searchParams }: Props) {
           Tambahkan menu yang tampil di halaman publik bisnismu.
         </p>
       </header>
-      {error && (
-        <p className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </p>
-      )}
+      <AuthToast error={error} />
       <div className="grid items-start gap-5 xl:grid-cols-[380px_1fr]">
         <article className={card}>
           <h2 className="display-font text-xl font-black">Tambah menu</h2>

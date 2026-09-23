@@ -1,5 +1,5 @@
-import { CheckCircle2, CircleAlert } from "lucide-react";
 import DashboardShell from "../../../components/dashboard-shell";
+import AuthToast from "../../(auth)/auth-toast";
 import { getCurrentMerchant } from "../../../lib/merchant";
 import { PUBLIC_SITE_URL } from "../../../lib/site";
 import SettingsForm from "./settings-form";
@@ -18,18 +18,7 @@ export default async function SettingsPage({ searchParams }: Props) {
           Kelola profil, URL, informasi bisnis, dan tampilan halaman publik.
         </p>
       </header>
-      {notice.error && (
-        <div className="mb-5 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          <CircleAlert size={18} className="mt-0.5 shrink-0" />
-          {notice.error}
-        </div>
-      )}
-      {notice.success && (
-        <div className="mb-5 flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
-          <CheckCircle2 size={18} className="mt-0.5 shrink-0" />
-          {notice.success}
-        </div>
-      )}
+      <AuthToast error={notice.error} message={notice.success} />
       <SettingsForm tenant={tenant} siteOrigin={siteOrigin} />
     </DashboardShell>
   );

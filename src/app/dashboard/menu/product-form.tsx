@@ -13,6 +13,7 @@ import { createProductAction, updateProductAction } from "../actions";
 import { optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
 import { normalizeImageUrl } from "../../../lib/image-url";
 import ImageCropDialog from "../../../components/image-crop-dialog";
+import PersistentForm from "../../../components/ui/persistent-form";
 
 type Category = { id: string; name: string };
 type Product = {
@@ -69,7 +70,11 @@ export default function ProductForm({
     ...categories.map((category) => ({ value: category.id, label: category.name })),
   ];
   return (
-    <form className="grid gap-4" action={product ? updateProductAction : createProductAction}>
+    <PersistentForm
+      storageKey={`menuku-product-${product ? `edit-${product.id}` : "create"}`}
+      className="grid gap-4"
+      action={product ? updateProductAction : createProductAction}
+    >
       <GlobalInput type="hidden" name="imageUrl" value={imageUrl} />
       {product && <GlobalInput type="hidden" name="id" value={product.id} />}
       <div
@@ -193,6 +198,6 @@ export default function ProductForm({
           void upload(cropped);
         }}
       />
-    </form>
+    </PersistentForm>
   );
 }

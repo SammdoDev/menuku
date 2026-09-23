@@ -4,6 +4,8 @@ import { GlobalInput, GlobalTextarea, SubmitButton } from "../../../components/u
 import { getCurrentMerchant } from "../../../lib/merchant";
 import { createCategoryAction, deleteCategoryAction, toggleCategoryAction } from "../actions";
 import CategoryEditButton from "./category-edit-button";
+import AuthToast from "../../(auth)/auth-toast";
+import PersistentForm from "../../../components/ui/persistent-form";
 
 type Props = { searchParams: Promise<{ error?: string }> };
 export default async function CategoriesPage({ searchParams }: Props) {
@@ -24,18 +26,18 @@ export default async function CategoriesPage({ searchParams }: Props) {
           Kelompokkan menu agar pelanggan mudah menemukannya.
         </p>
       </header>
-      {error && (
-        <p className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
-        </p>
-      )}
+      <AuthToast error={error} />
       <div className="grid items-start gap-5 xl:grid-cols-[380px_1fr]">
         <article className={card}>
           <h2 className="display-font text-xl font-black">Tambah kategori</h2>
           <p className="text-muted mt-1 mb-5 text-xs">
             Buat kategori seperti Kopi, Makanan, atau Dessert.
           </p>
-          <form className="grid gap-4" action={createCategoryAction}>
+          <PersistentForm
+            storageKey="menuku-category-create"
+            className="grid gap-4"
+            action={createCategoryAction}
+          >
             <label className="grid gap-2 text-sm font-bold">
               Nama kategori
               <GlobalInput name="name" placeholder="Contoh: Minuman" required />
@@ -48,7 +50,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
               />
             </label>
             <SubmitButton pendingLabel="Menambahkan kategori...">Simpan kategori</SubmitButton>
-          </form>
+          </PersistentForm>
         </article>
         <article className={card}>
           <h2 className="display-font text-xl font-black">Daftar kategori</h2>

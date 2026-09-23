@@ -1,7 +1,7 @@
 "use client";
 
 import { Camera, Check, ImagePlus, LoaderCircle, Palette, Trash2 } from "lucide-react";
-import { useState, type ChangeEvent, type CSSProperties } from "react";
+import { useCallback, useState, type ChangeEvent, type CSSProperties } from "react";
 import type { Tenant } from "../../../lib/merchant";
 import {
   GlobalAutocomplete,
@@ -14,6 +14,7 @@ import { updateStoreSettingsAction } from "../actions";
 import { optimizeImage, readImageUploadResponse } from "../../../lib/image-upload";
 import { normalizeImageUrl } from "../../../lib/image-url";
 import ImageCropDialog from "../../../components/image-crop-dialog";
+import PersistentForm from "../../../components/ui/persistent-form";
 
 type UploadKind = "logo" | "banner";
 
@@ -93,11 +94,19 @@ export default function SettingsForm({
     "--color-brand": primaryColor,
     backgroundColor,
   } as CSSProperties;
+  const restoreValues = useCallback((values: Record<string, string | boolean>) => {
+    if (typeof values.slug === "string") setSlug(values.slug);
+    if (typeof values.primaryColor === "string") setPrimaryColor(values.primaryColor);
+    if (typeof values.backgroundColor === "string") setBackgroundColor(values.backgroundColor);
+    if (values.layoutType === "grid" || values.layoutType === "list") setLayout(values.layoutType);
+  }, []);
 
   return (
-    <form
+    <PersistentForm
+      storageKey="menuku-settings-form"
       action={updateStoreSettingsAction}
       className="grid items-start gap-5 xl:grid-cols-[1.15fr_.85fr]"
+      onRestore={restoreValues}
     >
       <div className="grid gap-5">
         <section className={card}>
@@ -473,6 +482,6 @@ export default function SettingsForm({
           }}
         />
       </aside>
-    </form>
+    </PersistentForm>
   );
 }

@@ -431,7 +431,8 @@ export async function updateStoreSettingsAction(formData: FormData) {
   if (error?.code === "23505") fail("Alamat tersebut sudah digunakan bisnis lain.");
   if (error) fail("Pengaturan belum dapat disimpan. Coba lagi.");
 
-  revalidatePath("/dashboard", "layout");
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/settings");
   revalidatePath(`/store/${previousSlug}`);
   revalidatePath(`/store/${value.slug}`);
   redirect("/dashboard/settings?success=Pengaturan+berhasil+disimpan.");

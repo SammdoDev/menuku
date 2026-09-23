@@ -4,6 +4,7 @@ import { Pencil, X } from "lucide-react";
 import { useState } from "react";
 import { GlobalInput, GlobalTextarea, SubmitButton } from "../../../components/ui/form-controls";
 import { updateCategoryAction } from "../actions";
+import PersistentForm from "../../../components/ui/persistent-form";
 
 export default function CategoryEditButton({
   category,
@@ -34,7 +35,11 @@ export default function CategoryEditButton({
           <X size={15} />
         </button>
       </div>
-      <form action={updateCategoryAction} className="grid gap-3">
+      <PersistentForm
+        storageKey={`menuku-category-edit-${category.id}`}
+        action={updateCategoryAction}
+        className="grid gap-3"
+      >
         <GlobalInput type="hidden" name="id" value={category.id} />
         <GlobalInput name="name" defaultValue={category.name} required maxLength={80} />
         <GlobalTextarea
@@ -44,7 +49,7 @@ export default function CategoryEditButton({
           maxLength={200}
         />
         <SubmitButton pendingLabel="Menyimpan...">Simpan perubahan</SubmitButton>
-      </form>
+      </PersistentForm>
     </div>
   );
 }
