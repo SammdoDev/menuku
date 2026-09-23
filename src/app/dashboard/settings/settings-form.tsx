@@ -44,6 +44,7 @@ export default function SettingsForm({
   siteOrigin: string;
 }) {
   const canUsePromo = tenant.plan !== "free";
+  const canUseCustomStyle = tenant.plan !== "free";
   const [logo, setLogo] = useState(normalizeImageUrl(tenant.logo_url));
   const [banner, setBanner] = useState(normalizeImageUrl(tenant.banner_url));
   const [promoImage, setPromoImage] = useState(normalizeImageUrl(tenant.promo_image_url));
@@ -404,7 +405,7 @@ export default function SettingsForm({
       </div>
 
       <aside className="grid gap-5 xl:sticky xl:top-24">
-        <section className={card}>
+        <section className={`${card} ${!canUseCustomStyle ? "opacity-75" : ""}`}>
           <div className="mb-5 flex items-start gap-3">
             <span className="text-brand grid size-10 shrink-0 place-items-center rounded-xl bg-orange-50">
               <Palette size={19} />
@@ -426,6 +427,7 @@ export default function SettingsForm({
                   type="button"
                   title={name}
                   aria-label={`Tema ${name}`}
+                  disabled={!canUseCustomStyle}
                   onClick={() => {
                     setPrimaryColor(primary);
                     setBackgroundColor(background);
@@ -453,6 +455,7 @@ export default function SettingsForm({
                   type="color"
                   name="primaryColor"
                   value={primaryColor}
+                  disabled={!canUseCustomStyle}
                   onChange={(event) => setPrimaryColor(event.target.value)}
                 />
                 <code className="text-muted text-xs font-bold uppercase">{primaryColor}</code>
@@ -466,6 +469,7 @@ export default function SettingsForm({
                   type="color"
                   name="backgroundColor"
                   value={backgroundColor}
+                  disabled={!canUseCustomStyle}
                   onChange={(event) => setBackgroundColor(event.target.value)}
                 />
                 <code className="text-muted text-xs font-bold uppercase">{backgroundColor}</code>
@@ -484,6 +488,7 @@ export default function SettingsForm({
                 <button
                   key={value}
                   type="button"
+                  disabled={!canUseCustomStyle}
                   onClick={() => setLayout(value)}
                   className={`rounded-xl border p-3 text-left transition ${layout === value ? "border-brand ring-brand/10 bg-orange-50/60 ring-2" : "border-line"}`}
                 >
@@ -492,6 +497,11 @@ export default function SettingsForm({
                 </button>
               ))}
             </div>
+            {!canUseCustomStyle && (
+              <p className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-bold text-amber-800">
+                Pilihan layout menu dan warna tersedia mulai paket Premium.
+              </p>
+            )}
           </div>
 
           <div className="mt-5 grid gap-2">
