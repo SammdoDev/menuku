@@ -16,6 +16,7 @@ import {
 import Brand from "../components/brand";
 import { plans, rupiah } from "../lib/plans";
 import { supportWhatsAppUrl } from "../lib/site";
+export { default } from "./landing-page";
 
 const marketingPlans = [
   {
@@ -51,7 +52,7 @@ const marketingPlans = [
 ];
 const kicker = "mb-3 text-[11px] font-black uppercase tracking-[.13em] text-brand";
 
-export default function Home() {
+function LegacyHome() {
   return (
     <main className="bg-paper text-ink overflow-hidden">
       <header className="mx-auto flex h-18 max-w-7xl items-center px-4 sm:px-6 lg:px-10">

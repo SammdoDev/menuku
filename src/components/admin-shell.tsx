@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Activity, ExternalLink, LayoutDashboard, LogOut, Store } from "lucide-react";
+import { Activity, ExternalLink, LayoutDashboard, LogOut, Store, UsersRound } from "lucide-react";
 import { logoutAction } from "../app/(auth)/actions";
 import Brand from "./brand";
 
@@ -10,6 +10,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   const overviewActive = pathname === "/admin";
   const analyticsActive = pathname.startsWith("/admin/analytics");
+  const customersActive = pathname.startsWith("/admin/customers");
   return (
     <main className="bg-paper min-h-dvh lg:pl-72">
       <aside className="fixed inset-y-4 left-4 z-30 hidden w-64 flex-col rounded-3xl bg-[#211f1b] p-4 text-[#bdb5ac] shadow-2xl lg:flex">
@@ -32,6 +33,12 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
             className={`${analyticsActive ? "bg-brand font-extrabold text-white shadow-lg" : "hover:bg-white/[.08] hover:text-white"} flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition`}
           >
             <Activity size={18} /> Analytics platform
+          </Link>
+          <Link
+            href="/admin/customers"
+            className={`${customersActive ? "bg-brand font-extrabold text-white shadow-lg" : "hover:bg-white/[.08] hover:text-white"} flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition`}
+          >
+            <UsersRound size={18} /> CRM & retensi
           </Link>
         </nav>
         <div className="mt-auto grid gap-2 border-t border-white/10 pt-4 text-sm">
