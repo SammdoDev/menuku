@@ -10,8 +10,8 @@ const primary = "inline-flex min-h-12 items-center justify-center gap-2 rounded-
 const outline = "inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#d9d5ce] bg-white px-6 text-sm font-bold transition hover:-translate-y-0.5 hover:border-[#242320]";
 const plansData = [
   { name: "Free", price: rupiah(plans.free.price), detail: "Untuk mulai", features: ["2 kategori", "4 produk", "Katalog publik"], href: "/register?plan=free" },
-  { name: "Premium", price: rupiah(plans.premium.price), detail: "Untuk bisnis berkembang", features: ["6 kategori & 30 produk", "5 custom link", "Analytics dasar"], href: "/register?plan=premium", featured: true },
-  { name: "Business", price: rupiah(plans.business.price), detail: "Untuk tim", features: ["Semua fitur Premium", "3 anggota tim", "Custom domain"], href: "/register?plan=business" },
+  { name: "Premium", price: rupiah(plans.premium.price), detail: "Untuk bisnis berkembang", features: ["6 kategori & 30 produk", "5 tautan tambahan", "Analitik dasar"], href: "/register?plan=premium", featured: true },
+  { name: "Business", price: rupiah(plans.business.price), detail: "Untuk tim", features: ["Semua fitur Premium", "3 anggota tim", "Domain khusus"], href: "/register?plan=business" },
 ];
 
 export default function LandingPageEditorial() {
