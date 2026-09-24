@@ -88,3 +88,18 @@ export async function remindSubscriptionAction(formData: FormData) {
     .eq("id", id);
   revalidatePath("/admin");
 }
+
+export async function toggleCommunityVisibilityAction(formData: FormData) {
+  const id = String(formData.get("id") || "");
+  const visible = formData.get("visible") === "true";
+  const admin = await getAdminContext();
+  if (!admin || !id) return;
+
+  await admin.supabase
+    .from("tenants")
+    .update({ is_community_visible: !visible })
+    .eq("id", id);
+
+  revalidatePath("/admin");
+  revalidatePath("/community");
+}

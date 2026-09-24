@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { Activity, ArrowUpRight, Eye, Store, Users } from "lucide-react";
 import { getAdminContext } from "../../lib/admin";
-import { approveSubscriptionAction, remindSubscriptionAction } from "./actions";
+import {
+  approveSubscriptionAction,
+  remindSubscriptionAction,
+  toggleCommunityVisibilityAction,
+} from "./actions";
 
 type Tenant = {
   id: string;
@@ -10,6 +14,7 @@ type Tenant = {
   owner_id: string;
   plan: string;
   is_published: boolean;
+  is_community_visible: boolean;
   is_active: boolean;
   created_at: string;
 };
@@ -30,7 +35,7 @@ export default async function AdminPage() {
   ] = await Promise.all([
     admin.supabase
       .from("tenants")
-      .select("id,name,slug,owner_id,plan,is_published,is_active,created_at")
+      .select("id,name,slug,owner_id,plan,is_published,is_community_visible,is_active,created_at")
       .order("created_at", { ascending: false }),
     admin.supabase
       .from("profiles")
@@ -71,8 +76,8 @@ export default async function AdminPage() {
     ],
     [
       "Halaman publik",
-      businesses.filter((item) => item.is_published).length,
-      "Sudah dipublikasikan",
+      businesses.filter((item) => item.is_published && item.is_active && item.is_community_visible).length,
+      "Tampil di Community",
       Eye,
     ],
     ["Event hari ini", todayEvents.length, "Dari 1.000 event terbaru", Activity],
@@ -128,6 +133,7 @@ export default async function AdminPage() {
                 <th className="px-5 py-3">Pemilik</th>
                 <th className="px-5 py-3">Plan</th>
                 <th className="px-5 py-3">Status</th>
+                <th className="px-5 py-3">Community</th>
                 <th className="px-5 py-3">Daftar</th>
               </tr>
             </thead>
@@ -154,6 +160,24 @@ export default async function AdminPage() {
                         className={`rounded-full px-2.5 py-1 text-xs font-bold ${tenant.is_active && tenant.is_published ? "bg-emerald-50 text-emerald-700" : tenant.is_active ? "bg-amber-50 text-amber-700" : "bg-red-50 text-red-700"}`}
                       >
                         {!tenant.is_active ? "Suspended" : tenant.is_published ? "Publik" : "Draft"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <form action={toggleCommunityVisibilityAction}>
+                        <input type="hidden" name="id" value={tenant.id} />
+                        <input
+                          type="hidden"
+                          name="visible"
+                          value={String(tenant.is_community_visible)}
+                        />
+                        <button
+                          className={`rounded-lg px-3 py-2 text-xs font-extrabold ${tenant.is_community_visible ? "border-line border bg-white text-[#756d63]" : "bg-brand text-white"}`}
+                        >
+                          {tenant.is_community_visible ? "Sembunyikan" : "Tampilkan"}
+                        </button>
+                      </form>
+                      <span className="text-muted mt-1 block text-[10px]">
+                        {tenant.is_community_visible ? "Terlihat publik" : "Disembunyikan"}
                       </span>
                     </td>
                     <td className="text-muted px-5 py-4 text-xs">{date(tenant.created_at)}</td>

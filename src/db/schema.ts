@@ -76,6 +76,7 @@ export const tenants = pgTable(
     showAddress: boolean("show_address").notNull().default(true),
     showOpeningHours: boolean("show_opening_hours").notNull().default(true),
     isPublished: boolean("is_published").notNull().default(false),
+    isCommunityVisible: boolean("is_community_visible").notNull().default(true),
     isActive: boolean("is_active").notNull().default(true),
     ...timestamps,
   },

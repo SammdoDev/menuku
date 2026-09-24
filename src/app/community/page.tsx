@@ -10,7 +10,7 @@ type Product = { tenant_id: string; name: string };
 export default async function CommunityPage() {
   const supabase = await createSupabaseServerClient();
   const [{ data: tenantRows }, { data: productRows }] = await Promise.all([
-    supabase.from("tenants").select("id,name,slug,description,business_type,logo_url,banner_url,address").eq("is_published", true).eq("is_active", true).order("created_at", { ascending: false }),
+    supabase.from("tenants").select("id,name,slug,description,business_type,logo_url,banner_url,address").eq("is_published", true).eq("is_community_visible", true).eq("is_active", true).order("created_at", { ascending: false }),
     supabase.from("products").select("tenant_id,name").eq("is_active", true).eq("is_available", true).order("sort_order").limit(1000),
   ]);
   const tenants = (tenantRows ?? []) as Tenant[];
