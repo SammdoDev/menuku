@@ -1,14 +1,19 @@
 import Link from "next/link";
 import {
   Activity,
+  ArrowRight,
   ArrowUpRight,
+  CheckCircle2,
   ExternalLink,
   Link2,
   MenuSquare,
   QrCode,
   Sparkles,
+  TrendingUp,
+  Zap,
 } from "lucide-react";
 import DashboardShell from "../../components/dashboard-shell";
+import DashboardMotion from "../../components/dashboard-motion";
 import { getCurrentMerchant } from "../../lib/merchant";
 import { publicStoreUrl } from "../../lib/site";
 
@@ -54,6 +59,15 @@ export default async function DashboardPage() {
   }) as Daily;
   const menu = (products ?? []) as Product[];
   const name = user.user_metadata.name?.split(" ")[0] ?? "Merchant";
+  const chartData = [...(daily ?? [])].reverse() as Daily[];
+  const maxViews = Math.max(...chartData.map((item) => item.page_views), 1);
+  const setupItems = [
+    { label: "Profil bisnis", done: Boolean(tenant.description || tenant.business_type), href: "/dashboard/settings" },
+    { label: "Menu pertama", done: menu.length > 0, href: "/dashboard/menu" },
+    { label: "Link WhatsApp", done: Boolean(tenant.whatsapp), href: "/dashboard/settings" },
+    { label: "Publikasikan halaman", done: tenant.is_published, href: "/dashboard/publish" },
+  ];
+  const setupProgress = Math.round((setupItems.filter((item) => item.done).length / setupItems.length) * 100);
   const metrics = [
     ["Kunjungan hari ini", today.page_views, "Page views", Activity],
     ["Pengunjung unik", today.unique_visitors, "Hari ini", Activity],
@@ -67,8 +81,8 @@ export default async function DashboardPage() {
   ] as const;
   const card = "rounded-2xl border border-line bg-white p-5 shadow-sm sm:p-6";
   return (
-    <DashboardShell tenant={tenant} active="dashboard" title="Ringkasan">
-      <section className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <DashboardMotion><DashboardShell tenant={tenant} active="dashboard" title="Ringkasan">
+      <section data-dashboard-reveal className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-brand mb-2 flex items-center gap-1.5 text-[10px] font-black tracking-[.12em]">
             <Sparkles size={14} />
@@ -79,13 +93,15 @@ export default async function DashboardPage() {
             Lihat perkembangan <b>{tenant.name}</b> dan lanjutkan menyiapkan katalogmu.
           </p>
         </div>
+        <div className="flex items-center gap-2">
+          <Link href="/dashboard/menu" className="border-line hidden items-center gap-2 rounded-xl border bg-white px-3 py-2 text-xs font-extrabold sm:inline-flex"><Zap size={14} className="text-brand" /> Tambah menu</Link>
         <span
           className={`w-fit rounded-full px-3 py-2 text-xs font-extrabold ${tenant.is_published ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}
         >
           ● {tenant.is_published ? "Halaman publik" : "Masih draft"}
-        </span>
+        </span></div>
       </section>
-      <section className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <section data-dashboard-reveal className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
         {metrics.map(([label, value, note, Icon]) => (
           <article
             key={label}
@@ -100,7 +116,12 @@ export default async function DashboardPage() {
           </article>
         ))}
       </section>
-      <section className="mb-5 grid gap-5 xl:grid-cols-[1.4fr_1fr]">
+      <section data-dashboard-reveal className="mb-5 grid gap-5 xl:grid-cols-[1.4fr_1fr]">
+        <article className={card + " xl:col-span-1"}>
+          <header className="mb-5 flex items-start justify-between"><div><p className="text-brand mb-1 text-[10px] font-black tracking-[.12em]">PERFORMA 7 HARI</p><h2 className="display-font text-xl font-black">Kunjungan storefront</h2></div><span className="bg-emerald-50 text-emerald-700 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold"><TrendingUp size={12} /> Live insight</span></header>
+          {chartData.length ? <div className="flex h-36 items-end gap-2 sm:gap-3">{chartData.map((item) => <div className="group flex h-full flex-1 flex-col items-center justify-end gap-2" key={item.event_date}><div className="relative flex w-full flex-1 items-end"><div className="bg-brand/80 group-hover:bg-brand w-full rounded-t-lg transition-all" style={{ height: `${Math.max((item.page_views / maxViews) * 100, 8)}%` }}><span className="bg-charcoal absolute -top-7 left-1/2 hidden -translate-x-1/2 rounded-md px-2 py-1 text-[9px] text-white group-hover:block">{item.page_views}</span></div></div><span className="text-muted text-[9px]">{new Intl.DateTimeFormat("id-ID", { weekday: "short" }).format(new Date(item.event_date))}</span></div>)}</div> : <div className="border-line text-muted grid h-36 place-items-center rounded-xl border border-dashed text-center text-xs">Belum ada data kunjungan.<br />Bagikan halamanmu untuk mulai mengumpulkan insight.</div>}
+          <div className="border-line mt-5 grid grid-cols-3 gap-2 border-t pt-4 text-center"><div><b className="block text-lg">{chartData.reduce((sum, item) => sum + item.page_views, 0)}</b><span className="text-muted text-[10px]">Total view</span></div><div><b className="block text-lg">{chartData.reduce((sum, item) => sum + item.unique_visitors, 0)}</b><span className="text-muted text-[10px]">Pengunjung</span></div><div><b className="block text-lg">{chartData.reduce((sum, item) => sum + item.product_views, 0)}</b><span className="text-muted text-[10px]">Menu dilihat</span></div></div>
+        </article>
         <article className={card}>
           <header className="mb-4 flex items-start justify-between">
             <div>
@@ -180,6 +201,14 @@ export default async function DashboardPage() {
           </div>
         </article>
       </section>
+      <section data-dashboard-reveal className="mb-5 grid gap-5 xl:grid-cols-[.8fr_1.2fr]">
+        <article className={card}>
+          <header className="mb-4 flex items-start justify-between"><div><p className="text-brand mb-1 text-[10px] font-black tracking-[.12em]">SETUP SCORE</p><h2 className="display-font text-xl font-black">Siap untuk dibagikan</h2></div><b className="text-brand text-2xl">{setupProgress}%</b></header>
+          <div className="bg-line h-2 overflow-hidden rounded-full"><div className="bg-brand h-full rounded-full transition-all" style={{ width: `${setupProgress}%` }} /></div>
+          <div className="mt-4 grid gap-2">{setupItems.map((item) => <Link className="flex items-center gap-2 rounded-lg py-1 text-xs hover:bg-orange-50" href={item.href} key={item.label}>{item.done ? <CheckCircle2 size={15} className="text-emerald-600" /> : <span className="border-line size-[15px] rounded-full border" />}<span className={item.done ? "text-muted line-through" : "font-bold"}>{item.label}</span>{!item.done && <ArrowUpRight size={13} className="text-brand ml-auto" />}</Link>)}</div>
+        </article>
+        <article className="border-brand/20 relative overflow-hidden rounded-2xl border bg-[#fff4ed] p-6"><div className="relative z-10"><p className="text-brand mb-1 text-[10px] font-black tracking-[.12em]">QUICK WIN</p><h2 className="display-font max-w-md text-2xl font-black">Buat satu menu unggulan hari ini.</h2><p className="text-muted mt-2 max-w-md text-sm leading-6">Menu dengan foto, harga promo, dan status tersedia biasanya lebih cepat dipahami pelanggan.</p><Link href="/dashboard/menu" className={"bg-brand mt-5 inline-flex items-center gap-2 rounded-xl px-4 py-3 text-xs font-extrabold text-white"}>Tambah menu unggulan <ArrowRight size={14} /></Link></div><Sparkles className="text-brand/20 absolute -right-2 -bottom-6 size-36" /></article>
+      </section>
       <section className={card}>
         <header className="mb-4 flex items-start justify-between">
           <div>
@@ -223,6 +252,6 @@ export default async function DashboardPage() {
           </div>
         )}
       </section>
-    </DashboardShell>
+    </DashboardShell></DashboardMotion>
   );
 }
