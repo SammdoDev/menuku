@@ -16,7 +16,7 @@ import {
 import Brand from "../components/brand";
 import { plans, rupiah } from "../lib/plans";
 import { supportWhatsAppUrl } from "../lib/site";
-export { default } from "./landing-page-id";
+export { default } from "./landing-page-linktree";
 
 const marketingPlans = [
   {
