@@ -10,7 +10,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { logoutAction } from "../app/(auth)/actions";
-import { publicStoreUrl } from "../lib/site";
+import { PUBLIC_SITE_URL, publicStoreUrl } from "../lib/site";
 import Brand from "./brand";
 import { LoadingLink } from "./global-loading";
 
@@ -28,6 +28,14 @@ const links = [
 ] as const;
 
 const mobileLinks = links.filter(({ key }) => key !== "publish");
+const mobileLabels: Record<string, string> = {
+  dashboard: "Home",
+  menu: "Menu",
+  categories: "Kategori",
+  links: "Links",
+  billing: "Paket",
+  settings: "Settings",
+};
 
 export default function DashboardShell({
   tenant,
@@ -54,7 +62,7 @@ export default function DashboardShell({
           <div className="min-w-0">
             <b className="block truncate text-sm text-white">{tenant.name}</b>
             <small className="block truncate text-[10px] text-[#aaa39a]">
-              www.digimenu.my.id/store/{tenant.slug}
+              {PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}/store/{tenant.slug}
             </small>
           </div>
         </div>
@@ -93,18 +101,18 @@ export default function DashboardShell({
         </Link>
       </header>
 
-      <div className="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-10">{children}</div>
+      <div className="mx-auto w-full min-w-0 max-w-7xl p-4 sm:p-6 lg:p-10">{children}</div>
 
-      <nav className="bg-charcoal/95 fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-2xl border border-white/10 p-1.5 text-white shadow-2xl backdrop-blur-xl lg:hidden">
+      <nav className="bg-charcoal/95 fixed inset-x-3 bottom-3 z-40 grid grid-cols-6 rounded-2xl border border-white/10 p-1.5 text-white shadow-2xl backdrop-blur-xl lg:hidden">
         {mobileLinks.map(({ key, href, label, icon: Icon }) => (
           <LoadingLink
             key={key}
             href={href}
             aria-label={label}
-            className={`grid min-h-12 place-items-center rounded-xl transition ${active === key ? "bg-brand text-white" : "text-white/60"}`}
+            className={`grid min-h-12 min-w-0 place-items-center rounded-xl transition ${active === key ? "bg-brand text-white" : "text-white/60"}`}
           >
-            <Icon size={19} />
-            <span className="text-[8px] font-bold">{label}</span>
+            <Icon size={18} />
+            <span className="max-w-full truncate text-[8px] font-bold">{mobileLabels[key]}</span>
           </LoadingLink>
         ))}
       </nav>

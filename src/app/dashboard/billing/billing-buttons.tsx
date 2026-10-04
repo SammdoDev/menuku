@@ -22,16 +22,14 @@ export default function BillingButtons({
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`/api/payments/manual?months=${months}`, {
+      const response = await fetch(`/api/payments/duitku?months=${months}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ plan: code }),
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || "Pembayaran belum dapat dibuat.");
-      window.location.assign(
-        `/dashboard/billing/confirmation?order=${encodeURIComponent(data.orderId)}&plan=${code}`,
-      );
+      window.location.assign(data.paymentUrl);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Pembayaran gagal dibuat.");
       setLoading(false);
@@ -41,13 +39,8 @@ export default function BillingButtons({
     <div>
       {code !== "free" && (
         <div className="mb-5 rounded-2xl bg-[#faf8f4] p-4 text-center">
-          <img
-            src="/qris.jpeg"
-            alt="QRIS pembayaran Menuku"
-            className="mx-auto size-48 rounded-xl object-contain"
-          />
           <p className="text-muted mt-2 text-[11px]">
-            Scan QRIS lalu transfer sesuai nominal paket.
+            Kamu akan diarahkan ke checkout Duitku untuk memilih metode pembayaran.
           </p>
         </div>
       )}
@@ -78,13 +71,13 @@ export default function BillingButtons({
             ? "Pilih Free Demo"
             : currentPlan === "business"
               ? "Sudah termasuk Business"
-              : currentPlan === "premium" && code === "premium"
+            : currentPlan === "premium" && code === "premium"
                 ? "Perpanjang Premium"
                 : currentPlan === "premium"
                   ? "Upgrade prorata ke Business"
-                  : "Saya sudah transfer"}
+                  : "Bayar dengan Duitku"}
       </button>
-      {error && <p className="mt-2 text-xs text-emerald-700">{error}</p>}
+      {error && <p className="mt-2 text-xs text-red-700">{error}</p>}
     </div>
   );
 }

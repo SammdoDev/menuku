@@ -172,10 +172,11 @@ export default function ProductForm({
         />
         Tandai sebagai rekomendasi
       </label>
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <SubmitButton
           pendingLabel={product ? "Menyimpan perubahan..." : "Menambahkan menu..."}
           disabled={uploading}
+          className="w-full sm:w-auto"
         >
           {product ? "Simpan perubahan" : "Simpan menu"}
         </SubmitButton>
@@ -183,7 +184,7 @@ export default function ProductForm({
           <button
             type="button"
             onClick={onCancel}
-            className="border-line min-h-12 rounded-xl border px-4 text-sm font-extrabold"
+            className="border-line min-h-12 w-full rounded-xl border px-4 text-sm font-extrabold sm:w-auto"
           >
             Batal
           </button>

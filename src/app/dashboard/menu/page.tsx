@@ -37,7 +37,7 @@ export default async function MenuPage({ searchParams }: Props) {
         </p>
       </header>
       <AuthToast error={error} />
-      <div className="grid items-start gap-5 xl:grid-cols-[380px_1fr]">
+      <div className="grid min-w-0 items-start gap-5 xl:grid-cols-[minmax(0,380px)_minmax(0,1fr)]">
         <article className={card}>
           <h2 className="display-font text-xl font-black">Tambah menu</h2>
           <p className="text-muted mt-1 mb-5 text-xs">
@@ -54,10 +54,7 @@ export default async function MenuPage({ searchParams }: Props) {
           {products?.length ? (
             <div className="grid gap-2">
               {products.map((product) => (
-                <div
-                  className="border-line flex flex-wrap items-start gap-3 rounded-xl border p-3 sm:flex-nowrap sm:items-center"
-                  key={product.id}
-                >
+                <div className="border-line flex min-w-0 flex-col gap-3 rounded-xl border p-3 sm:flex-row sm:items-center" key={product.id}>
                   <span
                     className="text-brand grid size-11 shrink-0 place-items-center rounded-xl bg-orange-50 bg-cover bg-center"
                     style={
@@ -87,7 +84,7 @@ export default async function MenuPage({ searchParams }: Props) {
                           : "Habis"}
                     </span>
                   </div>
-                  <div className="ml-14 flex w-full flex-wrap gap-1.5 sm:ml-0 sm:w-auto">
+                  <div className="flex w-full flex-wrap gap-1.5 sm:max-w-[55%] sm:justify-end">
                     <ProductEditButton
                       product={product}
                       categories={(categories ?? []).map((category) => ({

@@ -1,4 +1,6 @@
-export const PUBLIC_SITE_URL = "https://www.digimenu.my.id";
+export const PUBLIC_SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.digimenu.my.id"
+).replace(/\/+$/, "");
 export const SUPPORT_WHATSAPP = process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP || "6282264274973";
 
 export function publicStoreUrl(slug: string) {

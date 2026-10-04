@@ -326,11 +326,11 @@ function LegacyHome() {
             ],
             [
               "Bagaimana cara membayar paket?",
-              "Pilih paket dan durasi di halaman Billing. Menuku membuat invoice dan menampilkan QRIS. Transfer sesuai nominal invoice, lalu kirim bukti transfer melalui WhatsApp agar admin bisa memverifikasi.",
+              "Pilih paket dan durasi di halaman Billing. Menuku membuat invoice dan mengarahkan kamu ke checkout Duitku.",
             ],
             [
               "Apakah pembayaran otomatis aktif?",
-              "Belum. Pembayaran QRIS saat ini diverifikasi manual oleh admin. Paket aktif setelah transfer cocok dengan invoice dan status subscription diperbarui.",
+              "Ya. Setelah pembayaran lewat Duitku berhasil, status subscription diperbarui otomatis melalui callback.",
             ],
             [
               "Kalau ingin upgrade saat paket masih berjalan bagaimana?",
