@@ -1,19 +1,18 @@
 import type { Metadata } from "next";
-import { PUBLIC_SITE_URL } from "../lib/site";
+import { INDEXABLE_SITE_URL } from "../lib/site";
 
-const title = "Menuku — Dashboard dan katalog digital untuk usaha kuliner";
+const title = "Menu Digital untuk UMKM Kuliner | Menuku";
 const description =
-  "Kelola menu, kategori, tautan bisnis, dan publikasi toko dari satu dashboard. Bagikan katalog Menuku melalui URL tokomu.";
+  "Buat menu digital dan katalog menu online untuk usaha kuliner. Kelola produk, kategori, informasi toko, dan tautan bisnis dari satu dashboard.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(PUBLIC_SITE_URL),
   title,
   description,
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "/",
+    url: INDEXABLE_SITE_URL,
     siteName: "Menuku",
     title,
     description,

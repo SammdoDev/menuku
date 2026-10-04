@@ -1,8 +1,16 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowRight, ExternalLink, MapPin, Megaphone, Search, Sparkles, Store, Utensils } from "lucide-react";
 import Brand from "../../components/brand";
 import { createSupabaseServerClient } from "../../lib/supabase/server";
 import { supportWhatsAppUrl } from "../../lib/site";
+
+export const metadata: Metadata = {
+  title: "Komunitas Kuliner Lokal | Menuku",
+  description:
+    "Jelajahi bisnis kuliner lokal, kedai, bakery, dan restoran yang menampilkan katalog menu digital di Menuku.",
+  alternates: { canonical: "/community" },
+};
 
 type Tenant = { id: string; name: string; slug: string; description: string | null; business_type: string | null; logo_url: string | null; banner_url: string | null; address: string | null };
 type Product = { tenant_id: string; name: string };
