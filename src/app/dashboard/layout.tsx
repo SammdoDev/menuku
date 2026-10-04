@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { GlobalLoadingProvider } from "../../components/global-loading";
 import { hasSupabaseEnv } from "../../lib/supabase/env";
 import { getCurrentMerchant } from "../../lib/merchant";
 
@@ -10,5 +11,5 @@ export default async function DashboardLayout({
     if (!user) redirect("/login");
     if (!tenant) redirect("/onboarding");
   }
-  return children;
+  return <GlobalLoadingProvider>{children}</GlobalLoadingProvider>;
 }

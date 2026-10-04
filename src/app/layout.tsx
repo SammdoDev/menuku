@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { GlobalLoadingProvider } from "../components/global-loading";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,9 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="id">
-      <body>
-        <GlobalLoadingProvider>{children}</GlobalLoadingProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

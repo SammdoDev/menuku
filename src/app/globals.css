@@ -53,13 +53,3 @@
     display: none;
   }
 }
-
-.landing-editorial {
-  font-family: "DM Sans", Inter, Arial, sans-serif;
-}
-
-.landing-editorial :is(h1, h2) {
-  font-family: "Newsreader", Georgia, serif;
-  font-weight: 400;
-  letter-spacing: -0.025em;
-}
