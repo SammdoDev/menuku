@@ -1,5 +1,7 @@
 import crypto from "node:crypto";
 
+const QRIS_METHODS = new Set(["SP", "NQ", "SQ"]);
+
 function required(name: string) {
   const value = process.env[name]?.trim();
   if (!value) throw new Error(`${name} belum diatur.`);
@@ -8,10 +10,13 @@ function required(name: string) {
 
 export function duitkuConfig() {
   const environment = process.env.DUITKU_ENV === "production" ? "production" : "sandbox";
+  const paymentMethod = process.env.DUITKU_PAYMENT_METHOD?.trim().toUpperCase() || "SP";
+  if (!QRIS_METHODS.has(paymentMethod))
+    throw new Error("DUITKU_PAYMENT_METHOD hanya menerima kode QRIS (SP, NQ, atau SQ).");
   return {
     merchantCode: required("DUITKU_MERCHANT_CODE"),
     apiKey: required("DUITKU_API_KEY"),
-    paymentMethod: process.env.DUITKU_PAYMENT_METHOD?.trim().toUpperCase() || null,
+    paymentMethod,
     endpoint:
       process.env.DUITKU_API_URL?.trim() ||
       (environment === "production"
@@ -54,7 +59,7 @@ export async function createDuitkuInvoice(input: {
   const timestamp = Date.now().toString();
   const body = {
     paymentAmount: input.amount,
-    ...(config.paymentMethod ? { paymentMethod: config.paymentMethod } : {}),
+    paymentMethod: config.paymentMethod,
     merchantOrderId: input.orderId,
     productDetails: input.productDetails,
     email: input.email,

@@ -52,7 +52,8 @@ export async function POST(request: Request) {
   const parsed = z.object({ plan: z.enum(["premium", "business"]) }).safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Paket tidak valid." }, { status: 400 });
   const plan = parsed.data.plan;
-  const months = Math.min(12, Math.max(1, Number(new URL(request.url).searchParams.get("months") || 1)));
+  const requestedMonths = Number(new URL(request.url).searchParams.get("months") || 1);
+  const months = [1, 3, 6, 12].includes(requestedMonths) ? requestedMonths : 1;
   const { data: active } = await supabase
     .from("subscriptions")
     .select("plan,expires_at")
@@ -69,6 +70,11 @@ export async function POST(request: Request) {
   const remainingMonths = active ? Math.max(1, Math.ceil((new Date(active.expires_at).getTime() - now.getTime()) / (30 * 86400000))) : 0;
   const credit = isUpgrade ? plans[active!.plan as "premium" | "business"].price * remainingMonths : 0;
   const amount = Math.max(0, plans[plan].price * months - credit);
+  if (amount < 1)
+    return NextResponse.json(
+      { error: "Nominal invoice tidak valid. Hubungi admin untuk bantuan upgrade paket." },
+      { status: 400 },
+    );
   const expiresAt = addMonths(now, months).toISOString();
   const orderId = `MK${Date.now().toString(36).toUpperCase()}${crypto.randomBytes(5).toString("hex").toUpperCase()}`;
   const { error } = await supabase.from("subscriptions").insert({
@@ -81,7 +87,7 @@ export async function POST(request: Request) {
     expires_at: expiresAt,
     order_id: orderId,
     status: "pending",
-    payment_method: process.env.DUITKU_PAYMENT_METHOD?.trim().toUpperCase() || null,
+    payment_method: process.env.DUITKU_PAYMENT_METHOD?.trim().toUpperCase() || "SP",
   });
   if (error) return NextResponse.json({ error: "Invoice belum dapat dicatat." }, { status: 500 });
 

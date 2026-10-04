@@ -48,7 +48,7 @@ export default async function AdminPage() {
       .limit(1000),
     admin.supabase
       .from("subscriptions")
-      .select("id,tenant_id,plan,amount,order_id,created_at,expires_at,reminder_sent_at")
+      .select("id,tenant_id,plan,amount,order_id,payment_method,created_at,expires_at,reminder_sent_at")
       .eq("status", "pending")
       .order("created_at", { ascending: false }),
     admin.supabase
@@ -191,18 +191,19 @@ export default async function AdminPage() {
       <section className="border-line mt-6 overflow-hidden rounded-2xl border bg-white shadow-sm">
         <header className="p-5 sm:p-6">
           <p className="text-brand mb-1 text-[10px] font-black tracking-[.14em]">
-            VERIFIKASI MANUAL
+            PEMBAYARAN TERTUNDA
           </p>
           <h2 className="display-font text-xl font-black">Pembayaran menunggu konfirmasi</h2>
         </header>
         {pendingPayments.length ? (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[680px] text-left text-sm">
+            <table className="w-full min-w-[760px] text-left text-sm">
               <thead className="bg-[#faf8f4] text-[10px] font-black tracking-[.1em] text-[#8f877c] uppercase">
                 <tr>
                   <th className="px-5 py-3">Order</th>
                   <th className="px-5 py-3">Bisnis</th>
                   <th className="px-5 py-3">Paket</th>
+                  <th className="px-5 py-3">Metode</th>
                   <th className="px-5 py-3">Nominal</th>
                   <th className="px-5 py-3">Aksi</th>
                 </tr>
@@ -216,15 +217,24 @@ export default async function AdminPage() {
                       <td className="px-5 py-4">{business?.name || "-"}</td>
                       <td className="px-5 py-4 capitalize">{payment.plan}</td>
                       <td className="px-5 py-4">
+                        <span className="rounded-full bg-orange-50 px-2.5 py-1 text-xs font-bold text-orange-700">
+                          {payment.payment_method === "manual" ? "Transfer manual" : "QRIS Duitku"}
+                        </span>
+                      </td>
+                      <td className="px-5 py-4">
                         Rp{Number(payment.amount).toLocaleString("id-ID")}
                       </td>
                       <td className="px-5 py-4">
-                        <form action={approveSubscriptionAction}>
-                          <input type="hidden" name="id" value={payment.id} />
-                          <button className="bg-brand rounded-lg px-3 py-2 text-xs font-extrabold text-white">
-                            Aktifkan paket
-                          </button>
-                        </form>
+                        {payment.payment_method === "manual" ? (
+                          <form action={approveSubscriptionAction}>
+                            <input type="hidden" name="id" value={payment.id} />
+                            <button className="bg-brand rounded-lg px-3 py-2 text-xs font-extrabold text-white">
+                              Aktifkan setelah verifikasi
+                            </button>
+                          </form>
+                        ) : (
+                          <span className="text-muted text-xs">Menunggu callback Duitku</span>
+                        )}
                       </td>
                     </tr>
                   );

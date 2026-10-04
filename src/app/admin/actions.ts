@@ -10,10 +10,11 @@ export async function approveSubscriptionAction(formData: FormData) {
   if (!admin || !id) return;
   const { data: subscription } = await admin.supabase
     .from("subscriptions")
-    .select("tenant_id,plan,amount,expires_at")
+    .select("tenant_id,plan,amount,expires_at,payment_method,status")
     .eq("id", id)
     .maybeSingle();
-  if (!subscription) return;
+  if (!subscription || subscription.status !== "pending" || subscription.payment_method !== "manual")
+    return;
   const expiresAt = subscription.expires_at ? new Date(subscription.expires_at) : new Date();
   if (!subscription.expires_at) expiresAt.setDate(expiresAt.getDate() + 30);
   await admin.supabase
@@ -23,7 +24,9 @@ export async function approveSubscriptionAction(formData: FormData) {
       paid_at: new Date().toISOString(),
       expires_at: expiresAt.toISOString(),
     })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("status", "pending")
+    .eq("payment_method", "manual");
   await admin.supabase
     .from("tenants")
     .update({ plan: subscription.plan })

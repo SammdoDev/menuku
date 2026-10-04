@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Banknote, QrCode } from "lucide-react";
 import type { PlanCode } from "../../../lib/plans";
 import { GlobalAutocomplete } from "../../../components/ui/form-controls";
 
@@ -17,31 +18,68 @@ export default function BillingButtons({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [months, setMonths] = useState("1");
+  const [paymentMethod, setPaymentMethod] = useState<"manual" | "qris">("qris");
   async function pay() {
     if (code === "free") return;
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`/api/payments/duitku?months=${months}`, {
+      const endpoint = paymentMethod === "manual" ? "/api/payments/manual" : "/api/payments/duitku";
+      const response = await fetch(`${endpoint}?months=${months}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ plan: code }),
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || "Pembayaran belum dapat dibuat.");
-      window.location.assign(data.paymentUrl);
+      window.location.assign(paymentMethod === "manual" ? data.confirmationUrl : data.paymentUrl);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Pembayaran gagal dibuat.");
       setLoading(false);
     }
   }
+  const buttonLabel = loading
+    ? paymentMethod === "manual"
+      ? "Membuat invoice..."
+      : "Membuka QRIS Duitku..."
+    : code === "free"
+      ? "Pilih Free Demo"
+      : currentPlan === "business"
+        ? "Sudah termasuk Business"
+        : currentPlan === "premium" && code === "premium"
+          ? "Perpanjang Premium"
+          : currentPlan === "premium"
+            ? "Upgrade prorata ke Business"
+            : paymentMethod === "manual"
+              ? "Lanjut ke transfer manual"
+              : "Bayar otomatis dengan QRIS";
+
   return (
     <div>
       {code !== "free" && (
-        <div className="mb-5 rounded-2xl bg-[#faf8f4] p-4 text-center">
-          <p className="text-muted mt-2 text-[11px]">
-            Kamu akan diarahkan ke checkout Duitku untuk memilih metode pembayaran.
-          </p>
+        <div className="mb-5 grid gap-2 sm:grid-cols-2" role="group" aria-label="Pilih cara pembayaran">
+          <button
+            type="button"
+            aria-pressed={paymentMethod === "manual"}
+            onClick={() => setPaymentMethod("manual")}
+            className={`rounded-2xl border p-3 text-left transition ${paymentMethod === "manual" ? "border-brand bg-orange-50 ring-2 ring-brand/15" : "border-line bg-white hover:bg-[#faf8f4]"}`}
+          >
+            <span className="flex items-center gap-2 text-xs font-extrabold">
+              <Banknote className="text-brand" size={17} /> Transfer manual
+            </span>
+            <span className="text-muted mt-1 block text-[10px] leading-4">Nominal pas, diverifikasi admin.</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={paymentMethod === "qris"}
+            onClick={() => setPaymentMethod("qris")}
+            className={`rounded-2xl border p-3 text-left transition ${paymentMethod === "qris" ? "border-brand bg-orange-50 ring-2 ring-brand/15" : "border-line bg-white hover:bg-[#faf8f4]"}`}
+          >
+            <span className="flex items-center gap-2 text-xs font-extrabold">
+              <QrCode className="text-brand" size={17} /> QRIS otomatis
+            </span>
+            <span className="text-muted mt-1 block text-[10px] leading-4">Bayar lewat Duitku, status otomatis.</span>
+          </button>
         </div>
       )}
       {code !== "free" && currentPlan !== "business" && (
@@ -65,17 +103,7 @@ export default function BillingButtons({
         disabled={loading}
         className="bg-brand flex min-h-12 w-full items-center justify-center rounded-xl text-sm font-extrabold text-white disabled:opacity-60"
       >
-        {loading
-          ? "Mengirim konfirmasi..."
-          : code === "free"
-            ? "Pilih Free Demo"
-            : currentPlan === "business"
-              ? "Sudah termasuk Business"
-            : currentPlan === "premium" && code === "premium"
-                ? "Perpanjang Premium"
-                : currentPlan === "premium"
-                  ? "Upgrade prorata ke Business"
-                  : "Bayar dengan Duitku"}
+        {buttonLabel}
       </button>
       {error && <p className="mt-2 text-xs text-red-700">{error}</p>}
     </div>

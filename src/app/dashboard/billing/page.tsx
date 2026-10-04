@@ -25,7 +25,7 @@ export default async function BillingPage() {
           Pilih paket untuk bisnismu.
         </h1>
         <p className="text-muted mt-2 text-sm">
-          Naikkan paket kapan saja. Pilih metode pembayaran yang tersedia di checkout Duitku.
+          Pilih transfer manual sesuai nominal invoice atau bayar otomatis dengan QRIS Duitku.
         </p>
         {subscription?.status === "active" && subscription.expires_at && (
           <p className="mt-3 w-fit rounded-xl bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
