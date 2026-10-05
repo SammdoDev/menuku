@@ -1,6 +1,6 @@
 export const plans = {
   free: {
-    name: "Gratis",
+    name: "Free",
     price: 0,
     description: "Coba buat katalog digital tanpa biaya.",
     features: ["Maks. 2 kategori", "Maks. 4 produk", "Halaman katalog dasar"],
