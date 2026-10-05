@@ -1,44 +1,79 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
 import type { PublicStore } from "@/features/storefront/types";
 import StorefrontBottomNav from "@/features/storefront/components/storefront-bottom-nav";
+import type {
+  StorefrontNavActive,
+  StorefrontNavPanel,
+} from "@/features/storefront/components/storefront-bottom-nav";
 import StorefrontDetail from "@/features/storefront/components/storefront-detail";
 import StorefrontFeatured from "@/features/storefront/components/storefront-featured";
 import StorefrontHeader from "@/features/storefront/components/storefront-header";
 import StorefrontMenu from "@/features/storefront/components/storefront-menu";
-import type { StorefrontMenuSheet } from "@/features/storefront/components/storefront-menu";
 import StorefrontPromo from "@/features/storefront/components/storefront-promo";
 import StorefrontToast from "@/features/storefront/components/storefront-toast";
 import { mapProducts } from "@/features/storefront/mapper";
 import { buildWhatsAppUrl } from "@/features/storefront/helpers";
 import type { Item } from "@/features/storefront/types";
 import { trackStorefront } from "@/features/storefront/track-storefront";
+import { ALL_CATEGORY } from "@/features/storefront/constants";
+import {
+  formatStorefrontMessage,
+  StorefrontLocaleProvider,
+  useStorefrontLocale,
+} from "@/features/storefront/storefront-locale";
 
 export default function Storefront({ store }: { store: PublicStore }) {
-  const [active, setActive] = useState("Semua");
+  return (
+    <StorefrontLocaleProvider>
+      <StorefrontPage store={store} />
+    </StorefrontLocaleProvider>
+  );
+}
+
+function StorefrontPage({ store }: { store: PublicStore }) {
+  const { messages } = useStorefrontLocale();
+  const [active, setActive] = useState(ALL_CATEGORY);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<Item | null>(null);
   const [notice, setNotice] = useState("");
-  const [menuSheet, setMenuSheet] = useState<StorefrontMenuSheet>(null);
-  const [navActive, setNavActive] = useState<"menu" | "search" | "filter" | "share" | "chat">(
-    "menu",
-  );
-  const searchRef = useRef<HTMLInputElement>(null);
-  const changeMenuSheet = useCallback((sheet: StorefrontMenuSheet) => {
-    setMenuSheet(sheet);
-    if (!sheet) setNavActive("menu");
+  const [navPanel, setNavPanel] = useState<StorefrontNavPanel>(null);
+  const [navActive, setNavActive] = useState<StorefrontNavActive>("menu");
+  const changeMenuSheet = useCallback((sheet: "browse" | null) => {
+    setNavPanel(sheet);
+    setNavActive(sheet ? "browse" : "menu");
   }, []);
+  useEffect(() => {
+    if (!navPanel) return;
+
+    function closeOnOutsidePress(event: PointerEvent) {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (
+        target.closest("[data-storefront-nav-panel]") ||
+        target.closest("[data-storefront-bottom-nav]")
+      ) {
+        return;
+      }
+
+      setNavPanel(null);
+      setNavActive("menu");
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsidePress);
+    return () => document.removeEventListener("pointerdown", closeOnOutsidePress);
+  }, [navPanel]);
   const items = useMemo(() => mapProducts(store), [store]);
   useEffect(() => trackStorefront(store.tenant.slug, "page_view"), [store.tenant.slug]);
   const categories = [
-    "Semua",
+    ALL_CATEGORY,
     ...store.categories.map((category) => category.name),
     ...(!store.categories.length ? [...new Set(items.map((item) => item.category))] : []),
   ];
   const whatsapp = buildWhatsAppUrl(
     store.tenant.whatsapp,
-    `Halo ${store.tenant.name}, saya ingin bertanya.`,
+    formatStorefrontMessage(messages.header.greeting, { store: store.tenant.name }),
   );
   const showNotice = (message: string) => {
     setNotice(message);
@@ -48,7 +83,7 @@ export default function Storefront({ store }: { store: PublicStore }) {
     try {
       await navigator.clipboard?.writeText(location.href);
     } finally {
-      showNotice("Link halaman berhasil disalin");
+      showNotice(messages.footer.copied);
     }
   };
   const share = async () => {
@@ -59,20 +94,17 @@ export default function Storefront({ store }: { store: PublicStore }) {
     await copy();
   };
   const goToMenu = () => {
-    setMenuSheet(null);
+    setNavPanel(null);
     setNavActive("menu");
     document.getElementById("menu")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  const focusSearch = () => {
+  const openMenuTools = () => {
+    if (navPanel === "browse") {
+      changeMenuSheet(null);
+      return;
+    }
     document.getElementById("menu")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setMenuSheet("search");
-    setNavActive("search");
-    window.setTimeout(() => searchRef.current?.focus(), 450);
-  };
-  const openFilters = () => {
-    document.getElementById("menu")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setMenuSheet("filter");
-    setNavActive("filter");
+    changeMenuSheet("browse");
   };
   const themeStyle = {
     "--color-brand": store.tenant.primary_color || "#FF6534",
@@ -81,7 +113,7 @@ export default function Storefront({ store }: { store: PublicStore }) {
   } as CSSProperties;
   return (
     <main className="min-h-dvh sm:p-8" style={themeStyle}>
-      <section className="mx-auto max-w-5xl overflow-hidden bg-[var(--store-background)] shadow-[0_22px_65px_#433d3022] sm:rounded-sm">
+      <section className="mx-auto w-full max-w-md overflow-hidden bg-[var(--store-background)] shadow-[0_22px_65px_#433d3022] sm:rounded-sm">
         <StorefrontHeader
           store={store}
           onShare={() => {
@@ -98,13 +130,12 @@ export default function Storefront({ store }: { store: PublicStore }) {
             setSelected(item);
           }}
           onSeeAll={() => {
-            setActive("Semua");
+            setActive(ALL_CATEGORY);
             setQuery("");
             goToMenu();
           }}
         />
         <StorefrontMenu
-          ref={searchRef}
           items={items}
           categories={categories}
           active={active}
@@ -120,15 +151,20 @@ export default function Storefront({ store }: { store: PublicStore }) {
           }}
           layout={store.tenant.layout_type === "list" ? "list" : "grid"}
           showPrice={store.tenant.show_price}
-          sheet={menuSheet}
+          primaryColor={store.tenant.primary_color || "#FF6534"}
+          backgroundColor={store.tenant.background_color || "#EEECE5"}
+          sheet={navPanel === "browse" ? "browse" : null}
           onSheetChange={changeMenuSheet}
         />
-        <footer className="border-line text-muted mx-5 mb-28 flex items-center justify-between border-t py-6 text-[10px] sm:mx-12 sm:mb-0 sm:text-xs">
+        <footer className="border-line text-muted mx-5 mb-28 flex items-center justify-between border-t py-6 text-[10px]">
           <p>
-            © 2026 {store.tenant.name} · Dibuat dengan <b>menuku</b>
+            {formatStorefrontMessage(messages.footer.copyright, {
+              year: new Date().getFullYear(),
+              store: store.tenant.name,
+            })}
           </p>
           <button className="text-ink font-bold" onClick={copy}>
-            Salin link
+            {messages.footer.copyLink}
           </button>
         </footer>
       </section>
@@ -137,8 +173,9 @@ export default function Storefront({ store }: { store: PublicStore }) {
       )}
       <StorefrontBottomNav
         onMenu={goToMenu}
-        onSearch={focusSearch}
-        onFilter={openFilters}
+        onBrowse={openMenuTools}
+        panel={navPanel}
+        onPanelChange={setNavPanel}
         onActiveChange={setNavActive}
         active={navActive}
         onShare={() => {
@@ -149,6 +186,9 @@ export default function Storefront({ store }: { store: PublicStore }) {
         primaryColor={store.tenant.primary_color || "#FF6534"}
         backgroundColor={store.tenant.background_color || "#EEECE5"}
         slug={store.tenant.slug}
+        storeName={store.tenant.name}
+        openingHours={store.tenant.opening_hours}
+        showOpeningHours={store.tenant.show_opening_hours}
       />
       <StorefrontToast message={notice} />
     </main>

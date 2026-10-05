@@ -237,5 +237,96 @@
     "tagline": "Digital menus for food businesses in Indonesia.",
     "login": "Log in",
     "contact": "Contact support"
+  },
+  "storefront": {
+    "nav": {
+      "menu": "Menu",
+      "browse": "Search & Filter",
+      "hours": "Opening hours",
+      "share": "Share",
+      "chat": "Chat",
+      "aria": "Store navigation"
+    },
+    "header": {
+      "open": "Open to customers",
+      "preview": "Owner preview",
+      "share": "Share page",
+      "welcome": "Welcome to our menu.",
+      "whatsapp": "Ask on WhatsApp",
+      "instagram": "Instagram",
+      "location": "Location",
+      "greeting": "Hi {store}, I have a question."
+    },
+    "featured": { "eyebrow": "Our picks", "title": "This week's favorites", "all": "See all" },
+    "promo": { "eyebrow": "Events & promos", "detail": "View details", "view": "View promotion" },
+    "menu": {
+      "eyebrow": "Menu",
+      "title": "Find your favorite",
+      "searchTitle": "Search & filter menu",
+      "searchHint": "Search the menu, then narrow the results with filters.",
+      "close": "Close panel",
+      "searchPlaceholder": "Search menu...",
+      "searchLabel": "Search menu name, category, or description",
+      "clearSearch": "Clear search",
+      "suggestions": "Menu suggestions",
+      "matching": "Matching items",
+      "picks": "Suggested items",
+      "notFound": "No menu items found.",
+      "resultCount": "{count} items found",
+      "category": "Category",
+      "availability": "Availability",
+      "all": "All",
+      "available": "Available",
+      "soldOut": "Sold out",
+      "featuredOnly": "Recommended items only",
+      "priceRange": "Price range",
+      "minPrice": "Minimum price",
+      "maxPrice": "Maximum price",
+      "sort": "Sort menu",
+      "sortRelevant": "Most relevant",
+      "sortDefault": "Default order",
+      "sortAZ": "Name A to Z",
+      "priceLow": "Lowest price",
+      "priceHigh": "Highest price",
+      "reset": "Reset",
+      "showResults": "Show {count} items",
+      "resultLead": "{count} items",
+      "recommendation": "Recommended",
+      "noProducts": "No menu items yet",
+      "merchantNoProducts": "The store owner has not added any products.",
+      "emptyQuery": "Try changing your search or selected filters.",
+      "showAll": "Show all menu items",
+      "descriptionFallback": "A customer favorite"
+    },
+    "detail": {
+      "close": "Close",
+      "defaultDescription": "A customer favorite from {store}.",
+      "contactMissing": "Contact details are unavailable",
+      "soldOut": "Sold out today",
+      "whatsapp": "Ask on WhatsApp",
+      "greeting": "Hi {store}, I have a question about {product}."
+    },
+    "hours": {
+      "title": "Opening hours",
+      "close": "Close opening hours",
+      "today": "Today · {day}",
+      "closed": "Closed",
+      "unset": "Not set",
+      "empty": "The store owner has not set opening hours.",
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      }
+    },
+    "footer": {
+      "copyLink": "Copy link",
+      "copyright": "© {year} {store} · Made with Menuku",
+      "copied": "Page link copied"
+    }
   }
 }

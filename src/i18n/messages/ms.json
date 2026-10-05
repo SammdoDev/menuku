@@ -233,5 +233,100 @@
     "tagline": "Menu digital untuk perniagaan makanan di Indonesia.",
     "login": "Log masuk",
     "contact": "Hubungi sokongan"
+  },
+  "storefront": {
+    "nav": {
+      "menu": "Menu",
+      "browse": "Cari & Tapis",
+      "hours": "Waktu operasi",
+      "share": "Kongsi",
+      "chat": "Sembang",
+      "aria": "Navigasi kedai"
+    },
+    "header": {
+      "open": "Dibuka untuk pelanggan",
+      "preview": "Pratonton pemilik",
+      "share": "Kongsi halaman",
+      "welcome": "Selamat datang ke halaman menu kami.",
+      "whatsapp": "Tanya melalui WhatsApp",
+      "instagram": "Instagram",
+      "location": "Lokasi",
+      "greeting": "Hai {store}, saya ingin bertanya."
+    },
+    "featured": {
+      "eyebrow": "Pilihan kami",
+      "title": "Kegemaran minggu ini",
+      "all": "Lihat semua"
+    },
+    "promo": { "eyebrow": "Acara & promosi", "detail": "Lihat butiran", "view": "Lihat promosi" },
+    "menu": {
+      "eyebrow": "Senarai menu",
+      "title": "Cari pilihan kegemaran",
+      "searchTitle": "Cari & tapis menu",
+      "searchHint": "Cari menu, kemudian kecilkan hasil menggunakan penapis.",
+      "close": "Tutup panel",
+      "searchPlaceholder": "Cari menu...",
+      "searchLabel": "Cari nama menu, kategori atau penerangan",
+      "clearSearch": "Kosongkan carian",
+      "suggestions": "Cadangan menu",
+      "matching": "Menu yang sepadan",
+      "picks": "Pilihan menu",
+      "notFound": "Menu tidak ditemui.",
+      "resultCount": "{count} menu ditemui",
+      "category": "Kategori",
+      "availability": "Ketersediaan",
+      "all": "Semua",
+      "available": "Tersedia",
+      "soldOut": "Habis",
+      "featuredOnly": "Menu cadangan sahaja",
+      "priceRange": "Julat harga",
+      "minPrice": "Harga minimum",
+      "maxPrice": "Harga maksimum",
+      "sort": "Susun menu",
+      "sortRelevant": "Paling berkaitan",
+      "sortDefault": "Susunan asal",
+      "sortAZ": "Nama A hingga Z",
+      "priceLow": "Harga terendah",
+      "priceHigh": "Harga tertinggi",
+      "reset": "Set semula",
+      "showResults": "Paparkan {count} menu",
+      "resultLead": "{count} menu",
+      "recommendation": "Cadangan",
+      "noProducts": "Menu belum tersedia",
+      "merchantNoProducts": "Pemilik kedai belum menambah produk.",
+      "emptyQuery": "Cuba ubah kata carian atau penapis yang dipilih.",
+      "showAll": "Paparkan semua menu",
+      "descriptionFallback": "Menu pilihan"
+    },
+    "detail": {
+      "close": "Tutup",
+      "defaultDescription": "Pilihan istimewa daripada {store}.",
+      "contactMissing": "Maklumat hubungan tidak tersedia",
+      "soldOut": "Habis dijual hari ini",
+      "whatsapp": "Tanya melalui WhatsApp",
+      "greeting": "Hai {store}, saya ingin bertanya tentang menu {product}."
+    },
+    "hours": {
+      "title": "Waktu operasi",
+      "close": "Tutup waktu operasi",
+      "today": "Hari ini · {day}",
+      "closed": "Tutup",
+      "unset": "Belum ditetapkan",
+      "empty": "Pemilik kedai belum menetapkan waktu operasi.",
+      "days": {
+        "monday": "Isnin",
+        "tuesday": "Selasa",
+        "wednesday": "Rabu",
+        "thursday": "Khamis",
+        "friday": "Jumaat",
+        "saturday": "Sabtu",
+        "sunday": "Ahad"
+      }
+    },
+    "footer": {
+      "copyLink": "Salin pautan",
+      "copyright": "© {year} {store} · Dibuat dengan Menuku",
+      "copied": "Pautan halaman disalin"
+    }
   }
 }

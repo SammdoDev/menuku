@@ -11,6 +11,8 @@ type LanguageAutocompleteProps = {
   searchLabel: string;
   noResultsLabel: string;
   onValueChange: (locale: Locale) => void;
+  placement?: "top" | "bottom";
+  compact?: boolean;
 };
 
 function LanguageAutocomplete({
@@ -19,6 +21,8 @@ function LanguageAutocomplete({
   searchLabel,
   noResultsLabel,
   onValueChange,
+  placement = "bottom",
+  compact = false,
 }: LanguageAutocompleteProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -85,13 +89,17 @@ function LanguageAutocomplete({
   }
 
   return (
-    <div className="relative" ref={rootRef}>
+    <div className={compact ? "relative min-w-0 flex-1" : "relative"} ref={rootRef}>
       <button
         aria-label={`${label}: ${selectedOption.label}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listboxId}
-        className="inline-flex h-10 min-w-[82px] items-center justify-center gap-2 rounded-xl px-2 text-xs font-bold text-[#29251f] transition hover:bg-[#f7f2ed] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b13b19]"
+        className={
+          compact
+            ? "flex min-h-[3.5rem] w-full min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-1 text-[9px] leading-none font-bold text-[#29251f] transition hover:bg-[#f7f2ed] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#b13b19]"
+            : "inline-flex h-10 min-w-[82px] items-center justify-center gap-2 rounded-xl px-2 text-xs font-bold text-[#29251f] transition hover:bg-[#f7f2ed] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b13b19]"
+        }
         onClick={() => {
           if (!open) {
             setQuery("");
@@ -107,20 +115,27 @@ function LanguageAutocomplete({
         ref={triggerRef}
         type="button"
       >
-        <Globe2 aria-hidden="true" className="text-[#a34a2b]" size={15} />
-        <span aria-hidden="true" className="text-base leading-none">
+        {!compact && <Globe2 aria-hidden="true" className="text-[#a34a2b]" size={15} />}
+        <span
+          aria-hidden="true"
+          className={compact ? "text-lg leading-none" : "text-base leading-none"}
+        >
           {selectedOption.flag}
         </span>
         <span>{selectedOption.shortLabel}</span>
-        <ChevronDown
-          aria-hidden="true"
-          className={`text-[#827b72] transition ${open ? "rotate-180" : ""}`}
-          size={13}
-        />
+        {!compact && (
+          <ChevronDown
+            aria-hidden="true"
+            className={`text-[#827b72] transition ${open ? "rotate-180" : ""}`}
+            size={13}
+          />
+        )}
       </button>
 
       {open && (
-        <div className="absolute top-[calc(100%+0.55rem)] right-0 z-50 w-64 overflow-hidden rounded-2xl border border-[#e9dfd7] bg-white p-2 shadow-[0_20px_60px_-20px_rgba(41,37,31,.32)]">
+        <div
+          className={`absolute ${placement === "top" ? "bottom-[calc(100%+0.55rem)]" : "top-[calc(100%+0.55rem)]"} right-0 z-50 w-64 overflow-hidden rounded-2xl border border-[#e9dfd7] bg-white p-2 shadow-[0_20px_60px_-20px_rgba(41,37,31,.32)]`}
+        >
           <div className="flex h-10 items-center gap-2 rounded-xl border border-[#eee8e1] bg-[#faf8f5] px-3 focus-within:border-[#b13b19]/50 focus-within:ring-2 focus-within:ring-[#b13b19]/10">
             <Search aria-hidden="true" className="shrink-0 text-[#827b72]" size={15} />
             <input

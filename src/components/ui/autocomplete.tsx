@@ -16,6 +16,17 @@ export type SelectOption = {
   shortLabel?: string;
 };
 
+type AutocompleteTranslations = {
+  chooseOption: string;
+  notSelected: string;
+  close: string;
+  optionList: string;
+  search: string;
+  noResults: string;
+  noResultsHint: string;
+  placeholder: string;
+};
+
 const control =
   "w-full rounded-xl border border-line bg-white px-3.5 text-sm text-ink outline-none transition placeholder:text-[#aaa39a] focus:border-brand/60 focus:ring-4 focus:ring-brand/10 disabled:cursor-not-allowed disabled:opacity-60";
 
@@ -30,12 +41,14 @@ export function Autocomplete({
   onValueChange,
   inline = false,
   searchable,
+  translations,
   ...props
 }: SelectHTMLAttributes<HTMLSelectElement> & {
   options: SelectOption[];
   onValueChange?: (value: string) => void;
   inline?: boolean;
   searchable?: boolean;
+  translations?: AutocompleteTranslations;
 }) {
   const generatedId = useId();
   const controlId = id || `global-autocomplete-${generatedId.replace(/:/g, "")}`;
@@ -176,7 +189,7 @@ export function Autocomplete({
       {!inline && (
         <button
           type="button"
-          aria-label="Tutup pilihan"
+          aria-label={translations?.close || "Tutup pilihan"}
           className="fixed inset-0 z-[70] cursor-default bg-black/25 backdrop-blur-[1px] sm:hidden"
           onClick={() => closeDropdown(true)}
         />
@@ -185,7 +198,9 @@ export function Autocomplete({
         ref={menuRef}
         id={listboxId}
         role="listbox"
-        aria-label={props.name ? `Pilihan ${props.name}` : "Daftar pilihan"}
+        aria-label={
+          translations?.optionList || (props.name ? `Pilihan ${props.name}` : "Daftar pilihan")
+        }
         className={`z-[80] overflow-hidden border border-[#e5ddd4] bg-white shadow-[0_24px_70px_rgba(43,36,29,.24)] sm:rounded-2xl ${
           inline
             ? "absolute top-full right-0 left-0 mt-2 rounded-2xl"
@@ -196,17 +211,17 @@ export function Autocomplete({
         <div className="flex items-center justify-between border-b border-[#eee8e1] px-4 py-3 sm:hidden">
           <div>
             <p className="text-[10px] font-black tracking-[.14em] text-[#a59b91] uppercase">
-              Pilih opsi
+              {translations?.chooseOption || "Pilih opsi"}
             </p>
             <p className="text-ink mt-0.5 text-sm font-extrabold">
-              {selectedOption?.label || "Belum dipilih"}
+              {selectedOption?.label || translations?.notSelected || "Belum dipilih"}
             </p>
           </div>
           <button
             type="button"
             className="text-muted grid size-9 place-items-center rounded-full bg-[#f4f0eb] text-lg"
             onClick={() => closeDropdown(true)}
-            aria-label="Tutup"
+            aria-label={translations?.close || "Tutup"}
           >
             <X size={17} />
           </button>
@@ -220,7 +235,7 @@ export function Autocomplete({
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 onKeyDown={handleKeyboard}
-                placeholder="Cari pilihan..."
+                placeholder={translations?.search || "Cari pilihan..."}
                 className="text-ink h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-[#aaa39a]"
               />
             </div>
@@ -263,8 +278,12 @@ export function Autocomplete({
           ) : (
             <div className="px-4 py-8 text-center">
               <Search className="mx-auto mb-2 text-[#c7beb5]" size={24} />
-              <p className="text-ink text-sm font-bold">Pilihan tidak ditemukan</p>
-              <p className="text-muted mt-1 text-xs">Coba kata kunci lainnya.</p>
+              <p className="text-ink text-sm font-bold">
+                {translations?.noResults || "Pilihan tidak ditemukan"}
+              </p>
+              <p className="text-muted mt-1 text-xs">
+                {translations?.noResultsHint || "Coba kata kunci lainnya."}
+              </p>
             </div>
           )}
         </div>
@@ -322,7 +341,10 @@ export function Autocomplete({
           />
         )}
         <span className="min-w-0 flex-1 truncate">
-          {selectedOption?.shortLabel || selectedOption?.label || "Pilih opsi"}
+          {selectedOption?.shortLabel ||
+            selectedOption?.label ||
+            translations?.placeholder ||
+            "Pilih opsi"}
         </span>
       </button>
       <ChevronDown

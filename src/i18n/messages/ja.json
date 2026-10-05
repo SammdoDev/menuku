@@ -233,5 +233,100 @@
     "tagline": "インドネシアの飲食店向けデジタルメニュー。",
     "login": "ログイン",
     "contact": "サポートに連絡"
+  },
+  "storefront": {
+    "nav": {
+      "menu": "メニュー",
+      "browse": "検索・絞り込み",
+      "hours": "営業時間",
+      "share": "共有",
+      "chat": "チャット",
+      "aria": "店舗ナビゲーション"
+    },
+    "header": {
+      "open": "営業中",
+      "preview": "オーナープレビュー",
+      "share": "ページを共有",
+      "welcome": "メニューページへようこそ。",
+      "whatsapp": "WhatsAppで問い合わせ",
+      "instagram": "Instagram",
+      "location": "場所",
+      "greeting": "{store}さん、質問があります。"
+    },
+    "featured": { "eyebrow": "おすすめ", "title": "今週の人気メニュー", "all": "すべて見る" },
+    "promo": {
+      "eyebrow": "イベント・キャンペーン",
+      "detail": "詳細を見る",
+      "view": "キャンペーンを見る"
+    },
+    "menu": {
+      "eyebrow": "メニュー一覧",
+      "title": "お気に入りを見つけよう",
+      "searchTitle": "メニューを検索・絞り込み",
+      "searchHint": "メニューを検索し、条件を指定して絞り込めます。",
+      "close": "パネルを閉じる",
+      "searchPlaceholder": "メニューを検索…",
+      "searchLabel": "メニュー名、カテゴリ、説明を検索",
+      "clearSearch": "検索をクリア",
+      "suggestions": "メニュー候補",
+      "matching": "検索結果",
+      "picks": "おすすめメニュー",
+      "notFound": "メニューが見つかりません。",
+      "resultCount": "{count}件のメニュー",
+      "category": "カテゴリー",
+      "availability": "販売状況",
+      "all": "すべて",
+      "available": "販売中",
+      "soldOut": "売り切れ",
+      "featuredOnly": "おすすめのみ",
+      "priceRange": "価格帯",
+      "minPrice": "最低価格",
+      "maxPrice": "最高価格",
+      "sort": "並び替え",
+      "sortRelevant": "関連度順",
+      "sortDefault": "標準順",
+      "sortAZ": "名前順 A〜Z",
+      "priceLow": "価格の安い順",
+      "priceHigh": "価格の高い順",
+      "reset": "リセット",
+      "showResults": "{count}件を表示",
+      "resultLead": "{count}件",
+      "recommendation": "おすすめ",
+      "noProducts": "メニューはまだありません",
+      "merchantNoProducts": "店舗オーナーが商品をまだ追加していません。",
+      "emptyQuery": "検索語句や絞り込み条件を変更してください。",
+      "showAll": "すべてのメニューを表示",
+      "descriptionFallback": "おすすめメニュー"
+    },
+    "detail": {
+      "close": "閉じる",
+      "defaultDescription": "{store}のおすすめメニュー。",
+      "contactMissing": "連絡先がありません",
+      "soldOut": "本日は売り切れです",
+      "whatsapp": "WhatsAppで問い合わせ",
+      "greeting": "{store}さん、メニュー「{product}」について質問があります。"
+    },
+    "hours": {
+      "title": "営業時間",
+      "close": "営業時間を閉じる",
+      "today": "本日 · {day}",
+      "closed": "休業",
+      "unset": "未設定",
+      "empty": "店舗オーナーが営業時間を設定していません。",
+      "days": {
+        "monday": "月曜日",
+        "tuesday": "火曜日",
+        "wednesday": "水曜日",
+        "thursday": "木曜日",
+        "friday": "金曜日",
+        "saturday": "土曜日",
+        "sunday": "日曜日"
+      }
+    },
+    "footer": {
+      "copyLink": "リンクをコピー",
+      "copyright": "© {year} {store} · Menukuで作成",
+      "copied": "ページのリンクをコピーしました"
+    }
   }
 }

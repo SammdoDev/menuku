@@ -22,6 +22,27 @@ function MarketingMotionProvider({ children }: { children: React.ReactNode }) {
     });
     const updateScrollTrigger = () => ScrollTrigger.update();
     const refreshScrollTrigger = () => ScrollTrigger.refresh();
+    let hasUserScrolled = false;
+
+    function markUserScroll() {
+      hasUserScrolled = true;
+    }
+
+    function markKeyboardScroll(event: KeyboardEvent) {
+      const scrollKeys = ["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "];
+      if (!scrollKeys.includes(event.key)) return;
+      if (
+        event.target instanceof HTMLElement &&
+        event.target.closest("input, textarea, select, [contenteditable='true']")
+      ) {
+        return;
+      }
+      hasUserScrolled = true;
+    }
+
+    window.addEventListener("wheel", markUserScroll, { passive: true });
+    window.addEventListener("touchmove", markUserScroll, { passive: true });
+    window.addEventListener("keydown", markKeyboardScroll);
     lenis.on("scroll", updateScrollTrigger);
     window.addEventListener("menuku:translations-updated", refreshScrollTrigger);
 
@@ -39,24 +60,67 @@ function MarketingMotionProvider({ children }: { children: React.ReactNode }) {
         );
 
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
-        gsap.from(element, {
-          y: 28,
-          opacity: 0,
-          duration: 0.7,
-          ease: "power2.out",
-          scrollTrigger: { trigger: element, start: "top 86%", once: true },
+        let hasPlayed = false;
+        const revealTween = gsap.fromTo(
+          element,
+          { y: 28, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: "power2.out",
+            paused: true,
+            immediateRender: false,
+          },
+        );
+
+        ScrollTrigger.create({
+          trigger: element,
+          start: "top 86%",
+          onEnter: playReveal,
+          onEnterBack: playReveal,
+          onUpdate: playReveal,
         });
+
+        function playReveal() {
+          if (!hasUserScrolled || hasPlayed) return;
+          hasPlayed = true;
+          revealTween.play(0);
+        }
       });
 
       gsap.utils.toArray<HTMLElement>("[data-stagger], [data-bento]").forEach((group) => {
-        gsap.from(group.children, {
-          y: 22,
-          opacity: 0,
-          duration: 0.55,
-          stagger: group.matches("[data-bento]") ? 0.12 : 0.08,
-          ease: "power2.out",
-          scrollTrigger: { trigger: group, start: "top 84%", once: true },
+        const children = Array.from(group.children);
+        if (!children.length) return;
+
+        let hasPlayed = false;
+        const revealTween = gsap.fromTo(
+          children,
+          { y: 22, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.55,
+            stagger: group.matches("[data-bento]") ? 0.12 : 0.08,
+            ease: "power2.out",
+            paused: true,
+            immediateRender: false,
+          },
+        );
+
+        ScrollTrigger.create({
+          trigger: group,
+          start: "top 84%",
+          onEnter: playReveal,
+          onEnterBack: playReveal,
+          onUpdate: playReveal,
         });
+
+        function playReveal() {
+          if (!hasUserScrolled || hasPlayed) return;
+          hasPlayed = true;
+          revealTween.play(0);
+        }
       });
     }, root);
 
@@ -65,6 +129,9 @@ function MarketingMotionProvider({ children }: { children: React.ReactNode }) {
       gsap.ticker.remove(updateLenis);
       lenis.off("scroll", updateScrollTrigger);
       lenis.destroy();
+      window.removeEventListener("wheel", markUserScroll);
+      window.removeEventListener("touchmove", markUserScroll);
+      window.removeEventListener("keydown", markKeyboardScroll);
       window.removeEventListener("menuku:translations-updated", refreshScrollTrigger);
     };
   }, []);

@@ -3,9 +3,13 @@ import { useEffect } from "react";
 import { ExternalLink, MessageCircle, X } from "lucide-react";
 import type { PublicStore } from "@/features/storefront/types";
 import { formatRupiah } from "@/lib/format";
-import { buildWhatsAppUrl } from "@/features/storefront/helpers";
+import { buildWhatsAppUrl, getContrastTextColor } from "@/features/storefront/helpers";
 import type { Item } from "@/features/storefront/types";
 import { trackStorefront } from "@/features/storefront/track-storefront";
+import {
+  formatStorefrontMessage,
+  useStorefrontLocale,
+} from "@/features/storefront/storefront-locale";
 
 export default function StorefrontDetail({
   product,
@@ -16,6 +20,7 @@ export default function StorefrontDetail({
   store: PublicStore;
   close: () => void;
 }) {
+  const { messages } = useStorefrontLocale();
   useEffect(() => {
     const key = (event: KeyboardEvent) => event.key === "Escape" && close();
     document.body.style.overflow = "hidden";
@@ -27,7 +32,10 @@ export default function StorefrontDetail({
   }, [close]);
   const url = buildWhatsAppUrl(
     store.tenant.whatsapp,
-    `Halo ${store.tenant.name}, saya ingin bertanya tentang menu ${product.name}.`,
+    formatStorefrontMessage(messages.detail.greeting, {
+      store: store.tenant.name,
+      product: product.name,
+    }),
   );
   return (
     <div
@@ -35,30 +43,33 @@ export default function StorefrontDetail({
       onClick={close}
     >
       <article
-        className="relative max-h-[92dvh] w-full overflow-auto rounded-t-3xl bg-white sm:grid sm:max-w-2xl sm:grid-cols-2 sm:overflow-hidden sm:rounded-3xl"
+        className="relative max-h-[92dvh] w-full overflow-auto rounded-t-3xl bg-white sm:max-w-md sm:rounded-3xl"
         onClick={(event) => event.stopPropagation()}
       >
         <button
           className="absolute top-3 right-3 z-10 grid size-9 place-items-center rounded-full bg-white/90"
           onClick={close}
-          aria-label="Tutup"
+          aria-label={messages.detail.close}
         >
           <X size={20} />
         </button>
         <img
-          className="h-[min(36dvh,280px)] w-full object-cover sm:h-full sm:min-h-96"
+          className="h-[min(36dvh,280px)] w-full object-cover"
           src={product.image}
           alt={product.name}
         />
-        <div className="flex flex-col p-5 sm:p-8">
+        <div className="flex flex-col p-5">
           <span className="text-brand text-[10px] font-black tracking-[.12em] uppercase">
             {product.category}
           </span>
           <h2 className="display-font mt-1 text-3xl font-black">{product.name}</h2>
           <p className="text-muted mt-3 text-sm leading-6">
-            {product.description || `Menu pilihan dari ${store.tenant.name}.`}
+            {product.description ||
+              formatStorefrontMessage(messages.detail.defaultDescription, {
+                store: store.tenant.name,
+              })}
           </p>
-          <div className="border-line mt-6 border-t pt-5 sm:mt-auto">
+          <div className="border-line mt-6 border-t pt-5">
             {store.tenant.show_price && (
               <div className="mb-3">
                 {product.promo && (
@@ -71,7 +82,11 @@ export default function StorefrontDetail({
             )}
             {product.available && url ? (
               <a
-                className="bg-brand flex min-h-12 items-center justify-center gap-2 rounded-xl text-sm font-extrabold text-white"
+                className="bg-brand focus-visible:outline-brand flex min-h-12 items-center justify-center gap-2 rounded-xl text-sm font-extrabold transition hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-[.99]"
+                style={{
+                  color: getContrastTextColor(store.tenant.primary_color || "#FF6534"),
+                  backgroundColor: store.tenant.primary_color || "#FF6534",
+                }}
                 href={url}
                 onClick={() =>
                   trackStorefront(store.tenant.slug, "whatsapp_click", { productId: product.id })
@@ -80,11 +95,11 @@ export default function StorefrontDetail({
                 rel="noopener noreferrer"
               >
                 <MessageCircle size={17} />
-                Tanya via WhatsApp <ExternalLink size={16} />
+                {messages.detail.whatsapp} <ExternalLink size={16} />
               </a>
             ) : (
               <span className="text-sm font-bold text-red-700">
-                {product.available ? "Kontak belum tersedia" : "Sedang habis hari ini"}
+                {product.available ? messages.detail.contactMissing : messages.detail.soldOut}
               </span>
             )}
           </div>

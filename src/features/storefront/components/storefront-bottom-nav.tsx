@@ -1,6 +1,17 @@
-import { LayoutGrid, MessageCircle, Search, Share2, SlidersHorizontal } from "lucide-react";
+"use client";
+
+import { useCallback, type CSSProperties } from "react";
+import { Clock3, Globe2, LayoutGrid, MessageCircle, Search, Share2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { languageOptions } from "@/i18n/language-options";
+import StorefrontLanguagePanel from "@/features/storefront/components/storefront-language-panel";
+import StorefrontOpeningHours from "@/features/storefront/components/storefront-opening-hours";
+import { getContrastTextColor } from "@/features/storefront/helpers";
 import { trackStorefront } from "@/features/storefront/track-storefront";
+import { useStorefrontLocale } from "@/features/storefront/storefront-locale";
+
+export type StorefrontNavActive = "menu" | "browse" | "hours" | "language" | "share" | "chat";
+export type StorefrontNavPanel = "browse" | "hours" | "language" | null;
 
 type StorefrontNavItemProps = {
   label: string;
@@ -19,20 +30,14 @@ function StorefrontNavItem({
   onClick,
   href,
 }: StorefrontNavItemProps) {
-  const className = `flex min-h-12 min-w-0 flex-1 items-center justify-center gap-1 rounded-full px-0.5 text-[10px] font-bold transition-all duration-300 ease-out ${active ? "text-white shadow-sm" : "hover:bg-black/[.05]"}`;
-  const style = {
-    color: active ? "#fff" : primaryColor,
-    backgroundColor: active ? primaryColor : undefined,
-  };
+  const style: CSSProperties = active
+    ? { color: getContrastTextColor(primaryColor), backgroundColor: primaryColor }
+    : { color: primaryColor };
+  const className = `flex min-h-[3.5rem] min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-1 text-[9px] leading-none font-bold transition duration-200 ease-out hover:-translate-y-0.5 hover:bg-brand/10 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand active:translate-y-0 active:scale-[.96] ${active ? "shadow-sm" : ""}`;
   const content = (
     <>
       <Icon size={18} className="shrink-0" aria-hidden="true" />
-      <span
-        className={`overflow-hidden whitespace-nowrap transition-all duration-300 ease-out ${active ? "max-w-20 translate-x-0 opacity-100" : "max-w-0 -translate-x-1 opacity-0"}`}
-        aria-hidden={!active}
-      >
-        {label}
-      </span>
+      <span className="max-w-full truncate">{label}</span>
     </>
   );
 
@@ -46,7 +51,6 @@ function StorefrontNavItem({
         style={style}
         onClick={onClick}
         aria-label={label}
-        aria-current={active ? "page" : undefined}
       >
         {content}
       </a>
@@ -60,7 +64,7 @@ function StorefrontNavItem({
       style={style}
       onClick={onClick}
       aria-label={label}
-      aria-current={active ? "page" : undefined}
+      aria-pressed={active}
     >
       {content}
     </button>
@@ -69,8 +73,9 @@ function StorefrontNavItem({
 
 export default function StorefrontBottomNav({
   onMenu,
-  onSearch,
-  onFilter,
+  onBrowse,
+  panel,
+  onPanelChange,
   onShare,
   onActiveChange,
   whatsapp,
@@ -78,71 +83,151 @@ export default function StorefrontBottomNav({
   backgroundColor,
   slug,
   active,
+  storeName,
+  openingHours,
+  showOpeningHours,
 }: {
   onMenu: () => void;
-  onSearch: () => void;
+  onBrowse: () => void;
+  panel: StorefrontNavPanel;
+  onPanelChange: (panel: StorefrontNavPanel) => void;
   onShare: () => void;
-  onFilter: () => void;
-  onActiveChange: (active: "menu" | "search" | "filter" | "share" | "chat") => void;
+  onActiveChange: (active: StorefrontNavActive) => void;
   whatsapp: string;
   primaryColor: string;
   backgroundColor: string;
   slug: string;
-  active: "menu" | "search" | "filter" | "share" | "chat";
+  active: StorefrontNavActive;
+  storeName: string;
+  openingHours: unknown;
+  showOpeningHours: boolean;
 }) {
+  const { locale, setLocale, language, messages } = useStorefrontLocale();
+  const selectedLanguage =
+    languageOptions.find((option) => option.value === locale) ?? languageOptions[0];
+  const navStyle = {
+    "--color-brand": primaryColor,
+    backgroundColor: `color-mix(in srgb, ${backgroundColor} 22%, white)`,
+    borderColor: `color-mix(in srgb, ${primaryColor} 25%, transparent)`,
+  } as CSSProperties;
+
+  function toggleOpeningHours() {
+    const nextOpen = panel !== "hours";
+    onPanelChange(nextOpen ? "hours" : null);
+    onActiveChange(nextOpen ? "hours" : "menu");
+  }
+
+  function toggleLanguagePanel() {
+    const nextOpen = panel !== "language";
+    onPanelChange(nextOpen ? "language" : null);
+    onActiveChange(nextOpen ? "language" : "menu");
+  }
+
+  const closeOpeningHours = useCallback(() => {
+    onPanelChange(null);
+    onActiveChange("menu");
+  }, [onActiveChange, onPanelChange]);
+
+  const closeLanguagePanel = useCallback(() => {
+    onPanelChange(null);
+    onActiveChange("menu");
+  }, [onActiveChange, onPanelChange]);
+
   return (
-    <nav
-      className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-1 border-t px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_-8px_28px_#00000012] backdrop-blur-xl sm:hidden"
-      style={{
-        borderColor: `${primaryColor}35`,
-        backgroundColor: `${backgroundColor}F2`,
-      }}
-      aria-label="Navigasi toko"
-    >
-      <StorefrontNavItem
-        label="Menu"
-        icon={LayoutGrid}
-        active={active === "menu"}
-        primaryColor={primaryColor}
-        onClick={onMenu}
-      />
-      <StorefrontNavItem
-        label="Cari"
-        icon={Search}
-        active={active === "search"}
-        primaryColor={primaryColor}
-        onClick={onSearch}
-      />
-      <StorefrontNavItem
-        label="Filter"
-        icon={SlidersHorizontal}
-        active={active === "filter"}
-        primaryColor={primaryColor}
-        onClick={onFilter}
-      />
-      <StorefrontNavItem
-        label="Bagikan"
-        icon={Share2}
-        active={active === "share"}
-        primaryColor={primaryColor}
-        onClick={() => {
-          onActiveChange("share");
-          onShare();
-        }}
-      />
-      {whatsapp ? (
+    <>
+      <nav
+        data-storefront-bottom-nav
+        className={`fixed inset-x-0 bottom-0 z-40 flex items-center gap-0 border-t px-1.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom))] shadow-[0_-8px_28px_#00000012] backdrop-blur-xl sm:inset-x-auto sm:bottom-5 sm:left-1/2 sm:w-[calc(100vw_-_2rem)] sm:max-w-md sm:-translate-x-1/2 sm:border sm:px-3 sm:py-2 sm:shadow-[0_14px_50px_rgba(0,0,0,.16)] ${panel ? "sm:rounded-t-none sm:rounded-b-3xl" : "sm:rounded-3xl"}`}
+        style={navStyle}
+        aria-label={messages.nav.aria}
+      >
         <StorefrontNavItem
-          label="Chat"
-          icon={MessageCircle}
-          active={active === "chat"}
+          label={messages.nav.menu}
+          icon={LayoutGrid}
+          active={active === "menu"}
           primaryColor={primaryColor}
-          href={whatsapp}
+          onClick={onMenu}
+        />
+        <StorefrontNavItem
+          label={messages.nav.browse}
+          icon={Search}
+          active={active === "browse"}
+          primaryColor={primaryColor}
+          onClick={onBrowse}
+        />
+        {showOpeningHours && (
+          <StorefrontNavItem
+            label={messages.nav.hours}
+            icon={Clock3}
+            active={active === "hours"}
+            primaryColor={primaryColor}
+            onClick={toggleOpeningHours}
+          />
+        )}
+        <StorefrontNavItem
+          label={messages.nav.share}
+          icon={Share2}
+          active={active === "share"}
+          primaryColor={primaryColor}
           onClick={() => {
-            onActiveChange("chat");
-            trackStorefront(slug, "whatsapp_click");
+            onPanelChange(null);
+            onActiveChange("share");
+            onShare();
           }}
         />
-      ) : null}
-    </nav>
+        {whatsapp ? (
+          <StorefrontNavItem
+            label={messages.nav.chat}
+            icon={MessageCircle}
+            active={active === "chat"}
+            primaryColor={primaryColor}
+            href={whatsapp}
+            onClick={() => {
+              onPanelChange(null);
+              onActiveChange("chat");
+              trackStorefront(slug, "whatsapp_click");
+            }}
+          />
+        ) : null}
+        <button
+          type="button"
+          data-storefront-language-trigger
+          className="hover:bg-brand/10 focus-visible:outline-brand flex min-h-[3.5rem] min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-1 text-[9px] leading-none font-bold transition duration-200 ease-out hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-1 active:translate-y-0 active:scale-[.96]"
+          style={
+            active === "language"
+              ? { color: getContrastTextColor(primaryColor), backgroundColor: primaryColor }
+              : { color: primaryColor }
+          }
+          onClick={toggleLanguagePanel}
+          aria-label={`${language.label}: ${selectedLanguage.label}`}
+          aria-expanded={panel === "language"}
+          aria-haspopup="dialog"
+          aria-pressed={panel === "language"}
+        >
+          <Globe2 size={17} aria-hidden="true" />
+          <span className="max-w-full truncate">{selectedLanguage.shortLabel}</span>
+        </button>
+      </nav>
+      <StorefrontLanguagePanel
+        open={panel === "language"}
+        label={language.label}
+        closeLabel={messages.menu.close}
+        value={locale}
+        primaryColor={primaryColor}
+        backgroundColor={backgroundColor}
+        onValueChange={setLocale}
+        onClose={closeLanguagePanel}
+      />
+      {showOpeningHours && (
+        <StorefrontOpeningHours
+          openingHours={openingHours}
+          storeName={storeName}
+          primaryColor={primaryColor}
+          backgroundColor={backgroundColor}
+          open={panel === "hours"}
+          onClose={closeOpeningHours}
+        />
+      )}
+    </>
   );
 }
