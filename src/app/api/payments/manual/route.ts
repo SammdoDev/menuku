@@ -6,6 +6,7 @@ import { plans } from "../../../../lib/plans";
 import {
   billingConfirmationUrl,
   getPendingInvoice,
+  PENDING_INVOICE_FIELDS,
   sendBillingInvoiceEmail,
 } from "../../../../lib/billing-invoices";
 import { createSupabaseAdminClient } from "../../../../lib/supabase/admin";
@@ -41,14 +42,15 @@ export async function POST(request: Request) {
         confirmationUrl: billingConfirmationUrl(invoice.order_id, invoice.plan),
       });
     }
-    const emailSent = invoice.payment_provider === "pakasir" && !invoice.payment_url
-      ? null
-      : await sendBillingInvoiceEmail({
-          admin: paymentAdmin,
-          invoice,
-          email: user.email,
-          paymentUrl: invoice.payment_url,
-        });
+    const emailSent =
+      invoice.payment_provider === "pakasir" && !invoice.payment_url
+        ? null
+        : await sendBillingInvoiceEmail({
+            admin: paymentAdmin,
+            invoice,
+            email: user.email,
+            paymentUrl: invoice.payment_url,
+          });
     return NextResponse.json({
       ok: true,
       existing: true,
@@ -88,9 +90,14 @@ export async function POST(request: Request) {
   const now = new Date();
   const isUpgrade = Boolean(active && rank[plan] > rank[active.plan as keyof typeof rank]);
   const remainingMonths = active
-    ? Math.max(1, Math.ceil((new Date(active.expires_at).getTime() - now.getTime()) / (30 * 86400000)))
+    ? Math.max(
+        1,
+        Math.ceil((new Date(active.expires_at).getTime() - now.getTime()) / (30 * 86400000)),
+      )
     : 0;
-  const credit = isUpgrade ? plans[active!.plan as "premium" | "business"].price * remainingMonths : 0;
+  const credit = isUpgrade
+    ? plans[active!.plan as "premium" | "business"].price * remainingMonths
+    : 0;
   const amount = Math.max(0, plans[plan].price * months - credit);
   if (amount < 1)
     return NextResponse.json(
@@ -123,7 +130,7 @@ export async function POST(request: Request) {
 
   const { data: invoice, error: invoiceError } = await paymentAdmin
     .from("subscriptions")
-    .select("id,tenant_id,owner_id,order_id,plan,months,amount,status,payment_method,payment_provider,payment_url,pakasir_txn_id,created_at,invoice_email_sent_at,invoice_email_attempted_at,pakasir_status_checked_at,billing_pending_lock")
+    .select(PENDING_INVOICE_FIELDS)
     .eq("order_id", orderId)
     .maybeSingle();
   if (invoiceError || !invoice) {

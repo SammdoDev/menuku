@@ -7,6 +7,7 @@ import { createPakasirPayment, pakasirConfig } from "../../../../lib/pakasir";
 import {
   billingConfirmationUrl,
   getPendingInvoice,
+  PENDING_INVOICE_FIELDS,
   sendBillingInvoiceEmail,
 } from "../../../../lib/billing-invoices";
 import { createSupabaseAdminClient } from "../../../../lib/supabase/admin";
@@ -46,14 +47,15 @@ export async function POST(request: Request) {
       });
     }
     const paymentUrl = invoice.payment_url;
-    const emailSent = invoice.payment_provider === "pakasir" && !paymentUrl
-      ? null
-      : await sendBillingInvoiceEmail({
-          admin: paymentAdmin,
-          invoice,
-          email: user.email,
-          paymentUrl,
-        });
+    const emailSent =
+      invoice.payment_provider === "pakasir" && !paymentUrl
+        ? null
+        : await sendBillingInvoiceEmail({
+            admin: paymentAdmin,
+            invoice,
+            email: user.email,
+            paymentUrl,
+          });
     return NextResponse.json({
       ok: true,
       existing: true,
@@ -159,7 +161,7 @@ export async function POST(request: Request) {
       })
       .eq("order_id", orderId)
       .eq("payment_provider", "pakasir")
-      .select("id,tenant_id,owner_id,order_id,plan,months,amount,status,payment_method,payment_provider,payment_url,pakasir_txn_id,created_at,invoice_email_sent_at,invoice_email_attempted_at,pakasir_status_checked_at,billing_pending_lock")
+      .select(PENDING_INVOICE_FIELDS)
       .maybeSingle();
     if (updateError || !savedPayment) throw new Error("Payment link belum dapat disimpan.");
 
