@@ -54,11 +54,12 @@ export default async function BillingConfirmationPage({
           </div>
         )}
         <div className="my-6 rounded-2xl bg-[#faf8f4] p-4 text-center">
-          <p className="mb-3 text-xs font-bold">{manual ? "Transfer manual sesuai nominal invoice" : "Pembayaran QRIS otomatis melalui Duitku"}</p>
+          <p className="mb-3 text-xs font-bold">{manual ? "Transfer manual sesuai nominal invoice" : "Pembayaran QRIS otomatis melalui Pakasir"}</p>
           <p className="text-muted mt-2 text-[11px]">
             {manual
               ? "Transfer tepat sesuai total invoice. Hubungi admin untuk detail rekening dan verifikasi pembayaran."
-              : "Bayar dengan QRIS di halaman Duitku. Status paket diperbarui otomatis setelah callback pembayaran diterima."}
+              : "Bayar dengan QRIS di halaman Pakasir. Status paket diperbarui otomatis setelah pembayaran terkonfirmasi."
+            }
           </p>
           {!manual && !paid && !failed && invoice?.payment_url && (
             <a
@@ -67,7 +68,7 @@ export default async function BillingConfirmationPage({
               rel="noreferrer"
               className="bg-brand mt-4 inline-flex min-h-11 items-center justify-center rounded-xl px-5 text-sm font-extrabold text-white"
             >
-              Buka QRIS Duitku
+              Buka QRIS Pakasir
             </a>
           )}
         </div>
@@ -97,7 +98,7 @@ export default async function BillingConfirmationPage({
         <div className="grid gap-3 text-sm">
           <p className="flex items-center gap-2 font-bold">
             <StatusIcon className={statusClass} size={18} />
-            {paid ? "Pembayaran berhasil" : failed ? "Transaksi gagal" : manual ? "Invoice transfer siap" : "QRIS Duitku siap dibayar"}
+            {paid ? "Pembayaran berhasil" : failed ? "Transaksi gagal" : manual ? "Invoice transfer siap" : "QRIS Pakasir siap dibayar"}
           </p>
           <p className="text-muted leading-6">
             {invoice?.status === "active"
@@ -106,7 +107,7 @@ export default async function BillingConfirmationPage({
                 ? "Transaksi ini gagal atau kedaluwarsa. Kembali ke billing untuk membuat invoice baru."
                 : manual
                   ? "Setelah transfer, admin akan mencocokkan nominal dan mengaktifkan paketmu."
-                  : "Selesaikan pembayaran di halaman Duitku. Status paket akan diperbarui otomatis setelah callback pembayaran diterima."}
+                  : "Selesaikan pembayaran di halaman Pakasir. Status paket akan diperbarui otomatis setelah pembayaran terkonfirmasi."}
           </p>
         </div>
         <a

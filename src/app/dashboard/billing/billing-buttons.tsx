@@ -24,7 +24,7 @@ export default function BillingButtons({
     setLoading(true);
     setError("");
     try {
-      const endpoint = paymentMethod === "manual" ? "/api/payments/manual" : "/api/payments/duitku";
+      const endpoint = paymentMethod === "manual" ? "/api/payments/manual" : "/api/payments/pakasir";
       const response = await fetch(`${endpoint}?months=${months}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -41,7 +41,7 @@ export default function BillingButtons({
   const buttonLabel = loading
     ? paymentMethod === "manual"
       ? "Membuat invoice..."
-      : "Membuka QRIS Duitku..."
+      : "Membuka checkout Pakasir..."
     : code === "free"
       ? "Pilih Free Demo"
       : currentPlan === "business"
@@ -78,7 +78,7 @@ export default function BillingButtons({
             <span className="flex items-center gap-2 text-xs font-extrabold">
               <QrCode className="text-brand" size={17} /> QRIS otomatis
             </span>
-            <span className="text-muted mt-1 block text-[10px] leading-4">Bayar lewat Duitku, status otomatis.</span>
+            <span className="text-muted mt-1 block text-[10px] leading-4">Bayar lewat Pakasir, status otomatis.</span>
           </button>
         </div>
       )}

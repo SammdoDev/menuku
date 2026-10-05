@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 
 export type Locale = "id" | "en";
 export type TranslationMessages = Record<Locale, Record<string, string>>;
+const LANGUAGE_PREFERENCE_KEY = "menuku-language-v2";
 
 export function useTranslate(messages: TranslationMessages) {
   const [locale, setLocale] = useState<Locale>("id");
 
   useEffect(() => {
     try {
-      const saved = window.localStorage.getItem("menuku-language");
+      const saved = window.localStorage.getItem(LANGUAGE_PREFERENCE_KEY);
       if (saved === "id" || saved === "en") setLocale(saved);
     } catch {
       // Keep Indonesian as the default when browser storage is unavailable.
@@ -31,7 +32,7 @@ export function useTranslate(messages: TranslationMessages) {
   function changeLocale(nextLocale: Locale) {
     setLocale(nextLocale);
     try {
-      window.localStorage.setItem("menuku-language", nextLocale);
+      window.localStorage.setItem(LANGUAGE_PREFERENCE_KEY, nextLocale);
     } catch {
       // The selected language still applies for this page session.
     }

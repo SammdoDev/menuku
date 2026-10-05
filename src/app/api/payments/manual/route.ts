@@ -66,6 +66,7 @@ export async function POST(request: Request) {
     order_id: orderId,
     status: "pending",
     payment_method: "manual",
+    payment_provider: "manual",
   });
   if (error)
     return NextResponse.json({ error: "Invoice transfer belum dapat dicatat." }, { status: 500 });

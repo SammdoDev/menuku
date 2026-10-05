@@ -218,7 +218,9 @@ export default async function AdminPage() {
                       <td className="px-5 py-4 capitalize">{payment.plan}</td>
                       <td className="px-5 py-4">
                         <span className="rounded-full bg-orange-50 px-2.5 py-1 text-xs font-bold text-orange-700">
-                          {payment.payment_method === "manual" ? "Transfer manual" : "QRIS Duitku"}
+                          {payment.payment_method === "manual"
+                            ? "Transfer manual"
+                            : "QRIS Pakasir"}
                         </span>
                       </td>
                       <td className="px-5 py-4">
@@ -233,7 +235,7 @@ export default async function AdminPage() {
                             </button>
                           </form>
                         ) : (
-                          <span className="text-muted text-xs">Menunggu callback Duitku</span>
+                          <span className="text-muted text-xs">Menunggu konfirmasi Pakasir</span>
                         )}
                       </td>
                     </tr>
