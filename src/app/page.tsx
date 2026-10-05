@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { INDEXABLE_SITE_URL } from "../lib/site";
+import { plans, type PlanCode } from "../lib/plans";
+import LandingPageLinktree from "./landing-page-linktree";
 
-const title = "Menu Digital untuk UMKM Kuliner | Menuku";
+const title = "Menu Digital untuk Bisnis Kuliner Indonesia | Menuku";
 const description =
-  "Buat menu digital dan katalog menu online untuk usaha kuliner. Kelola produk, kategori, informasi toko, dan tautan bisnis dari satu dashboard.";
+  "Buat menu digital yang mudah dibagikan untuk bisnis kuliner. Kelola produk, harga, kategori, informasi toko, dan tautan bisnis dari satu dashboard.";
 
 export const metadata: Metadata = {
   title,
@@ -20,4 +22,10 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title, description },
 };
 
-export { default } from "./landing-page-linktree";
+export default function HomePage() {
+  const planPrices = (Object.entries(plans) as [PlanCode, (typeof plans)[PlanCode]][]).map(
+    ([code, plan]) => ({ code, price: plan.price }),
+  );
+
+  return <LandingPageLinktree planPrices={planPrices} />;
+}

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
 @theme {
   --font-sans: Inter, Arial, sans-serif;
@@ -17,7 +18,6 @@
     box-sizing: border-box;
   }
   html {
-    scroll-behavior: smooth;
     background: var(--color-paper);
   }
   body {
