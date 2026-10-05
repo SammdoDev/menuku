@@ -17,7 +17,12 @@
     "eyebrow": "MENU DIGITAL UNTUK BISNIS KULINER",
     "title": {
       "first": "Bikin tokomu jadi",
-      "highlight": "pilihan nomor satu."
+      "highlight": "pilihan nomor satu.",
+      "rotating": [
+        "pilihan nomor satu.",
+        "favorit pelanggan.",
+        "mudah ditemukan."
+      ]
     },
     "copy": "Menu digital yang cantik, praktis, dan mudah dibagikan. Kelola produk, harga, dan info tokomu dalam satu tempat.",
     "primary": "Buat menu gratis",

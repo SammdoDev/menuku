@@ -17,7 +17,12 @@
     "eyebrow": "MENU DIGITAL UNTUK PERNIAGAAN MAKANAN",
     "title": {
       "first": "Cipta laman web",
-      "highlight": "pertama anda."
+      "highlight": "pertama anda.",
+      "rotating": [
+        "pertama anda.",
+        "untuk kedai anda.",
+        "yang mudah dikongsi."
+      ]
     },
     "copy": "Menu digital yang menarik dan mudah dikongsi. Urus produk, harga dan maklumat kedai anda di satu tempat.",
     "primary": "Cipta menu percuma",

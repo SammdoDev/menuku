@@ -17,7 +17,12 @@
     "eyebrow": "DIGITAL MENUS FOR FOOD BUSINESSES",
     "title": {
       "first": "Make your business",
-      "highlight": "the customers’ #1 choice."
+      "highlight": "the customers’ #1 choice.",
+      "rotating": [
+        "the customers’ #1 choice.",
+        "a favorite among customers.",
+        "easy to find and share."
+      ]
     },
     "copy": "A beautiful, practical menu that is easy to share. Manage products, prices, and store details in one place.",
     "primary": "Create a free menu",

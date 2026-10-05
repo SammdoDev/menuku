@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Activity,
   ArrowRight,
@@ -28,6 +29,7 @@ import { useTranslate } from "../lib/use-translate";
 import { getConstants } from "../lib/i18n";
 import type { PlanCode } from "../lib/plans";
 import { supportWhatsAppUrl } from "../lib/site";
+import { useState } from "react";
 
 type LandingPlan = { code: PlanCode; price: number };
 
@@ -50,9 +52,13 @@ function MenuThumbnail({ tone }: { tone: "peach" | "green" }) {
   return (
     <span
       aria-hidden="true"
-      className={`grid size-12 shrink-0 place-items-center rounded-xl text-xl ${tone === "peach" ? "bg-gradient-to-br from-[#ffd9bf] to-[#f6a77d]" : "bg-gradient-to-br from-[#e2edcf] to-[#a4c18e]"}`}
+      className="size-12 shrink-0 rounded-xl bg-cover bg-center shadow-sm"
+      style={{
+        backgroundImage: "url('/landing-menu-food-strip.webp')",
+        backgroundPosition: tone === "peach" ? "0% center" : "50% center",
+        backgroundSize: "300% 100%",
+      }}
     >
-      {tone === "peach" ? "☕" : "🍵"}
     </span>
   );
 }
@@ -62,9 +68,9 @@ function AnalyticsBars() {
     <div className="flex h-24 items-end gap-2" aria-hidden="true">
       {[34, 53, 42, 69, 57, 86, 74, 100, 78, 92, 68, 100].map((height, index) => (
         <span
-          className={`min-w-0 flex-1 rounded-t-md ${index === 7 || index === 11 ? "bg-[#b13b19]" : "bg-[#e7b49b]"}`}
+          className={`min-w-0 origin-bottom flex-1 rounded-t-md motion-safe:animate-[chart-breathe_6s_ease-in-out_infinite] ${index === 7 || index === 11 ? "bg-[#b13b19]" : "bg-[#e7b49b]"}`}
           key={index}
-          style={{ height: `${height}%` }}
+          style={{ height: `${height}%`, animationDelay: `${index * 0.14}s` }}
         />
       ))}
     </div>
@@ -73,6 +79,8 @@ function AnalyticsBars() {
 
 export default function LandingPageLinktree({ planPrices }: { planPrices: LandingPlan[] }) {
   const { locale, setLocale } = useTranslate();
+  const [openFaq, setOpenFaq] = useState<(typeof faqItems)[number] | null>(null);
+  const reduceMotion = useReducedMotion();
   const CONSTANT = getConstants(locale);
   const currency = new Intl.NumberFormat(
     { id: "id-ID", en: "en-US", ms: "ms-MY", zh: "zh-CN", ja: "ja-JP" }[locale],
@@ -88,7 +96,7 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
       <main className="bg-paper text-ink min-h-screen overflow-hidden">
         <header className="border-line sticky top-0 z-40 border-b bg-white/90 backdrop-blur-xl">
           <div className="mx-auto flex min-h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
-            <Brand />
+            <Brand prominent />
             <nav className="hidden items-center gap-7 text-sm font-semibold md:flex" aria-label={CONSTANT.nav.aria}>
               <a className="hover:text-brand transition" href="#fitur">{CONSTANT.nav.features}</a>
               <a className="hover:text-brand transition" href="#galeri">{CONSTANT.nav.gallery}</a>
@@ -123,6 +131,7 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
             description={CONSTANT.hero.copy}
             eyebrow={CONSTANT.hero.eyebrow}
             highlight={CONSTANT.hero.title.highlight}
+            rotatingHighlights={CONSTANT.hero.title.rotating}
             points={[CONSTANT.hero.point.one, CONSTANT.hero.point.two]}
             primaryLabel={CONSTANT.hero.primary}
             secondaryLabel={CONSTANT.hero.secondary}
@@ -131,7 +140,7 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
 
           <div className="relative mx-auto w-full max-w-[590px] lg:col-span-6" data-hero-preview>
             <div className="absolute -right-5 -top-8 size-32 rounded-full bg-[#ffb88e]/45 blur-2xl sm:-right-9 sm:-top-10 sm:size-44" />
-            <div className="relative rotate-[1deg] rounded-[1.8rem] border border-white bg-white/85 p-2 shadow-[0_30px_90px_-28px_rgba(68,43,30,.3)] sm:rounded-[2rem] sm:p-3">
+            <div className="relative rotate-[1deg] rounded-[1.8rem] border border-white bg-white/85 p-2 shadow-[0_30px_90px_-28px_rgba(68,43,30,.3)] motion-safe:animate-[menu-card-float_10s_ease-in-out_infinite] sm:rounded-[2rem] sm:p-3">
               <div className="overflow-hidden rounded-[1.35rem] bg-[#fffaf5] sm:rounded-[1.55rem]">
                 <div className="flex items-center justify-between gap-3 border-b border-[#eee5dd] px-4 py-3 sm:px-5 sm:py-4">
                   <div className="flex items-center gap-2.5">
@@ -269,7 +278,7 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
                   >
                     <div
                       aria-hidden="true"
-                      className={`pointer-events-none absolute -right-12 -bottom-20 size-56 rounded-full blur-3xl transition duration-500 group-hover:scale-125 ${isMenu ? "bg-[#ff6534]/20" : "bg-[#f8d8c6]/35"}`}
+                      className={`pointer-events-none absolute -right-12 -bottom-20 size-56 rounded-full blur-3xl transition duration-500 group-hover:scale-125 motion-safe:animate-[ambient-glow-drift_14s_ease-in-out_infinite] ${isMenu ? "bg-[#ff6534]/20" : "bg-[#f8d8c6]/35"}`}
                     />
                     <div
                       className={`relative z-10 grid h-full items-center gap-4 ${isMenu ? "grid-cols-1 sm:grid-cols-[.82fr_1.18fr]" : "grid-cols-[minmax(0,1fr)_minmax(70px,.52fr)]"}`}
@@ -291,27 +300,33 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
                       </div>
 
                     {feature === "menu" && (
-                      <div
-                        aria-hidden="true"
-                        className="w-full rotate-[-3deg] rounded-2xl border border-white/70 bg-white p-3 shadow-[0_20px_50px_-22px_rgba(0,0,0,.6)] transition duration-500 group-hover:rotate-0 group-hover:scale-[1.03] sm:p-4"
-                      >
-                        <div className="flex items-center gap-1.5 border-b border-[#eee8e1] pb-2.5">
-                          <span className="size-1.5 rounded-full bg-[#ff9d79]" />
-                          <span className="size-1.5 rounded-full bg-[#f4cf77]" />
-                          <span className="size-1.5 rounded-full bg-[#b7d09e]" />
-                          <span className="ml-auto h-1.5 w-12 rounded-full bg-[#eee8e1]" />
-                        </div>
-                        <div className="mt-3 grid gap-2.5">
-                          {[0, 1, 2].map((row) => (
-                            <div className="flex items-center gap-2.5" key={row}>
-                              <span className={`size-8 shrink-0 rounded-lg ${row === 1 ? "bg-[#dce8cd]" : "bg-[#f5d8c6]"}`} />
-                              <span className="grid flex-1 gap-1.5">
-                                <span className="h-1.5 w-3/4 rounded-full bg-[#d9d3cc]" />
-                                <span className="h-1 w-1/2 rounded-full bg-[#eee8e1]" />
-                              </span>
-                              <span className="h-2 w-8 rounded-full bg-[#f2a27e]" />
-                            </div>
-                          ))}
+                      <div aria-hidden="true" className="w-full motion-safe:animate-[menu-card-float_8s_ease-in-out_infinite]">
+                        <div className="w-full rotate-[-3deg] rounded-2xl border border-white/70 bg-white p-3 shadow-[0_20px_50px_-22px_rgba(0,0,0,.6)] transition duration-700 group-hover:rotate-0 group-hover:scale-[1.03] sm:p-4">
+                          <div className="flex items-center gap-1.5 border-b border-[#eee8e1] pb-2.5">
+                            <span className="size-1.5 rounded-full bg-[#ff9d79]" />
+                            <span className="size-1.5 rounded-full bg-[#f4cf77]" />
+                            <span className="size-1.5 rounded-full bg-[#b7d09e]" />
+                            <span className="ml-auto h-1.5 w-12 rounded-full bg-[#eee8e1]" />
+                          </div>
+                          <div className="mt-3 grid gap-2.5">
+                            {[0, 1, 2].map((row) => (
+                              <div className="flex items-center gap-2.5" key={row}>
+                                <span
+                                  className="size-8 shrink-0 rounded-lg bg-cover bg-center"
+                                  style={{
+                                    backgroundImage: "url('/landing-menu-food-strip.webp')",
+                                    backgroundPosition: `${row * 50}% center`,
+                                    backgroundSize: "300% 100%",
+                                  }}
+                                />
+                                <span className="grid flex-1 gap-1.5">
+                                  <span className="h-1.5 w-3/4 rounded-full bg-[#d9d3cc]" />
+                                  <span className="h-1 w-1/2 rounded-full bg-[#eee8e1]" />
+                                </span>
+                                <span className="h-2 w-8 rounded-full bg-[#f2a27e]" />
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -384,7 +399,7 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
                   className="group relative isolate min-h-[290px] overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#302c26]/90 p-5 transition duration-500 hover:-translate-y-1 hover:border-[#ff6534]/45 hover:shadow-2xl hover:shadow-black/20 sm:p-7"
                   key={number}
                 >
-                  <div aria-hidden="true" className={`pointer-events-none absolute -right-10 -bottom-16 size-56 rounded-full blur-[70px] transition duration-500 group-hover:scale-125 ${index === 0 ? "bg-[#ff6534]/20" : index === 1 ? "bg-[#e7b49b]/10" : "bg-[#b5ca98]/10"}`} />
+                  <div aria-hidden="true" className={`pointer-events-none absolute -right-10 -bottom-16 size-56 rounded-full blur-[70px] transition duration-500 group-hover:scale-125 motion-safe:animate-[ambient-glow-drift_15s_ease-in-out_infinite] ${index === 0 ? "bg-[#ff6534]/20" : index === 1 ? "bg-[#e7b49b]/10" : "bg-[#b5ca98]/10"}`} />
                   <span aria-hidden="true" className="display-font pointer-events-none absolute top-16 right-4 text-[6rem] leading-none font-black text-white/[.035] transition duration-500 group-hover:text-white/[.07] sm:text-[7rem]">
                     {number}
                   </span>
@@ -443,9 +458,52 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
           </div>
         </section>
 
-        <section id="faq" className="mx-auto grid max-w-7xl scroll-mt-24 gap-8 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-12 lg:gap-12 lg:px-10" data-reveal>
-          <div className="lg:col-span-4"><p className="mb-3 text-[10px] font-black tracking-[.15em] text-[#b13b19]">{CONSTANT.faq.eyebrow}</p><h2 className="display-font max-w-sm text-3xl font-black sm:text-4xl">{CONSTANT.faq.title}</h2><p className="text-muted mt-4 max-w-sm text-sm leading-6">{CONSTANT.faq.copy}</p><a className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#b13b19]" href={supportWhatsAppUrl()} target="_blank" rel="noreferrer">{CONSTANT.faq.contact}<ArrowUpRight size={15} /></a></div>
-          <div className="lg:col-span-8">{faqItems.map((item) => <details className="group border-b border-[#e9dfd7] py-4 first:border-t" key={item}><summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-extrabold">{CONSTANT.faq[item].question}<ChevronDown className="text-muted shrink-0 transition group-open:rotate-180" size={17} /></summary><p className="text-muted max-w-2xl pt-3 pr-6 text-sm leading-6">{CONSTANT.faq[item].answer}</p></details>)}</div>
+        <section
+          className="relative isolate mx-auto grid max-w-7xl scroll-mt-24 gap-8 overflow-hidden px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-12 lg:gap-12 lg:px-10"
+          data-reveal
+          id="faq"
+        >
+          <div aria-hidden="true" className="pointer-events-none absolute -top-24 right-[16%] size-72 rounded-full bg-[#ffb88e]/20 blur-[90px] motion-safe:animate-[ambient-glow-drift_16s_ease-in-out_infinite]" />
+          <div className="relative z-10 lg:col-span-4"><p className="mb-3 text-[10px] font-black tracking-[.15em] text-[#b13b19]">{CONSTANT.faq.eyebrow}</p><h2 className="display-font max-w-sm text-3xl font-black sm:text-4xl">{CONSTANT.faq.title}</h2><p className="text-muted mt-4 max-w-sm text-sm leading-6">{CONSTANT.faq.copy}</p><a className="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-[#b13b19]" href={supportWhatsAppUrl()} target="_blank" rel="noreferrer">{CONSTANT.faq.contact}<ArrowUpRight size={15} /></a></div>
+          <div className="relative z-10 lg:col-span-8">
+            {faqItems.map((item) => {
+              const isOpen = openFaq === item;
+              const answerId = `faq-answer-${item}`;
+
+              return (
+                <article className="border-b border-[#e9dfd7] py-4 first:border-t" key={item}>
+                  <button
+                    aria-controls={answerId}
+                    aria-expanded={isOpen}
+                    className="flex w-full cursor-pointer items-center justify-between gap-4 text-left text-sm font-extrabold"
+                    onClick={() => setOpenFaq(isOpen ? null : item)}
+                    type="button"
+                  >
+                    {CONSTANT.faq[item].question}
+                    <ChevronDown
+                      className={`text-muted shrink-0 transition-transform duration-300 ease-out ${isOpen ? "rotate-180" : ""}`}
+                      size={17}
+                    />
+                  </button>
+                  <motion.div
+                    animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+                    aria-hidden={!isOpen}
+                    className="overflow-hidden"
+                    id={answerId}
+                    initial={false}
+                    transition={{
+                      duration: reduceMotion ? 0 : 0.34,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <p className="text-muted max-w-2xl pt-3 pr-6 text-sm leading-6">
+                      {CONSTANT.faq[item].answer}
+                    </p>
+                  </motion.div>
+                </article>
+              );
+            })}
+          </div>
         </section>
 
         <section className="mx-4 mb-8 overflow-hidden rounded-[1.8rem] bg-[#b13b19] px-5 py-10 text-white sm:mx-6 sm:px-8 sm:py-12 lg:mx-auto lg:max-w-7xl lg:px-12" data-reveal>

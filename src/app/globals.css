@@ -53,3 +53,35 @@
     display: none;
   }
 }
+
+@keyframes chart-breathe {
+  0%,
+  100% {
+    transform: scaleY(0.92);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes menu-card-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@keyframes ambient-glow-drift {
+  0%,
+  100% {
+    opacity: 0.16;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: translate3d(5px, -7px, 0) scale(1.04);
+  }
+}
