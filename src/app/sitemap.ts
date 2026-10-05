@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { INDEXABLE_SITE_URL } from "../lib/site";
+import { INDEXABLE_SITE_URL } from "@/config/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();

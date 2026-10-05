@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { GlobalInput, SubmitButton } from "../../../components/ui/form-controls";
-import { requestOtpAction } from "../actions";
-import AuthShell from "../auth-shell";
-import AuthToast from "../auth-toast";
+import { Input } from "@/components/ui/text-input";
+import { SubmitButton } from "@/components/ui/submit-button";
+import { requestOtpAction } from "@/features/auth/actions/auth-actions";
+import AuthShell from "@/features/auth/components/auth-shell";
+import AuthToast from "@/features/auth/components/auth-toast";
 
 type Props = { searchParams: Promise<{ error?: string; message?: string }> };
 export default async function LoginPage({ searchParams }: Props) {
@@ -24,10 +25,10 @@ export default async function LoginPage({ searchParams }: Props) {
         }
       >
         <form className="grid gap-4" action={requestOtpAction}>
-          <GlobalInput type="hidden" name="mode" value="login" />
+          <Input type="hidden" name="mode" value="login" />
           <label className="grid gap-2 text-sm font-bold">
             Email
-            <GlobalInput
+            <Input
               name="email"
               type="email"
               autoComplete="email"

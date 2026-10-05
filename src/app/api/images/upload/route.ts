@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { MAX_IMAGE_SIZE } from "../../../../lib/image-upload";
-import { createSupabaseServerClient } from "../../../../lib/supabase/server";
+import { MAX_IMAGE_SIZE } from "@/lib/image-upload-constants";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const allowed = new Set(["image/jpeg", "image/png", "image/webp"]);
 const bucket = process.env.SUPABASE_STORAGE_BUCKET || "images";

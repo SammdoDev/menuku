@@ -1,0 +1,23 @@
+export type PendingInvoice = {
+  id: string;
+  tenant_id: string;
+  owner_id: string;
+  order_id: string;
+  plan: string;
+  months: number;
+  amount: number;
+  status: string;
+  payment_method: string | null;
+  payment_provider: string | null;
+  payment_url: string | null;
+  pakasir_txn_id: string | null;
+  created_at: string;
+  invoice_email_sent_at: string | null;
+  invoice_email_attempted_at: string | null;
+  pakasir_status_checked_at: string | null;
+  billing_pending_lock: boolean;
+  payment_receipt_email_attempted_at: string | null;
+  payment_receipt_email_sent_at: string | null;
+  invoice_expired_email_attempted_at: string | null;
+  invoice_expired_email_sent_at: string | null;
+};

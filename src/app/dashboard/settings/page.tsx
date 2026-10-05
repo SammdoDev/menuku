@@ -1,8 +1,8 @@
-import DashboardShell from "../../../components/dashboard-shell";
-import AuthToast from "../../(auth)/auth-toast";
-import { getCurrentMerchant } from "../../../lib/merchant";
-import { PUBLIC_SITE_URL } from "../../../lib/site";
-import SettingsForm from "./settings-form";
+import DashboardShell from "@/features/dashboard/components/dashboard-shell";
+import AuthToast from "@/features/auth/components/auth-toast";
+import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
+import { PUBLIC_SITE_URL } from "@/config/site";
+import SettingsForm from "@/features/stores/components/settings-form";
 
 type Props = { searchParams: Promise<{ error?: string; success?: string }> };
 

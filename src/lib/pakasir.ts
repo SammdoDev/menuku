@@ -1,3 +1,5 @@
+import "server-only";
+
 export function pakasirConfig() {
   const projectSlug = process.env.PAKASIR_PROJECT_SLUG?.trim();
   const apiKey = process.env.PAKASIR_API_KEY?.trim();

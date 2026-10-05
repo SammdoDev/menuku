@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowLeft, Compass } from "lucide-react";
-import Brand from "../components/brand";
+import Brand from "@/components/brand/brand";
 
 export default function NotFound() {
   return (

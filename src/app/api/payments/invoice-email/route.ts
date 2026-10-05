@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { getCurrentMerchant } from "../../../../lib/merchant";
-import { getPendingInvoice, sendBillingInvoiceEmail } from "../../../../lib/billing-invoices";
-import { createSupabaseAdminClient } from "../../../../lib/supabase/admin";
+import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
+import { getPendingInvoice } from "@/features/billing/pending-invoice-query";
+import { sendBillingInvoiceEmail } from "@/features/billing/invoice-emails";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export async function POST() {
   const { user, tenant } = await getCurrentMerchant();
@@ -12,7 +13,10 @@ export async function POST() {
   const admin = createSupabaseAdminClient();
   const invoice = await getPendingInvoice(admin, tenant.id);
   if (!invoice || invoice.status !== "pending") {
-    return NextResponse.json({ error: "Tidak ada invoice pending yang bisa dikirim." }, { status: 404 });
+    return NextResponse.json(
+      { error: "Tidak ada invoice pending yang bisa dikirim." },
+      { status: 404 },
+    );
   }
 
   const emailSent = await sendBillingInvoiceEmail({

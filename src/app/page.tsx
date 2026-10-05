@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { INDEXABLE_SITE_URL } from "../lib/site";
-import { plans, type PlanCode } from "../lib/plans";
-import LandingPageLinktree from "./landing-page-linktree";
+import { INDEXABLE_SITE_URL } from "@/config/site";
+import { plans, type PlanCode } from "@/features/billing/plans";
+import MarketingPage from "@/features/marketing/marketing-page";
 
 const title = "Menu Digital untuk Bisnis Kuliner Indonesia | Menuku";
 const description =
@@ -27,5 +27,5 @@ export default function HomePage() {
     ([code, plan]) => ({ code, price: plan.price }),
   );
 
-  return <LandingPageLinktree planPrices={planPrices} />;
+  return <MarketingPage planPrices={planPrices} />;
 }

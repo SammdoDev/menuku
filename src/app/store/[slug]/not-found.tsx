@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Brand from "../../../components/brand";
+import Brand from "@/components/brand/brand";
 
 export default function StoreUnavailable() {
   return (

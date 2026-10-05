@@ -1,0 +1,237 @@
+{
+  "nav": {
+    "features": "Fitur",
+    "gallery": "Galeri",
+    "steps": "Cara kerja",
+    "pricing": "Harga",
+    "aria": "Navigasi utama",
+    "login": "Masuk",
+    "start": "Mulai gratis"
+  },
+  "language": {
+    "label": "Pilih bahasa",
+    "search": "Cari bahasa",
+    "noResults": "Bahasa tidak ditemukan"
+  },
+  "hero": {
+    "eyebrow": "MENU DIGITAL UNTUK BISNIS KULINER",
+    "title": {
+      "first": "Bikin tokomu jadi",
+      "highlight": "pilihan nomor satu.",
+      "rotating": ["pilihan nomor satu.", "favorit pelanggan.", "mudah ditemukan."]
+    },
+    "copy": "Menu digital yang cantik, praktis, dan mudah dibagikan. Kelola produk, harga, dan info tokomu dalam satu tempat.",
+    "primary": "Buat menu gratis",
+    "secondary": "Lihat contoh menu",
+    "point": {
+      "one": "Mulai gratis, tanpa kartu kredit",
+      "two": "Satu link untuk semua menu"
+    },
+    "preview": {
+      "badge": "TAMPILAN TOKO",
+      "open": "Buka menu",
+      "cafe": "Kopi Temu",
+      "description": "Kopi, roti, dan cerita baik.",
+      "category": {
+        "one": "Favorit",
+        "two": "Kopi"
+      },
+      "item": {
+        "one": "Kopi Susu Aren",
+        "two": "Matcha Cloud"
+      },
+      "url": "digimenu.my.id/kopi-kenangan",
+      "status": "Tersedia"
+    },
+    "float": {
+      "title": "Menu siap dibagikan",
+      "copy": "Satu link, semua info"
+    },
+    "metric": {
+      "value": "1 link",
+      "label": "untuk tokomu"
+    }
+  },
+  "gallery": {
+    "eyebrow": "SEMUA YANG TOKOMU BUTUHKAN",
+    "title": "Kecil langkahnya. Besar kesan menunya.",
+    "copy": "Dari katalog sampai insight, semuanya dirancang supaya tokomu makin mudah ditemukan dan diingat.",
+    "store": {
+      "eyebrow": "KATALOG DIGITAL",
+      "title": "Menu rapi, pelanggan nyaman memilih.",
+      "copy": "Tampilkan produk, harga, dan status ketersediaan dengan jelas.",
+      "price": {
+        "one": "Rp24.000",
+        "two": "Rp35.000"
+      }
+    },
+    "analytics": {
+      "eyebrow": "INSIGHT TOKO",
+      "title": "Lihat menu yang paling disukai.",
+      "visits": "Kunjungan minggu ini",
+      "growth": "Contoh: +28% dari minggu lalu",
+      "disclaimer": "Angka kunjungan dan produk pada preview dashboard adalah data contoh."
+    },
+    "qr": {
+      "eyebrow": "SCAN & JELAJAHI",
+      "title": "Satu scan, langsung lihat menu.",
+      "copy": "Tempel QR di meja, etalase, atau kemasan."
+    },
+    "links": {
+      "eyebrow": "SEMUA LINK PENTING",
+      "title": "WhatsApp, Maps, dan sosial media.",
+      "copy": "Arahkan pelanggan ke tujuan yang tepat dari satu halaman."
+    }
+  },
+  "story": {
+    "eyebrow": "DARI MENU KE PELANGGAN",
+    "title": "Satu link, pelanggan tahu harus apa.",
+    "copy": "Gulir untuk melihat bagaimana menu digital memudahkan pelanggan menemukan pilihan dan menghubungi tokomu.",
+    "scrollHint": "GULIR UNTUK MENJELAJAH",
+    "scenes": [
+      {
+        "title": "Menu yang menggugah selera.",
+        "copy": "Foto dan kategori rapi membantu menu andalanmu cepat terlihat."
+      },
+      {
+        "title": "Pilihan yang jelas.",
+        "copy": "Harga dan ketersediaan tampil jelas supaya pelanggan tahu apa yang bisa dipesan."
+      },
+      {
+        "title": "Pesanan lebih dekat.",
+        "copy": "Satu sentuhan membuka WhatsApp atau kanal pesan tokomu."
+      }
+    ]
+  },
+  "features": {
+    "eyebrow": "DIBUAT UNTUK USAHA KULINER",
+    "title": "Dari dapur ke pelanggan, lebih simpel.",
+    "copy": "Semua alat penting untuk mengelola katalog digital tokomu, tanpa alur yang bikin repot."
+  },
+  "feature": {
+    "menu": {
+      "title": "Menu dan kategori",
+      "copy": "Atur produk, harga, kategori, dan ketersediaan dengan cepat."
+    },
+    "store": {
+      "title": "Profil tokomu",
+      "copy": "Tampilkan jam buka, lokasi, deskripsi, dan kontak bisnis."
+    },
+    "links": {
+      "title": "Link bisnis",
+      "copy": "Hubungkan WhatsApp, Instagram, TikTok, Maps, dan tautan lain."
+    },
+    "analytics": {
+      "title": "Insight kunjungan",
+      "copy": "Pahami kunjungan dan interaksi pelanggan dengan tokomu."
+    }
+  },
+  "steps": {
+    "eyebrow": "TIGA LANGKAH MUDAH",
+    "title": "Dalam beberapa menit, siap dibagikan.",
+    "copy": "Mulai dari info yang sudah ada. Kamu bisa menyempurnakan tokomu kapan saja."
+  },
+  "step": {
+    "one": {
+      "title": "Buat akun",
+      "copy": "Daftar dan isi nama bisnis kulinermu."
+    },
+    "two": {
+      "title": "Susun menu",
+      "copy": "Tambah kategori, produk, harga, dan foto."
+    },
+    "three": {
+      "title": "Bagikan link",
+      "copy": "Publikasikan halaman, lalu bagikan ke pelanggan."
+    }
+  },
+  "pricing": {
+    "eyebrow": "PAKET MENUKU",
+    "title": "Mulai sesuai kebutuhanmu.",
+    "copy": "Pilih paket yang pas hari ini. Kamu bisa upgrade saat tokomu berkembang.",
+    "popular": "REKOMENDASI",
+    "free": {
+      "name": "Free",
+      "priceLabel": "Gratis",
+      "note": "Untuk mengenalkan tokomu secara online",
+      "features": ["Hingga 2 kategori", "Hingga 4 produk", "Halaman katalog dasar"]
+    },
+    "month": "/ bulan",
+    "forever": "selamanya",
+    "choose": {
+      "premium": "Pilih Premium",
+      "business": "Pilih Business"
+    },
+    "cta": {
+      "free": "Mulai gratis"
+    },
+    "premium": {
+      "note": "Untuk bisnis kuliner yang terus bertumbuh",
+      "features": [
+        "Hingga 6 kategori",
+        "Hingga 30 produk",
+        "Hingga 5 tautan bisnis",
+        "Analytics dasar",
+        "Pengaturan tampilan"
+      ],
+      "name": "Premium"
+    },
+    "business": {
+      "note": "Untuk tim dan usaha dengan kebutuhan lebih besar",
+      "features": ["Semua fitur Premium", "3 anggota tim", "Custom domain", "Dukungan prioritas"],
+      "name": "Business"
+    }
+  },
+  "payment": {
+    "eyebrow": "PEMBAYARAN FLEKSIBEL",
+    "title": "Pilih cara yang paling nyaman.",
+    "copy": "Upgrade paket langsung dari dashboard Menuku.",
+    "manual": {
+      "title": "Transfer manual",
+      "copy": "Minta detail rekening lewat admin. Paket aktif setelah pembayaran diverifikasi.",
+      "note": "Diverifikasi admin"
+    },
+    "qris": {
+      "title": "QRIS otomatis",
+      "copy": "Bayar melalui checkout Pakasir. Status paket diperbarui otomatis setelah pembayaran.",
+      "note": "Status otomatis"
+    }
+  },
+  "faq": {
+    "eyebrow": "MASIH PUNYA PERTANYAAN?",
+    "title": "Kami siap membantu.",
+    "copy": "Cari tahu hal penting sebelum tokomu mulai online.",
+    "contact": "Tanya admin",
+    "one": {
+      "question": "Apa itu Menuku?",
+      "answer": "Menuku membantu bisnis kuliner membuat katalog digital yang berisi menu, foto, harga, lokasi, dan kontak dalam satu link."
+    },
+    "two": {
+      "question": "Apakah pelanggan perlu membuat akun?",
+      "answer": "Tidak. Pelanggan cukup membuka link tokomu untuk melihat menu."
+    },
+    "three": {
+      "question": "Bisa mengubah menu setelah dibagikan?",
+      "answer": "Bisa kapan saja dari dashboard. Link tokomu tetap sama."
+    },
+    "four": {
+      "question": "Bagaimana cara membayar paket?",
+      "answer": "Gunakan QRIS otomatis lewat Pakasir atau pilih transfer manual dan minta detailnya dari admin."
+    },
+    "five": {
+      "question": "Apakah Menuku menerima pesanan langsung?",
+      "answer": "Menuku menampilkan katalog dan tombol kontak agar pelanggan bisa bertanya atau memesan langsung ke tokomu."
+    }
+  },
+  "cta": {
+    "eyebrow": "TOKOMU PANTAS TAMPIL MENARIK",
+    "title": "Buat menu yang bikin pelanggan ingin mampir.",
+    "copy": "Mulai gratis, rapikan katalog, lalu bagikan ke pelanggan hari ini.",
+    "button": "Buat menu gratis"
+  },
+  "footer": {
+    "tagline": "Menu digital untuk bisnis kuliner Indonesia.",
+    "login": "Masuk",
+    "contact": "Hubungi admin"
+  }
+}

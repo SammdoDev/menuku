@@ -1,5 +1,5 @@
 import { createBrowserClient } from "@supabase/ssr";
-import { hasSupabaseEnv } from "./env";
+import { hasSupabaseEnv } from "@/lib/supabase/env";
 
 export function createSupabaseBrowserClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

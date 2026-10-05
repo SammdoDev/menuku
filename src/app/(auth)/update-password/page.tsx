@@ -1,7 +1,8 @@
-import { GlobalInput, SubmitButton } from "../../../components/ui/form-controls";
-import { updatePasswordAction } from "../actions";
-import AuthShell from "../auth-shell";
-import AuthToast from "../auth-toast";
+import { Input } from "@/components/ui/text-input";
+import { SubmitButton } from "@/components/ui/submit-button";
+import { updatePasswordAction } from "@/features/auth/actions/auth-actions";
+import AuthShell from "@/features/auth/components/auth-shell";
+import AuthToast from "@/features/auth/components/auth-toast";
 
 type Props = { searchParams: Promise<{ error?: string }> };
 export default async function UpdatePasswordPage({ searchParams }: Props) {
@@ -17,7 +18,7 @@ export default async function UpdatePasswordPage({ searchParams }: Props) {
         <form className="grid gap-4" action={updatePasswordAction}>
           <label className="grid gap-2 text-sm font-bold">
             Password baru
-            <GlobalInput
+            <Input
               name="password"
               type="password"
               autoComplete="new-password"
@@ -27,7 +28,7 @@ export default async function UpdatePasswordPage({ searchParams }: Props) {
           </label>
           <label className="grid gap-2 text-sm font-bold">
             Konfirmasi password
-            <GlobalInput
+            <Input
               name="confirmation"
               type="password"
               autoComplete="new-password"

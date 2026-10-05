@@ -1,0 +1,101 @@
+"use server";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { createClient } from "@supabase/supabase-js";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { RESERVED_STORE_SLUGS } from "@/features/stores/store-paths";
+const schema = z.object({
+  name: z.string().trim().min(2, "Nama bisnis minimal 2 karakter.").max(120),
+  businessType: z.string().trim().min(2, "Pilih jenis bisnis."),
+  description: z.string().trim().max(300).optional(),
+  whatsapp: z
+    .string()
+    .trim()
+    .regex(/^[0-9+\-\s()]*$/, "Nomor WhatsApp tidak valid.")
+    .max(30)
+    .optional(),
+  logoUrl: z.string().url().optional(),
+  bannerUrl: z.string().url().optional(),
+  slug: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(
+      /^[a-z0-9]([a-z0-9-]{1,28})[a-z0-9]$/,
+      "Slug harus 3–30 karakter: huruf kecil, angka, atau tanda hubung.",
+    ),
+});
+const fail = (message: string): never =>
+  redirect(`/onboarding?error=${encodeURIComponent(message)}`);
+
+export async function createTenantAction(formData: FormData) {
+  const parsed = schema.safeParse({
+    name: formData.get("name"),
+    businessType: formData.get("businessType"),
+    description: formData.get("description") || undefined,
+    whatsapp: formData.get("whatsapp") || undefined,
+    logoUrl: formData.get("logoUrl") || undefined,
+    bannerUrl: formData.get("bannerUrl") || undefined,
+    slug: formData.get("slug"),
+  });
+  if (!parsed.success) fail(parsed.error.issues[0].message);
+  const value = parsed.data!;
+  if (RESERVED_STORE_SLUGS.has(value.slug)) fail("Alamat tersebut tidak dapat digunakan.");
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
+  const { data: existing } = await supabase
+    .from("tenants")
+    .select("id")
+    .eq("owner_id", user.id)
+    .maybeSingle();
+  if (existing) redirect("/dashboard");
+  const tenantInput = {
+    owner_id: user.id,
+    name: value.name,
+    slug: value.slug,
+    business_type: value.businessType,
+    description: value.description || null,
+    whatsapp: value.whatsapp || null,
+    logo_url: value.logoUrl || null,
+    banner_url: value.bannerUrl || null,
+  };
+  let { error } = await supabase.from("tenants").insert(tenantInput);
+  if (error && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const admin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      { auth: { autoRefreshToken: false, persistSession: false } },
+    );
+    const { error: profileError } = await admin
+      .from("profiles")
+      .upsert(
+        { id: user.id, email: user.email || "", name: user.user_metadata.name || "" },
+        { onConflict: "id" },
+      );
+    if (profileError)
+      console.error("[onboarding] profile recovery failed", {
+        code: profileError.code,
+        message: profileError.message,
+        details: profileError.details,
+        hint: profileError.hint,
+      });
+    ({ error } = await admin.from("tenants").insert(tenantInput));
+  }
+  if (error)
+    console.error("[onboarding] tenant creation failed", {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
+  if (error?.code === "23505") fail("Alamat tersebut sudah dipakai. Coba yang lain.");
+  if (error?.code === "23503")
+    fail(
+      "Profil akun belum siap. Jalankan migration 0006_backfill_profiles di Supabase, lalu coba lagi.",
+    );
+  if (error) fail("Bisnis belum dapat dibuat. Coba lagi.");
+  redirect("/dashboard");
+}

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowDown, ArrowRight, Check, Sparkles } from "lucide-react";
-import { Highlight } from "./hero-highlight";
+import { Highlight } from "@/components/ui/hero-highlight";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
