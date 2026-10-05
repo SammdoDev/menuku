@@ -12,7 +12,13 @@ import type {
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal, useFormStatus } from "react-dom";
 
-export type SelectOption = { label: string; value: string; disabled?: boolean };
+export type SelectOption = {
+  label: string;
+  value: string;
+  disabled?: boolean;
+  flag?: string;
+  shortLabel?: string;
+};
 const control =
   "w-full rounded-xl border border-line bg-white px-3.5 text-sm text-ink outline-none transition placeholder:text-[#aaa39a] focus:border-brand/60 focus:ring-4 focus:ring-brand/10 disabled:cursor-not-allowed disabled:opacity-60";
 
@@ -31,7 +37,7 @@ export function GlobalSlugInput({
 }: InputHTMLAttributes<HTMLInputElement> & { prefix: string }) {
   return (
     <div className="border-line focus-within:border-brand/60 focus-within:ring-brand/10 flex overflow-hidden rounded-xl border bg-white focus-within:ring-4">
-      <span className="text-muted border-line hidden items-center border-r bg-[#faf8f5] px-3 text-xs sm:flex">
+      <span className="text-muted border-line flex shrink-0 items-center border-r bg-[#faf8f5] px-2 text-[9px] sm:px-3 sm:text-xs">
         {prefix}
       </span>
       <GlobalInput {...props} className={`rounded-none border-0 focus:ring-0 ${className}`} />
@@ -275,11 +281,12 @@ export function GlobalAutocomplete({
                   }`}
                 >
                   <span
-                    className={`grid size-8 shrink-0 place-items-center rounded-lg text-xs font-black ${
-                      selected ? "bg-brand text-white" : "bg-[#eee9e3] text-[#91867b]"
+                    aria-hidden="true"
+                    className={`grid size-8 shrink-0 place-items-center rounded-lg text-base ${
+                      selected ? "bg-brand/10" : "bg-[#eee9e3]"
                     }`}
                   >
-                    {option.label.trim().charAt(0).toUpperCase()}
+                    {option.flag || option.label.trim().charAt(0).toUpperCase()}
                   </span>
                   <span className="min-w-0 flex-1 truncate">{option.label}</span>
                   {selected && <Check size={17} className="text-brand shrink-0" strokeWidth={3} />}
@@ -321,6 +328,7 @@ export function GlobalAutocomplete({
         id={controlId}
         type="button"
         role="combobox"
+        aria-label={props["aria-label"]}
         aria-controls={listboxId}
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -337,10 +345,18 @@ export function GlobalAutocomplete({
           selectedOption?.disabled || !selectedOption ? "text-[#aaa39a]" : "font-semibold"
         } ${open ? "border-brand/60 ring-brand/10 ring-4" : ""} ${className}`}
       >
-        <span
-          className={`size-2 shrink-0 rounded-full ${selectedOption?.disabled ? "bg-[#c8c0b8]" : "bg-brand"}`}
-        />
-        <span className="min-w-0 flex-1 truncate">{selectedOption?.label || "Pilih opsi"}</span>
+        {selectedOption?.flag ? (
+          <span aria-hidden="true" className="shrink-0 text-lg leading-none">
+            {selectedOption.flag}
+          </span>
+        ) : (
+          <span
+            className={`size-2 shrink-0 rounded-full ${selectedOption?.disabled ? "bg-[#c8c0b8]" : "bg-brand"}`}
+          />
+        )}
+        <span className="min-w-0 flex-1 truncate">
+          {selectedOption?.shortLabel || selectedOption?.label || "Pilih opsi"}
+        </span>
       </button>
       <ChevronDown
         size={17}

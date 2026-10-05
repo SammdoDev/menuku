@@ -1,0 +1,222 @@
+{
+  "nav": {
+    "features": "功能",
+    "gallery": "展示",
+    "steps": "使用方法",
+    "pricing": "价格",
+    "aria": "主导航",
+    "login": "登录",
+    "start": "免费开始"
+  },
+  "language": {
+    "label": "选择语言"
+  },
+  "hero": {
+    "eyebrow": "为餐饮商家打造的数字菜单",
+    "title": {
+      "first": "创建你的第一个",
+      "highlight": "网站。"
+    },
+    "copy": "精美、实用且易于分享的数字菜单。在一个地方管理商品、价格和店铺信息。",
+    "primary": "免费创建菜单",
+    "secondary": "查看菜单示例",
+    "point": {
+      "one": "免费开始，无需信用卡",
+      "two": "一个链接展示所有菜单"
+    },
+    "preview": {
+      "badge": "店铺预览",
+      "open": "查看菜单",
+      "cafe": "Kopi Temu",
+      "description": "咖啡、面包与美好故事。",
+      "category": {
+        "one": "人气推荐",
+        "two": "咖啡"
+      },
+      "item": {
+        "one": "椰糖拿铁",
+        "two": "抹茶云朵"
+      },
+      "status": "有货"
+    },
+    "float": {
+      "title": "菜单已准备好分享",
+      "copy": "一个链接，展示全部信息"
+    },
+    "metric": {
+      "value": "1 个链接",
+      "label": "属于你的店铺"
+    }
+  },
+  "gallery": {
+    "eyebrow": "店铺所需的一切",
+    "title": "简单开始，让菜单脱颖而出。",
+    "copy": "从商品目录到经营数据，帮助顾客发现并记住你的店铺。",
+    "store": {
+      "eyebrow": "数字商品目录",
+      "title": "菜单清晰，选择更轻松。",
+      "copy": "一目了然地展示商品、价格和供应状态。",
+      "price": {
+        "one": "IDR 24,000",
+        "two": "IDR 35,000"
+      }
+    },
+    "analytics": {
+      "eyebrow": "店铺数据",
+      "title": "看看顾客最喜欢什么。",
+      "visits": "本周访问量",
+      "growth": "示例：比上周增长 28%",
+      "disclaimer": "控制面板预览中的访问量和商品数量均为示例数据。"
+    },
+    "qr": {
+      "eyebrow": "扫码探索",
+      "title": "一扫即可查看菜单。",
+      "copy": "将二维码放在餐桌、橱窗或包装上。"
+    },
+    "links": {
+      "eyebrow": "重要链接一站集合",
+      "title": "WhatsApp、地图和社交媒体。",
+      "copy": "通过一个页面将顾客引导到所需的平台。"
+    }
+  },
+  "features": {
+    "eyebrow": "专为餐饮商家打造",
+    "title": "让厨房与顾客连接更简单。",
+    "copy": "管理数字商品目录所需的工具，简单省心。"
+  },
+  "feature": {
+    "menu": {
+      "title": "菜单与分类",
+      "copy": "快速管理商品、价格、分类和供应情况。"
+    },
+    "store": {
+      "title": "店铺资料",
+      "copy": "展示营业时间、地点、介绍和联系方式。"
+    },
+    "links": {
+      "title": "商家链接",
+      "copy": "连接 WhatsApp、Instagram、TikTok、地图等平台。"
+    },
+    "analytics": {
+      "title": "访问数据",
+      "copy": "了解访问量以及顾客与店铺的互动情况。"
+    }
+  },
+  "steps": {
+    "eyebrow": "简单三步",
+    "title": "几分钟即可分享。",
+    "copy": "从已有资料开始，随时完善你的店铺页面。"
+  },
+  "step": {
+    "one": {
+      "title": "创建账号",
+      "copy": "注册并填写餐饮店名称。"
+    },
+    "two": {
+      "title": "整理菜单",
+      "copy": "添加分类、商品、价格和照片。"
+    },
+    "three": {
+      "title": "分享链接",
+      "copy": "发布页面并分享给顾客。"
+    }
+  },
+  "pricing": {
+    "eyebrow": "MENUKU 套餐",
+    "title": "从适合你的方案开始。",
+    "copy": "选择合适的套餐，业务发展后可随时升级。",
+    "popular": "推荐方案",
+    "free": {
+      "name": "Free",
+      "priceLabel": "免费",
+      "note": "让店铺轻松上线",
+      "features": [
+        "最多 2 个分类",
+        "最多 4 件商品",
+        "基础数字商品目录"
+      ]
+    },
+    "month": "/ 月",
+    "forever": "永久",
+    "choose": {
+      "premium": "选择 Premium",
+      "business": "选择 Business"
+    },
+    "cta": {
+      "free": "免费开始"
+    },
+    "premium": {
+      "note": "适合持续成长的餐饮商家",
+      "features": [
+        "最多 6 个分类",
+        "最多 30 件商品",
+        "最多 5 个商家链接",
+        "基础数据分析",
+        "页面外观设置"
+      ],
+      "name": "Premium"
+    },
+    "business": {
+      "note": "适合团队和规模更大的业务",
+      "features": [
+        "包含 Premium 全部功能",
+        "3 位团队成员",
+        "自定义域名",
+        "优先支持"
+      ],
+      "name": "Business"
+    }
+  },
+  "payment": {
+    "eyebrow": "灵活付款",
+    "title": "选择方便的付款方式。",
+    "copy": "可直接在 Menuku 控制面板升级套餐。",
+    "manual": {
+      "title": "手动银行转账",
+      "copy": "向管理员索取账户信息。付款确认后套餐将启用。",
+      "note": "管理员确认"
+    },
+    "qris": {
+      "title": "自动 QRIS",
+      "copy": "通过 Pakasir 结账付款，成功后套餐状态会自动更新。",
+      "note": "自动更新状态"
+    }
+  },
+  "faq": {
+    "eyebrow": "还有问题吗？",
+    "title": "我们随时为你提供帮助。",
+    "copy": "了解店铺上线前需要知道的事项。",
+    "contact": "联系支持团队",
+    "one": {
+      "question": "什么是 Menuku？",
+      "answer": "Menuku 帮助餐饮商家创建数字商品目录，在一个链接中展示菜单、照片、价格、地点和联系方式。"
+    },
+    "two": {
+      "question": "顾客需要注册账号吗？",
+      "answer": "不需要。顾客打开店铺链接即可浏览菜单。"
+    },
+    "three": {
+      "question": "分享后还能更新菜单吗？",
+      "answer": "可以，随时在控制面板更新，店铺链接保持不变。"
+    },
+    "four": {
+      "question": "如何支付套餐费用？",
+      "answer": "可通过 Pakasir 使用 QRIS 付款，或选择手动转账并向管理员索取信息。"
+    },
+    "five": {
+      "question": "顾客可以直接下单吗？",
+      "answer": "Menuku 展示商品目录和联系按钮，顾客可以咨询或直接向店铺下单。"
+    }
+  },
+  "cta": {
+    "eyebrow": "让你的店铺脱颖而出",
+    "title": "创建让顾客想要光顾的菜单。",
+    "copy": "免费开始，完善商品目录，今天就分享给顾客。",
+    "button": "免费创建菜单"
+  },
+  "footer": {
+    "tagline": "为印度尼西亚餐饮商家打造的数字菜单。",
+    "login": "登录",
+    "contact": "联系支持团队"
+  }
+}

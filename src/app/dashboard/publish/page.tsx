@@ -31,7 +31,7 @@ export default async function PublishPage() {
           </p>
           <div className="border-line mb-4 rounded-xl border border-dashed p-8 text-center">
             <Globe2 className="text-brand mx-auto mb-2" />
-            <b className="text-sm break-all">www.digimenu.my.id/store/{tenant.slug}</b>
+            <b className="text-sm break-all">www.digimenu.my.id/{tenant.slug}</b>
           </div>
           <form className="grid" action={togglePublishAction}>
             <GlobalInput type="hidden" name="published" value={String(tenant.is_published)} />
@@ -62,7 +62,7 @@ export default async function PublishPage() {
               <div>
                 <b className="block text-sm">Nama dan alamat halaman</b>
                 <small className="text-muted text-xs">
-                  {tenant.name} · www.digimenu.my.id/store/{tenant.slug}
+                  {tenant.name} · www.digimenu.my.id/{tenant.slug}
                 </small>
               </div>
             </div>

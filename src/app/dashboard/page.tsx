@@ -176,7 +176,7 @@ export default async function DashboardPage() {
             ALAMAT HALAMAN
           </p>
           <h2 className="display-font max-w-[85%] text-xl font-black break-all sm:text-2xl">
-            www.digimenu.my.id/store/
+            www.digimenu.my.id/
             <em className="text-[#ff9c79] not-italic">{tenant.slug}</em>
           </h2>
           <p className="my-4 max-w-xs text-xs leading-5 text-white/60">

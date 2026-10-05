@@ -144,7 +144,7 @@ export default async function AdminPage() {
                   <tr key={tenant.id} className="border-line border-t">
                     <td className="px-5 py-4">
                       <b className="block">{tenant.name}</b>
-                      <span className="text-muted text-xs">/store/{tenant.slug}</span>
+                      <span className="text-muted text-xs">/{tenant.slug}</span>
                     </td>
                     <td className="px-5 py-4">
                       <span className="block">{owner?.name || "-"}</span>

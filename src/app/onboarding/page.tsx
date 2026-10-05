@@ -23,7 +23,7 @@ export default async function OnboardingPage({
               LANGKAH 1 DARI 3
             </p>
             <h1 className="display-font max-w-sm text-4xl leading-tight font-black">
-              Wajah pertama bisnismu dimulai di sini.
+              Siapkan etalase digital bisnismu.
             </h1>
             <ul className="mt-9 grid gap-5 text-sm text-white/60">
               <li className="flex items-center gap-3 font-extrabold text-white">
@@ -43,8 +43,8 @@ export default async function OnboardingPage({
           <div className="mb-8 md:hidden">
             <Brand />
           </div>
-          <p className="text-brand mb-2 text-[11px] font-black tracking-[.12em]">BUAT MERCHANT</p>
-          <h2 className="display-font text-3xl font-black">Profil dan tampilan awal</h2>
+          <p className="text-brand mb-2 text-[11px] font-black tracking-[.12em]">MAKE YOUR FIRST WEBSITE</p>
+          <h2 className="display-font text-3xl font-black">Make your first website</h2>
           <p className="text-muted mt-2 mb-7 max-w-xl text-sm leading-6">
             Tambahkan foto profil serta background dahulu, seperti menyiapkan halaman bisnis
             profesional.

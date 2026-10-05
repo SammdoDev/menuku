@@ -90,7 +90,7 @@ export default async function AdminCustomersPage() {
                 <div className="min-w-0 flex-1"><b className="block truncate">{tenant.name}</b><span className="text-muted block truncate text-xs">{owner?.email ?? "Email tidak tersedia"} · {reason}</span></div>
                 <span className="text-muted text-xs">{tenantEvents.length} event</span>
                 {owner?.email && <a className="border-line inline-flex items-center justify-center rounded-lg border p-2 text-[#716d65] hover:text-brand" href={`mailto:${owner.email}`} title="Email pelanggan"><Mail size={15} /></a>}
-                <Link className="bg-brand inline-flex items-center justify-center rounded-lg p-2 text-white" href={`/store/${tenant.slug}`} target="_blank" title="Buka storefront"><ArrowUpRight size={15} /></Link>
+                <Link className="bg-brand inline-flex items-center justify-center rounded-lg p-2 text-white" href={`/${tenant.slug}`} target="_blank" title="Buka storefront"><ArrowUpRight size={15} /></Link>
               </div>;
             })}
             {!needsAttention.length && <p className="text-muted rounded-xl bg-emerald-50 p-4 text-sm">Semua pelanggan sudah aktif optimal.</p>}

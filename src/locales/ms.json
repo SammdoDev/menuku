@@ -1,0 +1,222 @@
+{
+  "nav": {
+    "features": "Ciri-ciri",
+    "gallery": "Galeri",
+    "steps": "Cara ia berfungsi",
+    "pricing": "Harga",
+    "aria": "Navigasi utama",
+    "login": "Log masuk",
+    "start": "Mula secara percuma"
+  },
+  "language": {
+    "label": "Pilih bahasa"
+  },
+  "hero": {
+    "eyebrow": "MENU DIGITAL UNTUK PERNIAGAAN MAKANAN",
+    "title": {
+      "first": "Cipta laman web",
+      "highlight": "pertama anda."
+    },
+    "copy": "Menu digital yang menarik dan mudah dikongsi. Urus produk, harga dan maklumat kedai anda di satu tempat.",
+    "primary": "Cipta menu percuma",
+    "secondary": "Lihat contoh menu",
+    "point": {
+      "one": "Percuma untuk bermula, tanpa kad kredit",
+      "two": "Satu pautan untuk semua menu"
+    },
+    "preview": {
+      "badge": "PRATONTON KEDAI",
+      "open": "Buka menu",
+      "cafe": "Kopi Temu",
+      "description": "Kopi, roti dan cerita indah.",
+      "category": {
+        "one": "Pilihan ramai",
+        "two": "Kopi"
+      },
+      "item": {
+        "one": "Latte Gula Melaka",
+        "two": "Matcha Cloud"
+      },
+      "status": "Tersedia"
+    },
+    "float": {
+      "title": "Menu anda sedia dikongsi",
+      "copy": "Satu pautan, semua maklumat"
+    },
+    "metric": {
+      "value": "1 pautan",
+      "label": "untuk kedai anda"
+    }
+  },
+  "gallery": {
+    "eyebrow": "SEMUA YANG DIPERLUKAN KEDAI ANDA",
+    "title": "Mudah bermula. Menu yang memikat.",
+    "copy": "Daripada katalog hingga cerapan, semuanya membantu pelanggan mencari dan mengingati perniagaan anda.",
+    "store": {
+      "eyebrow": "KATALOG DIGITAL",
+      "title": "Menu yang jelas memudahkan pilihan.",
+      "copy": "Paparkan produk, harga dan ketersediaan dengan mudah.",
+      "price": {
+        "one": "IDR 24,000",
+        "two": "IDR 35,000"
+      }
+    },
+    "analytics": {
+      "eyebrow": "CERAPAN KEDAI",
+      "title": "Lihat menu yang paling digemari.",
+      "visits": "Kunjungan minggu ini",
+      "growth": "Contoh: +28% berbanding minggu lalu",
+      "disclaimer": "Jumlah kunjungan dan produk dalam pratonton papan pemuka ini ialah data contoh."
+    },
+    "qr": {
+      "eyebrow": "IMBAS & TEROKAI",
+      "title": "Imbas sekali untuk melihat menu.",
+      "copy": "Letakkan QR di meja, tingkap atau bungkusan."
+    },
+    "links": {
+      "eyebrow": "SEMUA PAUTAN PENTING",
+      "title": "WhatsApp, Maps dan media sosial.",
+      "copy": "Bawa pelanggan ke destinasi yang betul dari satu halaman."
+    }
+  },
+  "features": {
+    "eyebrow": "DIBINA UNTUK PERNIAGAAN MAKANAN",
+    "title": "Dari dapur kepada pelanggan, lebih mudah.",
+    "copy": "Alat penting untuk mengurus katalog digital anda, tanpa kerja yang menyusahkan."
+  },
+  "feature": {
+    "menu": {
+      "title": "Menu dan kategori",
+      "copy": "Urus produk, harga, kategori dan ketersediaan dengan pantas."
+    },
+    "store": {
+      "title": "Profil kedai anda",
+      "copy": "Paparkan waktu operasi, lokasi, penerangan dan maklumat hubungan."
+    },
+    "links": {
+      "title": "Pautan perniagaan",
+      "copy": "Sambungkan WhatsApp, Instagram, TikTok, Maps dan banyak lagi."
+    },
+    "analytics": {
+      "title": "Cerapan kunjungan",
+      "copy": "Fahami kunjungan dan interaksi pelanggan dengan kedai anda."
+    }
+  },
+  "steps": {
+    "eyebrow": "TIGA LANGKAH MUDAH",
+    "title": "Sedia dikongsi dalam beberapa minit.",
+    "copy": "Mulakan dengan maklumat yang sudah ada. Kemas kini kedai anda bila-bila masa."
+  },
+  "step": {
+    "one": {
+      "title": "Cipta akaun",
+      "copy": "Daftar dan masukkan nama perniagaan makanan anda."
+    },
+    "two": {
+      "title": "Susun menu",
+      "copy": "Tambah kategori, produk, harga dan foto."
+    },
+    "three": {
+      "title": "Kongsi pautan",
+      "copy": "Terbitkan halaman anda dan kongsikannya dengan pelanggan."
+    }
+  },
+  "pricing": {
+    "eyebrow": "PELAN MENUKU",
+    "title": "Mulakan dengan keperluan anda.",
+    "copy": "Pilih pelan yang sesuai hari ini. Naik taraf apabila perniagaan berkembang.",
+    "popular": "PILIHAN DISYORKAN",
+    "free": {
+      "name": "Free",
+      "priceLabel": "Percuma",
+      "note": "Cara mudah untuk membawa kedai anda ke dalam talian",
+      "features": [
+        "Sehingga 2 kategori",
+        "Sehingga 4 produk",
+        "Katalog digital asas"
+      ]
+    },
+    "month": "/ bulan",
+    "forever": "selamanya",
+    "choose": {
+      "premium": "Pilih Premium",
+      "business": "Pilih Business"
+    },
+    "cta": {
+      "free": "Mula secara percuma"
+    },
+    "premium": {
+      "note": "Untuk perniagaan makanan yang mahu berkembang",
+      "features": [
+        "Sehingga 6 kategori",
+        "Sehingga 30 produk",
+        "Sehingga 5 pautan perniagaan",
+        "Analitik asas",
+        "Tetapan paparan"
+      ],
+      "name": "Premium"
+    },
+    "business": {
+      "note": "Untuk pasukan dan operasi yang semakin berkembang",
+      "features": [
+        "Semua ciri Premium",
+        "3 ahli pasukan",
+        "Domain tersuai",
+        "Sokongan keutamaan"
+      ],
+      "name": "Business"
+    }
+  },
+  "payment": {
+    "eyebrow": "PEMBAYARAN FLEKSIBEL",
+    "title": "Pilih cara pembayaran anda.",
+    "copy": "Naik taraf pelan terus dari papan pemuka Menuku.",
+    "manual": {
+      "title": "Pindahan bank manual",
+      "copy": "Minta butiran akaun daripada admin. Pelan diaktifkan selepas bayaran disahkan.",
+      "note": "Disahkan admin"
+    },
+    "qris": {
+      "title": "QRIS automatik",
+      "copy": "Bayar melalui checkout Pakasir. Status pelan dikemas kini secara automatik selepas bayaran.",
+      "note": "Status automatik"
+    }
+  },
+  "faq": {
+    "eyebrow": "ADA SOALAN?",
+    "title": "Kami sedia membantu.",
+    "copy": "Ketahui perkara penting sebelum kedai anda mula dalam talian.",
+    "contact": "Hubungi sokongan",
+    "one": {
+      "question": "Apakah Menuku?",
+      "answer": "Menuku membantu perniagaan makanan membuat katalog digital dengan menu, foto, harga, lokasi dan maklumat hubungan dalam satu pautan."
+    },
+    "two": {
+      "question": "Adakah pelanggan perlu membuat akaun?",
+      "answer": "Tidak. Pelanggan boleh terus membuka pautan kedai anda dan melihat menu."
+    },
+    "three": {
+      "question": "Bolehkah saya mengemas kini menu selepas berkongsi?",
+      "answer": "Bila-bila masa melalui papan pemuka. Pautan kedai anda kekal sama."
+    },
+    "four": {
+      "question": "Bagaimana cara membayar pelan?",
+      "answer": "Bayar melalui QRIS Pakasir atau pilih pindahan manual dan minta butiran daripada admin."
+    },
+    "five": {
+      "question": "Bolehkah pelanggan membuat pesanan terus?",
+      "answer": "Menuku memaparkan katalog dan butang hubungan supaya pelanggan boleh bertanya atau membuat pesanan terus kepada kedai anda."
+    }
+  },
+  "cta": {
+    "eyebrow": "KEDAI ANDA LAYAK MENYERLAH",
+    "title": "Cipta menu yang membuat pelanggan ingin berkunjung.",
+    "copy": "Mula secara percuma, kemaskan katalog dan kongsikannya hari ini.",
+    "button": "Cipta menu percuma"
+  },
+  "footer": {
+    "tagline": "Menu digital untuk perniagaan makanan di Indonesia.",
+    "login": "Log masuk",
+    "contact": "Hubungi sokongan"
+  }
+}

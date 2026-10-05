@@ -80,9 +80,6 @@ export default function OnboardingForm() {
               <ImagePlus size={16} />
             )}{" "}
             {uploading === "banner" ? "Mengunggah..." : "Upload background"}
-            <b className="border-line text-muted hidden place-items-center border-r px-3 text-xs sm:grid">
-              {PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}/store/
-            </b>
             <GlobalInput
               className="hidden"
               type="file"
@@ -142,13 +139,13 @@ export default function OnboardingForm() {
         <label className={label}>
           Alamat halaman
           <GlobalSlugInput
-            prefix={`${PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}/store/`}
+            prefix={`${PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}/`}
             name="slug"
             value={slug}
             onChange={(event) =>
               setSlug(event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
             }
-            placeholder="kopitemu"
+            placeholder="kopi-kenangan"
             required
             minLength={3}
             maxLength={30}

@@ -299,7 +299,7 @@ export default function SettingsForm({
           <label className={field}>
             Slug halaman
             <GlobalSlugInput
-              prefix={`${siteOrigin}/store/`}
+              prefix={`${siteOrigin}/`}
               name="slug"
               value={slug}
               onChange={(event) =>
@@ -313,7 +313,7 @@ export default function SettingsForm({
           <p className="text-muted mt-3 rounded-xl bg-[#f6f3ef] p-3 text-xs break-all">
             URL baru:{" "}
             <b className="text-ink">
-              {siteOrigin}/store/{slug || "alamat-bisnis"}
+              {siteOrigin}/{slug || "alamat-bisnis"}
             </b>
           </p>
         </section>

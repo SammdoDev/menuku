@@ -62,7 +62,7 @@ export default function DashboardShell({
           <div className="min-w-0">
             <b className="block truncate text-sm text-white">{tenant.name}</b>
             <small className="block truncate text-[10px] text-[#aaa39a]">
-              {PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}/store/{tenant.slug}
+              {PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}/{tenant.slug}
             </small>
           </div>
         </div>

@@ -3,20 +3,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 import { createSupabaseServerClient } from "../../lib/supabase/server";
-
-const reserved = [
-  "www",
-  "app",
-  "admin",
-  "api",
-  "dashboard",
-  "login",
-  "register",
-  "support",
-  "help",
-  "pricing",
-  "settings",
-];
+import { RESERVED_STORE_SLUGS } from "../../lib/store-paths";
 const schema = z.object({
   name: z.string().trim().min(2, "Nama bisnis minimal 2 karakter.").max(120),
   businessType: z.string().trim().min(2, "Pilih jenis bisnis."),
@@ -53,7 +40,7 @@ export async function createTenantAction(formData: FormData) {
   });
   if (!parsed.success) fail(parsed.error.issues[0].message);
   const value = parsed.data!;
-  if (reserved.includes(value.slug)) fail("Alamat tersebut tidak dapat digunakan.");
+  if (RESERVED_STORE_SLUGS.has(value.slug)) fail("Alamat tersebut tidak dapat digunakan.");
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },

@@ -1,0 +1,222 @@
+{
+  "nav": {
+    "features": "Features",
+    "gallery": "Gallery",
+    "steps": "How it works",
+    "pricing": "Pricing",
+    "aria": "Main navigation",
+    "login": "Log in",
+    "start": "Start for free"
+  },
+  "language": {
+    "label": "Choose language"
+  },
+  "hero": {
+    "eyebrow": "DIGITAL MENUS FOR FOOD BUSINESSES",
+    "title": {
+      "first": "Make your business",
+      "highlight": "the customers’ #1 choice."
+    },
+    "copy": "A beautiful, practical menu that is easy to share. Manage products, prices, and store details in one place.",
+    "primary": "Create a free menu",
+    "secondary": "See a menu preview",
+    "point": {
+      "one": "Free to start, no credit card",
+      "two": "One link for your whole menu"
+    },
+    "preview": {
+      "badge": "STORE PREVIEW",
+      "open": "Open menu",
+      "cafe": "Kopi Temu",
+      "description": "Coffee, bread, and good stories.",
+      "category": {
+        "one": "Favorites",
+        "two": "Coffee"
+      },
+      "item": {
+        "one": "Palm Sugar Latte",
+        "two": "Matcha Cloud"
+      },
+      "status": "Available"
+    },
+    "float": {
+      "title": "Your menu is ready",
+      "copy": "One link, all the details"
+    },
+    "metric": {
+      "value": "1 link",
+      "label": "for your store"
+    }
+  },
+  "gallery": {
+    "eyebrow": "EVERYTHING YOUR STORE NEEDS",
+    "title": "A few simple steps. A menu that stands out.",
+    "copy": "From your catalog to useful insights, everything helps customers find and remember your business.",
+    "store": {
+      "eyebrow": "DIGITAL CATALOG",
+      "title": "A clear menu makes choosing easy.",
+      "copy": "Show products, prices, and availability at a glance.",
+      "price": {
+        "one": "IDR 24,000",
+        "two": "IDR 35,000"
+      }
+    },
+    "analytics": {
+      "eyebrow": "STORE INSIGHTS",
+      "title": "See what customers love most.",
+      "visits": "Visits this week",
+      "growth": "Example: +28% from last week",
+      "disclaimer": "Visit and product counts in this dashboard preview are sample data."
+    },
+    "qr": {
+      "eyebrow": "SCAN & EXPLORE",
+      "title": "One scan takes them to your menu.",
+      "copy": "Place your QR on tables, windows, or packaging."
+    },
+    "links": {
+      "eyebrow": "YOUR IMPORTANT LINKS",
+      "title": "WhatsApp, Maps, and social media.",
+      "copy": "Send customers where they need to go from one page."
+    }
+  },
+  "features": {
+    "eyebrow": "MADE FOR FOOD BUSINESSES",
+    "title": "From your kitchen to your customers, made simple.",
+    "copy": "The essential tools for managing your digital catalog, without the busywork."
+  },
+  "feature": {
+    "menu": {
+      "title": "Menus and categories",
+      "copy": "Quickly manage products, prices, categories, and availability."
+    },
+    "store": {
+      "title": "Your store profile",
+      "copy": "Show opening hours, location, description, and contact details."
+    },
+    "links": {
+      "title": "Business links",
+      "copy": "Connect WhatsApp, Instagram, TikTok, Maps, and more."
+    },
+    "analytics": {
+      "title": "Visit insights",
+      "copy": "Understand visits and customer interactions with your store."
+    }
+  },
+  "steps": {
+    "eyebrow": "THREE EASY STEPS",
+    "title": "Ready to share in minutes.",
+    "copy": "Start with the details you already have. Improve your storefront whenever you like."
+  },
+  "step": {
+    "one": {
+      "title": "Create an account",
+      "copy": "Sign up and add your food business name."
+    },
+    "two": {
+      "title": "Build your menu",
+      "copy": "Add categories, products, prices, and photos."
+    },
+    "three": {
+      "title": "Share your link",
+      "copy": "Publish your page and share it with customers."
+    }
+  },
+  "pricing": {
+    "eyebrow": "MENUKU PLANS",
+    "title": "Start with what you need.",
+    "copy": "Choose the right plan today. Upgrade as your business grows.",
+    "popular": "RECOMMENDED",
+    "free": {
+      "name": "Free",
+      "priceLabel": "Free",
+      "note": "A simple way to bring your store online",
+      "features": [
+        "Up to 2 categories",
+        "Up to 4 products",
+        "Basic digital catalog"
+      ]
+    },
+    "month": "/ month",
+    "forever": "forever",
+    "choose": {
+      "premium": "Choose Premium",
+      "business": "Choose Business"
+    },
+    "cta": {
+      "free": "Start for free"
+    },
+    "premium": {
+      "note": "For food businesses ready to grow",
+      "features": [
+        "Up to 6 categories",
+        "Up to 30 products",
+        "Up to 5 business links",
+        "Basic analytics",
+        "Display settings"
+      ],
+      "name": "Premium"
+    },
+    "business": {
+      "note": "For teams and growing operations",
+      "features": [
+        "Everything in Premium",
+        "3 team members",
+        "Custom domain",
+        "Priority support"
+      ],
+      "name": "Business"
+    }
+  },
+  "payment": {
+    "eyebrow": "FLEXIBLE PAYMENTS",
+    "title": "Choose how you want to pay.",
+    "copy": "Upgrade your plan right from the Menuku dashboard.",
+    "manual": {
+      "title": "Manual bank transfer",
+      "copy": "Ask our admin for bank details. Your plan activates after payment is verified.",
+      "note": "Verified by admin"
+    },
+    "qris": {
+      "title": "Automatic QRIS",
+      "copy": "Pay through Pakasir checkout. Your plan updates automatically after payment.",
+      "note": "Automatic status"
+    }
+  },
+  "faq": {
+    "eyebrow": "HAVE A QUESTION?",
+    "title": "We’re here to help.",
+    "copy": "Here are a few things to know before taking your store online.",
+    "contact": "Contact support",
+    "one": {
+      "question": "What is Menuku?",
+      "answer": "Menuku helps food businesses create a digital catalog with menus, photos, prices, location, and contact details in one link."
+    },
+    "two": {
+      "question": "Do customers need an account?",
+      "answer": "No. Customers can open your store link and browse the menu right away."
+    },
+    "three": {
+      "question": "Can I update my menu after sharing it?",
+      "answer": "Anytime from your dashboard. Your store link stays the same."
+    },
+    "four": {
+      "question": "How do I pay for a plan?",
+      "answer": "Pay by QRIS through Pakasir or choose manual transfer and ask our admin for the details."
+    },
+    "five": {
+      "question": "Can customers order directly through Menuku?",
+      "answer": "Menuku shows your catalog and contact buttons so customers can ask questions or order directly from your store."
+    }
+  },
+  "cta": {
+    "eyebrow": "YOUR STORE DESERVES TO STAND OUT",
+    "title": "Create a menu that makes customers want to visit.",
+    "copy": "Start free, polish your catalog, and share it with customers today.",
+    "button": "Create a free menu"
+  },
+  "footer": {
+    "tagline": "Digital menus for food businesses in Indonesia.",
+    "login": "Log in",
+    "contact": "Contact support"
+  }
+}

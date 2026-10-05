@@ -138,7 +138,7 @@ export async function POST(request: Request) {
   }
   const emailSent = await sendBillingInvoiceEmail({
     admin: paymentAdmin,
-    invoice,
+    invoice: invoice as Parameters<typeof sendBillingInvoiceEmail>[0]["invoice"],
     email: user.email,
   });
 

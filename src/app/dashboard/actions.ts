@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getCurrentMerchant } from "../../lib/merchant";
 import { getPlanRules } from "../../lib/plans";
+import { RESERVED_STORE_SLUGS } from "../../lib/store-paths";
 
 const slugify = (value: string) =>
   value
@@ -84,7 +85,7 @@ export async function updateCategoryAction(formData: FormData) {
   if (error) redirect("/dashboard/categories?error=Kategori+belum+dapat+diperbarui.");
   revalidatePath("/dashboard/categories");
   revalidatePath("/dashboard/menu");
-  revalidatePath(`/store/${tenant!.slug}`);
+  revalidatePath(`/${tenant!.slug}`);
 }
 export async function toggleCategoryAction(formData: FormData) {
   const id = z.string().uuid().safeParse(formData.get("id"));
@@ -230,7 +231,7 @@ export async function updateProductAction(formData: FormData) {
   if (error) redirect("/dashboard/menu?error=Menu+belum+dapat+diperbarui.");
   revalidatePath("/dashboard/menu");
   revalidatePath("/dashboard");
-  revalidatePath(`/store/${tenant!.slug}`);
+  revalidatePath(`/${tenant!.slug}`);
 }
 export async function toggleProductAction(formData: FormData) {
   const id = z.string().uuid().safeParse(formData.get("id"));
@@ -294,7 +295,7 @@ export async function createLinkAction(formData: FormData) {
   });
   if (error) redirect("/dashboard/links?error=Link+belum+dapat+disimpan.");
   revalidatePath("/dashboard/links");
-  revalidatePath(`/store/${tenant!.slug}`);
+  revalidatePath(`/${tenant!.slug}`);
   revalidatePath("/dashboard");
 }
 export async function toggleLinkAction(formData: FormData) {
@@ -308,7 +309,7 @@ export async function toggleLinkAction(formData: FormData) {
     .eq("id", id.data!)
     .eq("tenant_id", tenant!.id);
   revalidatePath("/dashboard/links");
-  revalidatePath(`/store/${tenant!.slug}`);
+  revalidatePath(`/${tenant!.slug}`);
 }
 export async function deleteLinkAction(formData: FormData) {
   const id = z.string().uuid().safeParse(formData.get("id"));
@@ -316,7 +317,7 @@ export async function deleteLinkAction(formData: FormData) {
   const { tenant, supabase } = await requireTenant();
   await supabase.from("custom_links").delete().eq("id", id.data!).eq("tenant_id", tenant!.id);
   revalidatePath("/dashboard/links");
-  revalidatePath(`/store/${tenant!.slug}`);
+  revalidatePath(`/${tenant!.slug}`);
   revalidatePath("/dashboard");
 }
 
@@ -329,23 +330,9 @@ export async function togglePublishAction(formData: FormData) {
     .eq("id", tenant!.id)
     .eq("owner_id", tenant!.owner_id);
   revalidatePath("/dashboard");
-  revalidatePath(`/store/${tenant!.slug}`);
+  revalidatePath(`/${tenant!.slug}`);
   revalidatePath("/dashboard/publish");
 }
-
-const reservedSlugs = new Set([
-  "www",
-  "app",
-  "admin",
-  "api",
-  "dashboard",
-  "login",
-  "register",
-  "support",
-  "help",
-  "pricing",
-  "settings",
-]);
 
 const optionalUrl = z.preprocess(
   (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
@@ -410,7 +397,7 @@ export async function updateStoreSettingsAction(formData: FormData) {
     redirect(`/dashboard/settings?error=${encodeURIComponent(message)}`);
   if (!parsed.success) fail(parsed.error.issues[0].message);
   const value = parsed.data!;
-  if (reservedSlugs.has(value.slug)) fail("Alamat tersebut tidak dapat digunakan.");
+  if (RESERVED_STORE_SLUGS.has(value.slug)) fail("Alamat tersebut tidak dapat digunakan.");
 
   const { tenant, supabase } = await requireTenant();
   const rules = getPlanRules(tenant!.plan);
@@ -448,7 +435,7 @@ export async function updateStoreSettingsAction(formData: FormData) {
   if (error) fail("Pengaturan belum dapat disimpan. Coba lagi.");
 
   revalidatePath("/dashboard/settings");
-  revalidatePath(`/store/${previousSlug}`);
-  revalidatePath(`/store/${value.slug}`);
+  revalidatePath(`/${previousSlug}`);
+  revalidatePath(`/${value.slug}`);
   redirect("/dashboard/settings?success=Pengaturan+berhasil+disimpan.");
 }
