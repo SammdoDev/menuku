@@ -9,7 +9,9 @@
     "start": "Mulai gratis"
   },
   "language": {
-    "label": "Pilih bahasa"
+    "label": "Pilih bahasa",
+    "search": "Cari bahasa",
+    "noResults": "Bahasa tidak ditemukan"
   },
   "hero": {
     "eyebrow": "MENU DIGITAL UNTUK BISNIS KULINER",
@@ -37,6 +39,7 @@
         "one": "Kopi Susu Aren",
         "two": "Matcha Cloud"
       },
+      "url": "digimenu.my.id/kopi-kenangan",
       "status": "Tersedia"
     },
     "float": {
@@ -78,6 +81,26 @@
       "title": "WhatsApp, Maps, dan sosial media.",
       "copy": "Arahkan pelanggan ke tujuan yang tepat dari satu halaman."
     }
+  },
+  "story": {
+    "eyebrow": "DARI MENU KE PELANGGAN",
+    "title": "Satu link, pelanggan tahu harus apa.",
+    "copy": "Gulir untuk melihat bagaimana menu digital memudahkan pelanggan menemukan pilihan dan menghubungi tokomu.",
+    "scrollHint": "GULIR UNTUK MENJELAJAH",
+    "scenes": [
+      {
+        "title": "Menu yang menggugah selera.",
+        "copy": "Foto dan kategori rapi membantu menu andalanmu cepat terlihat."
+      },
+      {
+        "title": "Pilihan yang jelas.",
+        "copy": "Harga dan ketersediaan tampil jelas supaya pelanggan tahu apa yang bisa dipesan."
+      },
+      {
+        "title": "Pesanan lebih dekat.",
+        "copy": "Satu sentuhan membuka WhatsApp atau kanal pesan tokomu."
+      }
+    ]
   },
   "features": {
     "eyebrow": "DIBUAT UNTUK USAHA KULINER",
@@ -130,11 +153,7 @@
       "name": "Free",
       "priceLabel": "Gratis",
       "note": "Untuk mengenalkan tokomu secara online",
-      "features": [
-        "Hingga 2 kategori",
-        "Hingga 4 produk",
-        "Halaman katalog dasar"
-      ]
+      "features": ["Hingga 2 kategori", "Hingga 4 produk", "Halaman katalog dasar"]
     },
     "month": "/ bulan",
     "forever": "selamanya",
@@ -158,12 +177,7 @@
     },
     "business": {
       "note": "Untuk tim dan usaha dengan kebutuhan lebih besar",
-      "features": [
-        "Semua fitur Premium",
-        "3 anggota tim",
-        "Custom domain",
-        "Dukungan prioritas"
-      ],
+      "features": ["Semua fitur Premium", "3 anggota tim", "Custom domain", "Dukungan prioritas"],
       "name": "Business"
     }
   },

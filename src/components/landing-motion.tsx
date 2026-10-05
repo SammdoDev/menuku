@@ -31,11 +31,7 @@ export default function LandingMotion({ children }: { children: React.ReactNode 
     const context = gsap.context(() => {
       gsap
         .timeline({ defaults: { ease: "power3.out" } })
-        .from("[data-hero-kicker]", { y: 16, opacity: 0, duration: 0.55 })
-        .from("[data-hero-title]", { y: 30, opacity: 0, duration: 0.75 }, "-=0.22")
-        .from("[data-hero-copy]", { y: 18, opacity: 0, duration: 0.55 }, "-=0.3")
-        .from("[data-hero-actions]", { y: 16, opacity: 0, duration: 0.45, stagger: 0.08 }, "-=0.24")
-        .from("[data-hero-preview]", { x: 46, y: 24, opacity: 0, rotate: 3, duration: 0.9 }, "-=0.7")
+        .from("[data-hero-preview]", { x: 46, y: 24, opacity: 0, rotate: 3, duration: 0.9 })
         .from("[data-hero-float]", { y: 16, opacity: 0, scale: 0.94, duration: 0.45, stagger: 0.1 }, "-=0.36");
 
       gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {

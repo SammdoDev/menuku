@@ -9,7 +9,9 @@
     "start": "Start for free"
   },
   "language": {
-    "label": "Choose language"
+    "label": "Choose language",
+    "search": "Search language",
+    "noResults": "No language found"
   },
   "hero": {
     "eyebrow": "DIGITAL MENUS FOR FOOD BUSINESSES",
@@ -37,6 +39,7 @@
         "one": "Palm Sugar Latte",
         "two": "Matcha Cloud"
       },
+      "url": "digimenu.my.id/kopi-kenangan",
       "status": "Available"
     },
     "float": {
@@ -78,6 +81,26 @@
       "title": "WhatsApp, Maps, and social media.",
       "copy": "Send customers where they need to go from one page."
     }
+  },
+  "story": {
+    "eyebrow": "FROM MENU TO CUSTOMER",
+    "title": "One link. A clearer path to every order.",
+    "copy": "Scroll to see how a digital menu helps customers discover, choose, and contact your store.",
+    "scrollHint": "SCROLL TO EXPLORE",
+    "scenes": [
+      {
+        "title": "Make every dish look inviting.",
+        "copy": "Organized categories and photos help your best sellers stand out."
+      },
+      {
+        "title": "Make choosing feel easy.",
+        "copy": "Clear prices and availability help customers know what they can order."
+      },
+      {
+        "title": "Bring the order one tap closer.",
+        "copy": "Customers can reach your WhatsApp or preferred contact channel directly."
+      }
+    ]
   },
   "features": {
     "eyebrow": "MADE FOR FOOD BUSINESSES",
@@ -130,11 +153,7 @@
       "name": "Free",
       "priceLabel": "Free",
       "note": "A simple way to bring your store online",
-      "features": [
-        "Up to 2 categories",
-        "Up to 4 products",
-        "Basic digital catalog"
-      ]
+      "features": ["Up to 2 categories", "Up to 4 products", "Basic digital catalog"]
     },
     "month": "/ month",
     "forever": "forever",
@@ -158,12 +177,7 @@
     },
     "business": {
       "note": "For teams and growing operations",
-      "features": [
-        "Everything in Premium",
-        "3 team members",
-        "Custom domain",
-        "Priority support"
-      ],
+      "features": ["Everything in Premium", "3 team members", "Custom domain", "Priority support"],
       "name": "Business"
     }
   },

@@ -15,13 +15,15 @@ import {
   MapPin,
   MenuSquare,
   QrCode,
-  Sparkles,
 } from "lucide-react";
 import Brand from "../components/brand";
+import LanguageAutocomplete from "../components/language-autocomplete";
 import LandingMotion from "../components/landing-motion";
-import { GlobalAutocomplete } from "../components/ui/form-controls";
-import { useTranslate, type Locale } from "../lib/use-translate";
-import { getConstants, languageOptions } from "../lib/i18n";
+import ScrollStory from "../components/scroll-story";
+import { HeroSection } from "../components/ui/hero-section-shadcnui";
+import { HeroHighlight } from "../components/ui/hero-highlight";
+import { useTranslate } from "../lib/use-translate";
+import { getConstants } from "../lib/i18n";
 import type { PlanCode } from "../lib/plans";
 import { supportWhatsAppUrl } from "../lib/site";
 
@@ -92,17 +94,13 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
               <a className="hover:text-brand transition" href="#harga">{CONSTANT.nav.pricing}</a>
             </nav>
             <div className="flex items-center gap-2 sm:gap-4">
-              <div className="border-line flex h-10 items-center gap-1.5 rounded-xl border bg-white px-2.5">
-                <Globe2 className="text-muted" size={15} aria-hidden="true" />
-                <GlobalAutocomplete
-                  aria-label={CONSTANT.language.label}
-                  className="h-9 w-[90px] border-0 bg-transparent px-1 pr-7 text-xs shadow-none ring-0 focus:ring-0"
-                  searchable
-                  options={languageOptions}
-                  onValueChange={(value) => setLocale(value as Locale)}
-                  value={locale}
-                />
-              </div>
+              <LanguageAutocomplete
+                label={CONSTANT.language.label}
+                noResultsLabel={CONSTANT.language.noResults}
+                onValueChange={setLocale}
+                searchLabel={CONSTANT.language.search}
+                value={locale}
+              />
               <Link className="text-muted hover:text-ink hidden text-sm font-semibold transition sm:inline" href="/login">
                 {CONSTANT.nav.login}
               </Link>
@@ -113,31 +111,21 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
           </div>
         </header>
 
-        <section className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-14 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:px-10 lg:pb-24 lg:pt-20">
-          <div className="pointer-events-none absolute -left-40 top-10 size-[26rem] rounded-full bg-[#ffd5c2]/50 blur-3xl" />
-          <div className="relative z-10 lg:col-span-6">
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#efc7b5] bg-white/80 px-3 py-2 text-[10px] font-black tracking-[.13em] text-[#a03417]" data-hero-kicker>
-              <Sparkles size={14} /> {CONSTANT.hero.eyebrow}
-            </p>
-            <h1 className="display-font max-w-2xl text-[2.8rem] leading-[.99] font-black tracking-[-.06em] sm:text-6xl lg:text-[4.35rem]" data-hero-title>
-              {CONSTANT.hero.title.first} <span className="text-[#b13b19]">{CONSTANT.hero.title.highlight}</span>
-            </h1>
-            <p className="text-muted mt-6 max-w-xl text-sm leading-7 sm:text-base sm:leading-8" data-hero-copy>
-              {CONSTANT.hero.copy}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3" data-hero-actions>
-              <Link className="bg-brand hover:bg-brand-dark inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 text-sm font-extrabold text-white shadow-lg shadow-[#b13b19]/15 transition hover:-translate-y-0.5" href="/register">
-                {CONSTANT.hero.primary} <ArrowRight size={16} />
-              </Link>
-              <a className="border-line inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border bg-white/90 px-5 text-sm font-bold transition hover:border-[#c7a493]" href="#galeri">
-                {CONSTANT.hero.secondary} <ArrowDownIcon />
-              </a>
-            </div>
-            <div className="text-muted mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs" data-hero-actions>
-              <span className="inline-flex items-center gap-2"><Check className="text-[#b13b19]" size={15} />{CONSTANT.hero.point.one}</span>
-              <span className="inline-flex items-center gap-2"><Check className="text-[#b13b19]" size={15} />{CONSTANT.hero.point.two}</span>
-            </div>
-          </div>
+        <HeroHighlight
+          className="relative"
+          containerClassName="mx-auto w-full max-w-7xl"
+        >
+          <section className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-14 pt-12 sm:px-6 sm:pb-20 sm:pt-16 lg:grid-cols-12 lg:gap-8 lg:px-10 lg:pb-24 lg:pt-20">
+          <div aria-hidden="true" className="pointer-events-none absolute -left-40 top-10 size-[26rem] rounded-full bg-[#ffd5c2]/50 blur-3xl" />
+          <HeroSection
+            description={CONSTANT.hero.copy}
+            eyebrow={CONSTANT.hero.eyebrow}
+            highlight={CONSTANT.hero.title.highlight}
+            points={[CONSTANT.hero.point.one, CONSTANT.hero.point.two]}
+            primaryLabel={CONSTANT.hero.primary}
+            secondaryLabel={CONSTANT.hero.secondary}
+            title={CONSTANT.hero.title.first}
+          />
 
           <div className="relative mx-auto w-full max-w-[590px] lg:col-span-6" data-hero-preview>
             <div className="absolute -right-5 -top-8 size-32 rounded-full bg-[#ffb88e]/45 blur-2xl sm:-right-9 sm:-top-10 sm:size-44" />
@@ -168,7 +156,7 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
                     </div>
                   </div>
                   <div className="mt-3 flex items-center justify-between rounded-xl bg-[#f4ede6] px-3 py-2.5 text-[10px] font-bold text-[#51473f]">
-                    <span className="inline-flex items-center gap-2"><Globe2 size={13} /> digimenu.my.id/kopitemu</span>
+                    <span className="inline-flex items-center gap-2"><Globe2 size={13} /> {CONSTANT.hero.preview.url}</span>
                     <ArrowUpRight size={14} />
                   </div>
                 </div>
@@ -182,7 +170,8 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
               <p className="display-font text-xl font-black">{CONSTANT.hero.metric.value}</p><p className="mt-0.5 text-[9px] text-white/65">{CONSTANT.hero.metric.label}</p>
             </div>
           </div>
-        </section>
+          </section>
+        </HeroHighlight>
 
         <section id="galeri" className="scroll-mt-24 border-y border-[#e9dfd7] bg-white py-16 sm:py-20" data-reveal>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
@@ -223,6 +212,15 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
             </div>
           </div>
         </section>
+
+        <ScrollStory
+          copy={CONSTANT.story.copy}
+          eyebrow={CONSTANT.story.eyebrow}
+          locale={locale}
+          scenes={CONSTANT.story.scenes}
+          scrollHint={CONSTANT.story.scrollHint}
+          title={CONSTANT.story.title}
+        />
 
         <section id="fitur" className="scroll-mt-24 mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-10" data-reveal>
           <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
@@ -294,8 +292,4 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
       </main>
     </LandingMotion>
   );
-}
-
-function ArrowDownIcon() {
-  return <ArrowRight className="rotate-90" size={15} aria-hidden="true" />;
 }

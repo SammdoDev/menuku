@@ -9,7 +9,9 @@
     "start": "Mula secara percuma"
   },
   "language": {
-    "label": "Pilih bahasa"
+    "label": "Pilih bahasa",
+    "search": "Cari bahasa",
+    "noResults": "Bahasa tidak ditemui"
   },
   "hero": {
     "eyebrow": "MENU DIGITAL UNTUK PERNIAGAAN MAKANAN",
@@ -37,6 +39,7 @@
         "one": "Latte Gula Melaka",
         "two": "Matcha Cloud"
       },
+      "url": "digimenu.my.id/kopi-kenangan",
       "status": "Tersedia"
     },
     "float": {
@@ -78,6 +81,26 @@
       "title": "WhatsApp, Maps dan media sosial.",
       "copy": "Bawa pelanggan ke destinasi yang betul dari satu halaman."
     }
+  },
+  "story": {
+    "eyebrow": "DARIPADA MENU KEPADA PELANGGAN",
+    "title": "Satu pautan, pelanggan tahu langkah seterusnya.",
+    "copy": "Tatal untuk melihat bagaimana menu digital membantu pelanggan mencari pilihan dan menghubungi kedai anda.",
+    "scrollHint": "TATAL UNTUK LIHAT",
+    "scenes": [
+      {
+        "title": "Menu yang nampak menyelerakan.",
+        "copy": "Foto dan kategori yang kemas menyerlahkan menu pilihan anda."
+      },
+      {
+        "title": "Pilihan yang mudah difahami.",
+        "copy": "Harga dan ketersediaan yang jelas membantu pelanggan memilih."
+      },
+      {
+        "title": "Pesanan hanya satu sentuhan.",
+        "copy": "Pelanggan boleh terus menghubungi WhatsApp atau saluran pilihan anda."
+      }
+    ]
   },
   "features": {
     "eyebrow": "DIBINA UNTUK PERNIAGAAN MAKANAN",
@@ -130,11 +153,7 @@
       "name": "Free",
       "priceLabel": "Percuma",
       "note": "Cara mudah untuk membawa kedai anda ke dalam talian",
-      "features": [
-        "Sehingga 2 kategori",
-        "Sehingga 4 produk",
-        "Katalog digital asas"
-      ]
+      "features": ["Sehingga 2 kategori", "Sehingga 4 produk", "Katalog digital asas"]
     },
     "month": "/ bulan",
     "forever": "selamanya",
@@ -158,12 +177,7 @@
     },
     "business": {
       "note": "Untuk pasukan dan operasi yang semakin berkembang",
-      "features": [
-        "Semua ciri Premium",
-        "3 ahli pasukan",
-        "Domain tersuai",
-        "Sokongan keutamaan"
-      ],
+      "features": ["Semua ciri Premium", "3 ahli pasukan", "Domain tersuai", "Sokongan keutamaan"],
       "name": "Business"
     }
   },
