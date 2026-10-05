@@ -20,7 +20,9 @@ export default async function BillingConfirmationPage({
   const plan = params.plan === "premium" || params.plan === "business" ? params.plan : "premium";
   const { data: invoice } = await supabase
     .from("subscriptions")
-    .select("order_id,plan,previous_plan,months,amount,status,created_at,payment_url,payment_method,payment_provider")
+    .select(
+      "order_id,plan,previous_plan,months,amount,status,created_at,payment_url,payment_method,payment_provider",
+    )
     .eq("tenant_id", tenant.id)
     .eq("order_id", order)
     .maybeSingle();
@@ -29,9 +31,10 @@ export default async function BillingConfirmationPage({
   const paid = invoice?.status === "active";
   const failed = invoice?.status === "failed";
   const manual = invoice?.payment_method === "manual";
-  const paymentUrl = invoice?.payment_provider === "pakasir"
-    ? canonicalPakasirPaymentUrl(invoice)
-    : invoice?.payment_url || null;
+  const paymentUrl =
+    invoice?.payment_provider === "pakasir"
+      ? canonicalPakasirPaymentUrl(invoice)
+      : invoice?.payment_url || null;
   const StatusIcon = paid ? CheckCircle2 : failed ? AlertCircle : Clock3;
   const statusClass = paid ? "text-emerald-600" : failed ? "text-red-600" : "text-amber-600";
   return (
@@ -50,7 +53,8 @@ export default async function BillingConfirmationPage({
         </div>
         {emailStatus === "sent" && (
           <p className="mb-5 rounded-xl bg-emerald-50 p-3 text-xs leading-5 text-emerald-800">
-            Instruksi pembayaran sudah dikirim ke email akunmu. Kamu juga bisa membayar dari halaman ini.
+            Instruksi pembayaran sudah dikirim ke email akunmu. Kamu juga bisa membayar dari halaman
+            ini.
           </p>
         )}
         {emailStatus === "failed" && (
@@ -64,24 +68,33 @@ export default async function BillingConfirmationPage({
             <InvoiceEmailButton />
           </div>
         )}
-        {!manual && !paid && !failed && (
+        {!manual && invoice?.payment_provider === "pakasir" && !failed && (
           <div className="rounded-2xl bg-orange-50 p-5">
             <div className="flex items-center gap-3">
-              <Clock3 className="text-brand" size={22} />
+              {!paid && <Clock3 className="text-brand" size={22} />}
               <div>
-                <p className="text-xs font-bold text-orange-900">Selesaikan pembayaran dalam</p>
-                <Countdown startedAt={invoice?.created_at} />
+                {!paid && (
+                  <p className="text-xs font-bold text-orange-900">Selesaikan pembayaran dalam</p>
+                )}
+                <Countdown
+                  startedAt={invoice.created_at}
+                  orderId={invoice.order_id || order}
+                  showCountdown={!paid}
+                />
               </div>
             </div>
           </div>
         )}
         <div className="my-6 rounded-2xl bg-[#faf8f4] p-4 text-center">
-          <p className="mb-3 text-xs font-bold">{manual ? "Transfer manual sesuai nominal invoice" : "Pembayaran QRIS otomatis melalui Pakasir"}</p>
+          <p className="mb-3 text-xs font-bold">
+            {manual
+              ? "Transfer manual sesuai nominal invoice"
+              : "Pembayaran QRIS otomatis melalui Pakasir"}
+          </p>
           <p className="text-muted mt-2 text-[11px]">
             {manual
               ? "Transfer tepat sesuai total invoice. Hubungi admin untuk detail rekening dan verifikasi pembayaran."
-              : "Bayar dengan QRIS di halaman Pakasir. Status paket diperbarui otomatis setelah pembayaran terkonfirmasi."
-            }
+              : "Bayar dengan QRIS di halaman Pakasir. Status paket diperbarui otomatis setelah pembayaran terkonfirmasi."}
           </p>
           {!manual && !paid && !failed && paymentUrl && (
             <a
@@ -107,6 +120,10 @@ export default async function BillingConfirmationPage({
             <b className="capitalize">{plans[selectedPlan].name}</b>
           </div>
           <div className="flex justify-between">
+            <span className="text-muted">Harga paket / bulan</span>
+            <b>{rupiah(plans[selectedPlan].price)}</b>
+          </div>
+          <div className="flex justify-between">
             <span className="text-muted">Durasi</span>
             <b>
               {invoice?.months || 1} bulan{invoice?.previous_plan ? " · upgrade prorata" : ""}
@@ -117,10 +134,29 @@ export default async function BillingConfirmationPage({
             <strong className="text-brand">{rupiah(amount)}</strong>
           </div>
         </div>
+        <div className="border-line border-b py-5">
+          <h2 className="mb-3 text-sm font-extrabold">
+            Fitur utama paket {plans[selectedPlan].name}
+          </h2>
+          <ul className="text-muted grid gap-2 text-sm leading-5">
+            {plans[selectedPlan].features.map((feature) => (
+              <li key={feature} className="flex gap-2">
+                <CheckCircle2 className="mt-0.5 shrink-0 text-emerald-600" size={15} />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="grid gap-3 text-sm">
           <p className="flex items-center gap-2 font-bold">
             <StatusIcon className={statusClass} size={18} />
-            {paid ? "Pembayaran berhasil" : failed ? "Transaksi gagal" : manual ? "Invoice transfer siap" : "QRIS Pakasir siap dibayar"}
+            {paid
+              ? "Pembayaran berhasil"
+              : failed
+                ? "Transaksi gagal"
+                : manual
+                  ? "Invoice transfer siap"
+                  : "QRIS Pakasir siap dibayar"}
           </p>
           <p className="text-muted leading-6">
             {invoice?.status === "active"
@@ -144,7 +180,9 @@ export default async function BillingConfirmationPage({
           rel="noreferrer"
           className="mt-5 flex min-h-11 items-center justify-center rounded-xl bg-emerald-600 px-4 text-center text-sm font-extrabold text-white"
         >
-          {manual && !paid ? "Minta detail rekening lewat WhatsApp" : "Butuh bantuan pembayaran? Chat admin"}
+          {manual && !paid
+            ? "Minta detail rekening lewat WhatsApp"
+            : "Butuh bantuan pembayaran? Chat admin"}
         </a>
         <Link
           href="/dashboard/billing"

@@ -69,6 +69,7 @@ const messages = {
     "gallery.analytics.title": "Lihat menu yang paling disukai.",
     "gallery.analytics.visits": "Kunjungan minggu ini",
     "gallery.analytics.growth": "Contoh: +28% dari minggu lalu",
+    "gallery.analytics.disclaimer": "Angka kunjungan dan produk pada preview dashboard adalah data contoh.",
     "gallery.qr.eyebrow": "SCAN & JELAJAHI",
     "gallery.qr.title": "Satu scan, langsung lihat menu.",
     "gallery.qr.copy": "Tempel QR di meja, etalase, atau kemasan.",
@@ -98,7 +99,7 @@ const messages = {
     "pricing.eyebrow": "PAKET MENUKU",
     "pricing.title": "Mulai sesuai kebutuhanmu.",
     "pricing.copy": "Pilih paket yang pas hari ini. Kamu bisa upgrade saat tokomu berkembang.",
-    "pricing.popular": "PALING POPULER",
+    "pricing.popular": "REKOMENDASI",
     "pricing.free": "Gratis",
     "pricing.month": "/ bulan",
     "pricing.forever": "selamanya",
@@ -111,11 +112,11 @@ const messages = {
     "pricing.free.feature.1": "Hingga 2 kategori",
     "pricing.free.feature.2": "Hingga 4 produk",
     "pricing.free.feature.3": "Halaman katalog dasar",
-    "pricing.free.feature.4": "Link toko untuk dibagikan",
     "pricing.premium.feature.1": "Hingga 6 kategori",
     "pricing.premium.feature.2": "Hingga 30 produk",
-    "pricing.premium.feature.3": "Hingga 5 custom link",
-    "pricing.premium.feature.4": "Analytics dan gaya kustom",
+    "pricing.premium.feature.3": "Hingga 5 tautan bisnis",
+    "pricing.premium.feature.4": "Analytics dasar",
+    "pricing.premium.feature.5": "Pengaturan tampilan",
     "pricing.business.feature.1": "Semua fitur Premium",
     "pricing.business.feature.2": "3 anggota tim",
     "pricing.business.feature.3": "Custom domain",
@@ -194,6 +195,7 @@ const messages = {
     "gallery.analytics.title": "See what customers love most.",
     "gallery.analytics.visits": "Visits this week",
     "gallery.analytics.growth": "Example: +28% from last week",
+    "gallery.analytics.disclaimer": "Visit and product counts in this dashboard preview are sample data.",
     "gallery.qr.eyebrow": "SCAN & EXPLORE",
     "gallery.qr.title": "One scan takes them to your menu.",
     "gallery.qr.copy": "Place your QR on tables, windows, or packaging.",
@@ -223,7 +225,7 @@ const messages = {
     "pricing.eyebrow": "MENUKU PLANS",
     "pricing.title": "Start with what you need.",
     "pricing.copy": "Choose the right plan today. Upgrade as your business grows.",
-    "pricing.popular": "MOST POPULAR",
+    "pricing.popular": "RECOMMENDED",
     "pricing.free": "Free",
     "pricing.month": "/ month",
     "pricing.forever": "forever",
@@ -236,11 +238,11 @@ const messages = {
     "pricing.free.feature.1": "Up to 2 categories",
     "pricing.free.feature.2": "Up to 4 products",
     "pricing.free.feature.3": "Basic digital catalog",
-    "pricing.free.feature.4": "A shareable store link",
     "pricing.premium.feature.1": "Up to 6 categories",
     "pricing.premium.feature.2": "Up to 30 products",
-    "pricing.premium.feature.3": "Up to 5 custom links",
-    "pricing.premium.feature.4": "Analytics and custom styling",
+    "pricing.premium.feature.3": "Up to 5 business links",
+    "pricing.premium.feature.4": "Basic analytics",
+    "pricing.premium.feature.5": "Display settings",
     "pricing.business.feature.1": "Everything in Premium",
     "pricing.business.feature.2": "3 team members",
     "pricing.business.feature.3": "Custom domain",
@@ -459,6 +461,7 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
                 <h3 className="display-font mt-3 text-lg leading-snug font-black">{t("gallery.analytics.title")}</h3>
                 <div className="mt-5"><div className="mb-2 flex items-end justify-between gap-2"><span className="text-[9px] text-white/60">{t("gallery.analytics.visits")}</span><Activity className="text-[#ffb99c]" size={15} /></div><AnalyticsBars /></div>
                 <p className="mt-3 text-[9px] font-bold text-emerald-300">{t("gallery.analytics.growth")}</p>
+                <p className="mt-2 text-[9px] leading-4 text-white/55">{t("gallery.analytics.disclaimer")}</p>
               </article>
               <article className="flex flex-col justify-between rounded-[1.6rem] bg-[#e9f0df] p-5 sm:p-6" data-bento-card>
                 <div><p className="text-[9px] font-black tracking-[.14em] text-[#477047]">{t("gallery.qr.eyebrow")}</p><h3 className="display-font mt-3 text-lg leading-snug font-black">{t("gallery.qr.title")}</h3><p className="text-muted mt-2 text-[10px] leading-5">{t("gallery.qr.copy")}</p></div>
@@ -497,10 +500,11 @@ export default function LandingPageLinktree({ planPrices }: { planPrices: Landin
             <div className="mt-9 grid gap-4 md:grid-cols-3" data-stagger>
               {planPrices.map(({ code, price }) => {
                 const featured = code === "premium";
-                const features = [1, 2, 3, 4].map((index) => `pricing.${code}.feature.${index}`);
+                const featureCount = code === "free" ? 3 : code === "premium" ? 5 : 4;
+                const features = Array.from({ length: featureCount }, (_, index) => `pricing.${code}.feature.${index + 1}`);
                 return <article className={`relative flex flex-col rounded-2xl border p-5 shadow-sm sm:p-6 ${featured ? "border-[#b13b19] bg-[#fffaf6] shadow-xl shadow-[#b13b19]/[.08]" : "border-[#e9dfd7] bg-[#faf8f4]"}`} key={code}>
-                  {featured && <span className="absolute -top-3 left-5 rounded-full bg-[#b13b19] px-3 py-1 text-[9px] font-black tracking-wide text-white">{t("pricing.popular")}</span>}
-                  <p className="display-font text-lg font-black">{code === "free" ? "Free" : code === "premium" ? "Premium" : "Business"}</p>
+                  {featured && <span className="mb-3 inline-flex self-start rounded-full bg-[#b13b19] px-3 py-1 text-[9px] font-black tracking-wide text-white">{t("pricing.popular")}</span>}
+                  <p className="display-font text-lg font-black">{code === "free" ? t("pricing.free") : code === "premium" ? "Premium" : "Business"}</p>
                   <p className="text-muted mt-1 min-h-5 text-xs">{t(`pricing.${code}.note`)}</p>
                   <p className="mt-5 text-2xl font-black tabular-nums">{price === 0 ? t("pricing.free") : currency.format(price)}<span className="text-muted ml-1 text-xs font-normal">{price === 0 ? t("pricing.forever") : t("pricing.month")}</span></p>
                   <ul className="my-5 grid flex-1 content-start gap-3 border-t border-[#e9dfd7] pt-5 text-xs leading-5 sm:text-sm">{features.map((feature) => <li className="flex items-start gap-2" key={feature}><Check className="mt-0.5 shrink-0 text-[#b13b19]" size={15} /><span>{t(feature)}</span></li>)}</ul>

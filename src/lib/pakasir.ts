@@ -43,7 +43,9 @@ export async function createPakasirPayment(input: {
     typeof data.txn_id !== "string" ||
     typeof data.payment_link !== "string"
   ) {
-    throw new Error("Pakasir belum dapat membuat transaksi. Periksa project, API key, dan nominal.");
+    throw new Error(
+      "Pakasir belum dapat membuat transaksi. Periksa project, API key, dan nominal.",
+    );
   }
 
   const paymentUrl = new URL(data.payment_link);
@@ -78,14 +80,12 @@ export async function getPakasirTransactionStatus(
     cache: "no-store",
     signal: AbortSignal.timeout(15_000),
   });
-  const data = (await response.json().catch(() => null)) as
-    | {
-        txn_id?: unknown;
-        order_id?: unknown;
-        amount?: unknown;
-        status?: unknown;
-      }
-    | null;
+  const data = (await response.json().catch(() => null)) as {
+    txn_id?: unknown;
+    order_id?: unknown;
+    amount?: unknown;
+    status?: unknown;
+  } | null;
 
   if (
     !response.ok ||
@@ -106,4 +106,23 @@ export async function getPakasirTransactionStatus(
     amount: Number(data.amount),
     status: data.status,
   };
+}
+
+export async function cancelPakasirTransaction(txnId: string) {
+  const { projectSlug, apiKey } = pakasirConfig();
+  const endpoint =
+    "https://app.pakasir.com/api/v2/cancel-transaction/" +
+    encodeURIComponent(projectSlug) +
+    "/" +
+    encodeURIComponent(txnId);
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: { "x-api-key": apiKey },
+    cache: "no-store",
+    signal: AbortSignal.timeout(15_000),
+  });
+  if (!response.ok) {
+    throw new Error("Pakasir belum dapat membatalkan transaksi.");
+  }
+  return true;
 }

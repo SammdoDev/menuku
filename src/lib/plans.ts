@@ -1,14 +1,9 @@
 export const plans = {
   free: {
-    name: "Free Demo",
+    name: "Gratis",
     price: 0,
     description: "Coba buat katalog digital tanpa biaya.",
-    features: [
-      "Maks. 2 kategori",
-      "Maks. 4 produk",
-      "Halaman katalog dasar",
-      "Tanpa custom link & analytics",
-    ],
+    features: ["Maks. 2 kategori", "Maks. 4 produk", "Halaman katalog dasar"],
     limits: { categories: 2, products: 4, links: 0, analytics: false, customStyle: false },
   },
   premium: {
@@ -18,8 +13,9 @@ export const plans = {
     features: [
       "Maks. 6 kategori",
       "Maks. 30 produk",
-      "Maks. 5 custom link",
-      "Analytics dasar & custom style",
+      "Maks. 5 tautan bisnis",
+      "Analytics dasar",
+      "Pengaturan tampilan",
     ],
     limits: {
       categories: 6,

@@ -1,13 +1,18 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getPakasirTransactionStatus, pakasirConfig } from "../../../../../lib/pakasir";
+import {
+  PENDING_INVOICE_FIELDS,
+  reconcilePakasirInvoice,
+  type PendingInvoice,
+} from "../../../../../lib/billing-invoices";
+import { pakasirConfig } from "../../../../../lib/pakasir";
 import { createSupabaseAdminClient } from "../../../../../lib/supabase/admin";
 
 const webhookSchema = z.object({
   txn_id: z.string().min(1),
   order_id: z.string().min(1),
-  amount: z.number().int().positive(),
+  amount: z.coerce.number().int().positive(),
   status: z.string(),
 });
 
@@ -18,28 +23,6 @@ function matchesSecret(provided: string, expected: string) {
     providedBuffer.length === expectedBuffer.length &&
     timingSafeEqual(providedBuffer, expectedBuffer)
   );
-}
-
-const planRank = { free: 0, premium: 1, business: 2 } as const;
-
-async function syncTenantPlan(
-  supabase: ReturnType<typeof createSupabaseAdminClient>,
-  tenantId: string,
-  plan: string,
-) {
-  const { data: tenant, error: tenantReadError } = await supabase
-    .from("tenants")
-    .select("plan")
-    .eq("id", tenantId)
-    .maybeSingle();
-  if (tenantReadError || !tenant) return false;
-
-  const currentRank = planRank[tenant.plan as keyof typeof planRank] ?? 0;
-  const nextRank = planRank[plan as keyof typeof planRank] ?? 0;
-  if (currentRank >= nextRank) return true;
-
-  const { error } = await supabase.from("tenants").update({ plan }).eq("id", tenantId);
-  return !error;
 }
 
 export async function POST(request: Request) {
@@ -64,76 +47,38 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Format webhook tidak valid." }, { status: 400 });
   }
   const event = parsed.data;
-  if (event.status !== "completed") {
-    return NextResponse.json({ received: true });
-  }
+  if (event.status !== "completed") return NextResponse.json({ received: true });
 
-  const supabase = createSupabaseAdminClient();
-  const { data: subscription, error: lookupError } = await supabase
+  const admin = createSupabaseAdminClient();
+  const { data, error } = await admin
     .from("subscriptions")
-    .select("id,tenant_id,plan,amount,status,payment_provider,pakasir_txn_id")
+    .select(PENDING_INVOICE_FIELDS)
     .eq("order_id", event.order_id)
     .maybeSingle();
-  if (lookupError) {
+  if (error) {
+    console.error("[pakasir] webhook invoice lookup failed", error);
     return NextResponse.json({ error: "Invoice belum dapat diperiksa." }, { status: 500 });
   }
+
+  const invoice = data as PendingInvoice | null;
   if (
-    !subscription ||
-    subscription.payment_provider !== "pakasir" ||
-    Number(subscription.amount) !== event.amount ||
-    subscription.pakasir_txn_id !== event.txn_id
+    !invoice ||
+    invoice.payment_provider !== "pakasir" ||
+    Number(invoice.amount) !== event.amount ||
+    invoice.pakasir_txn_id !== event.txn_id
   ) {
     return NextResponse.json({ error: "Data transaksi tidak cocok." }, { status: 404 });
   }
 
-  if (subscription.status !== "active") {
-    let remoteStatus;
-    try {
-      remoteStatus = await getPakasirTransactionStatus(event.txn_id);
-    } catch {
-      return NextResponse.json({ error: "Status pembayaran belum dapat diverifikasi." }, { status: 502 });
-    }
-    if (
-      remoteStatus.status !== "completed" ||
-      remoteStatus.txnId !== event.txn_id ||
-      remoteStatus.orderId !== event.order_id ||
-      remoteStatus.amount !== event.amount
-    ) {
-      return NextResponse.json({ error: "Status transaksi Pakasir tidak cocok." }, { status: 409 });
-    }
-
-    const { data: activated, error: activationError } = await supabase
-      .from("subscriptions")
-      .update({
-        status: "active",
-        paid_at: new Date().toISOString(),
-      })
-      .eq("id", subscription.id)
-      .eq("status", "pending")
-      .eq("payment_provider", "pakasir")
-      .select("id")
-      .maybeSingle();
-    if (activationError) {
-      return NextResponse.json({ error: "Paket belum dapat diaktifkan." }, { status: 500 });
-    }
-    if (!activated) {
-      const { data: latest, error: latestError } = await supabase
-        .from("subscriptions")
-        .select("status")
-        .eq("id", subscription.id)
-        .maybeSingle();
-      if (latestError) {
-        return NextResponse.json({ error: "Status invoice belum dapat diperiksa." }, { status: 500 });
-      }
-      if (latest?.status !== "active") {
-        return NextResponse.json({ error: "Invoice tidak lagi menunggu pembayaran." }, { status: 409 });
-      }
-    }
+  const updated = await reconcilePakasirInvoice(admin, invoice, { allowFailed: true });
+  if (updated.status !== "active") {
+    return NextResponse.json(
+      { error: "Status pembayaran belum dapat disinkronkan." },
+      { status: 502 },
+    );
   }
-
-  const synced = await syncTenantPlan(supabase, subscription.tenant_id, subscription.plan);
-  if (!synced) {
-    return NextResponse.json({ error: "Status paket belum dapat diperbarui." }, { status: 500 });
+  if (!updated.payment_receipt_email_sent_at) {
+    return NextResponse.json({ error: "Bukti pembayaran belum dapat dikirim." }, { status: 503 });
   }
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ received: true, status: "active" });
 }
