@@ -9,11 +9,13 @@ export default function BillingButtons({
   code,
   price,
   currentPlan,
+  blockedByPending = false,
 }: {
   code: PlanCode;
   price: number;
   currentPlan: PlanCode;
   currentExpiresAt?: string | null;
+  blockedByPending?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,13 +34,15 @@ export default function BillingButtons({
       });
       const data = await response.json();
       if (!response.ok || !data.ok) throw new Error(data.error || "Pembayaran belum dapat dibuat.");
-      window.location.assign(paymentMethod === "manual" ? data.confirmationUrl : data.paymentUrl);
+      window.location.assign(data.confirmationUrl || data.paymentUrl);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Pembayaran gagal dibuat.");
       setLoading(false);
     }
   }
-  const buttonLabel = loading
+  const buttonLabel = blockedByPending
+    ? "Selesaikan invoice yang masih aktif"
+    : loading
     ? paymentMethod === "manual"
       ? "Membuat invoice..."
       : "Membuka checkout Pakasir..."
@@ -100,7 +104,7 @@ export default function BillingButtons({
       <button
         type="button"
         onClick={() => void pay()}
-        disabled={loading}
+        disabled={loading || blockedByPending}
         className="bg-brand flex min-h-12 w-full items-center justify-center rounded-xl text-sm font-extrabold text-white disabled:opacity-60"
       >
         {buttonLabel}

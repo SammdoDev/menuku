@@ -14,6 +14,7 @@ export async function sendEmail({
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({ from, to: [to], subject, html }),
+    signal: AbortSignal.timeout(10_000),
   });
   return { sent: response.ok, reason: response.ok ? undefined : await response.text() };
 }

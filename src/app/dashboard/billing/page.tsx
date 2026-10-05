@@ -1,8 +1,12 @@
 import { Check, CreditCard, Sparkles } from "lucide-react";
+import Link from "next/link";
 import DashboardShell from "../../../components/dashboard-shell";
 import { getCurrentMerchant } from "../../../lib/merchant";
 import { plans, rupiah, type PlanCode } from "../../../lib/plans";
+import { billingConfirmationUrl, getPendingInvoice } from "../../../lib/billing-invoices";
+import { createSupabaseAdminClient } from "../../../lib/supabase/admin";
 import BillingButtons from "./billing-buttons";
+import InvoiceEmailButton from "./invoice-email-button";
 
 export default async function BillingPage() {
   const { user, tenant, supabase } = await getCurrentMerchant();
@@ -15,6 +19,7 @@ export default async function BillingPage() {
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+  const pendingInvoice = await getPendingInvoice(createSupabaseAdminClient(), tenant.id);
   return (
     <DashboardShell tenant={tenant} active="billing" title="Paket & pembayaran">
       <section className="mb-7">
@@ -32,6 +37,36 @@ export default async function BillingPage() {
             Paket {subscription.plan} aktif sampai{" "}
             {new Date(subscription.expires_at).toLocaleDateString("id-ID")}
           </p>
+        )}
+        {pendingInvoice?.status === "pending" && (
+          <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+            <p className="font-extrabold">Selesaikan invoice yang masih menunggu</p>
+            <p className="mt-1 text-xs leading-5">
+              Invoice {pendingInvoice.order_id} untuk paket {pendingInvoice.plan} sebesar{" "}
+              {rupiah(pendingInvoice.amount)} masih aktif. Kamu bisa membuat invoice baru setelah
+              pembayaran ini selesai atau dibatalkan.
+            </p>
+            {pendingInvoice.payment_url ? (
+              <a
+                href={pendingInvoice.payment_url}
+                className="mt-3 inline-flex min-h-10 items-center rounded-xl bg-amber-950 px-4 text-xs font-extrabold text-white"
+              >
+                Lanjutkan pembayaran
+              </a>
+            ) : (
+              <Link
+                href={billingConfirmationUrl(pendingInvoice.order_id, pendingInvoice.plan)}
+                className="mt-3 inline-flex min-h-10 items-center rounded-xl bg-amber-950 px-4 text-xs font-extrabold text-white"
+              >
+                Lihat invoice
+              </Link>
+            )}
+            {pendingInvoice.invoice_email_sent_at ? (
+              <p className="mt-3 text-xs font-bold text-emerald-800">Instruksi pembayaran sudah dikirim ke email akun.</p>
+            ) : (
+              <InvoiceEmailButton />
+            )}
+          </div>
         )}
       </section>
       <div className="grid gap-5 lg:grid-cols-3">
@@ -73,6 +108,7 @@ export default async function BillingPage() {
                   price={plan.price}
                   currentPlan={current}
                   currentExpiresAt={subscription?.expires_at}
+                  blockedByPending={Boolean(pendingInvoice?.status === "pending")}
                 />
               ) : (
                 <BillingButtons
@@ -80,6 +116,7 @@ export default async function BillingPage() {
                   price={plan.price}
                   currentPlan={current}
                   currentExpiresAt={subscription?.expires_at}
+                  blockedByPending={Boolean(pendingInvoice?.status === "pending")}
                 />
               )}
             </article>

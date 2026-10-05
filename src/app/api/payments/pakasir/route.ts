@@ -3,9 +3,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentMerchant } from "../../../../lib/merchant";
 import { plans } from "../../../../lib/plans";
-import { sendEmail } from "../../../../lib/email";
 import { createPakasirPayment, pakasirConfig } from "../../../../lib/pakasir";
-import { PUBLIC_SITE_URL, supportWhatsAppUrl } from "../../../../lib/site";
+import {
+  billingConfirmationUrl,
+  getPendingInvoice,
+  sendBillingInvoiceEmail,
+} from "../../../../lib/billing-invoices";
 import { createSupabaseAdminClient } from "../../../../lib/supabase/admin";
 
 const rank = { free: 0, premium: 1, business: 2 } as const;
@@ -14,19 +17,6 @@ function addMonths(date: Date, months: number) {
   const next = new Date(date);
   next.setMonth(next.getMonth() + months);
   return next;
-}
-
-function escapeHtml(value: string) {
-  return value.replace(/[&<>\"']/g, (character) => {
-    const entities: Record<string, string> = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      "\"": "&quot;",
-      "'": "&#39;",
-    };
-    return entities[character];
-  });
 }
 
 export async function POST(request: Request) {
@@ -41,6 +31,45 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "Paket tidak valid." }, { status: 400 });
   }
+
+  const paymentAdmin = createSupabaseAdminClient();
+  const continuePendingInvoice = async () => {
+    const invoice = await getPendingInvoice(paymentAdmin, tenant.id);
+    if (!invoice) return null;
+    if (invoice.status === "active") {
+      return NextResponse.json({
+        ok: true,
+        existing: true,
+        alreadyPaid: true,
+        orderId: invoice.order_id,
+        confirmationUrl: billingConfirmationUrl(invoice.order_id, invoice.plan),
+      });
+    }
+    const paymentUrl = invoice.payment_url;
+    const emailSent = invoice.payment_provider === "pakasir" && !paymentUrl
+      ? null
+      : await sendBillingInvoiceEmail({
+          admin: paymentAdmin,
+          invoice,
+          email: user.email,
+          paymentUrl,
+        });
+    return NextResponse.json({
+      ok: true,
+      existing: true,
+      orderId: invoice.order_id,
+      paymentUrl,
+      confirmationUrl: billingConfirmationUrl(
+        invoice.order_id,
+        invoice.plan,
+        emailSent === null ? undefined : emailSent ? "sent" : "failed",
+      ),
+      emailSent,
+    });
+  };
+
+  const pendingResponse = await continuePendingInvoice();
+  if (pendingResponse) return pendingResponse;
 
   try {
     pakasirConfig();
@@ -104,21 +133,23 @@ export async function POST(request: Request) {
     status: "pending",
     payment_method: "qris",
     payment_provider: "pakasir",
+    billing_pending_lock: true,
   });
   if (insertError) {
+    if (insertError.code === "23505") {
+      const concurrentResponse = await continuePendingInvoice();
+      if (concurrentResponse) return concurrentResponse;
+    }
     return NextResponse.json({ error: "Invoice belum dapat dicatat." }, { status: 500 });
   }
 
-  const returnUrl = new URL("/dashboard/billing/confirmation", PUBLIC_SITE_URL);
-  returnUrl.searchParams.set("order", orderId);
-  returnUrl.searchParams.set("plan", plan);
-  const paymentAdmin = createSupabaseAdminClient();
+  const returnUrl = billingConfirmationUrl(orderId, plan);
 
   try {
     const pakasir = await createPakasirPayment({
       orderId,
       amount,
-      returnUrl: returnUrl.toString(),
+      returnUrl,
     });
     const { data: savedPayment, error: updateError } = await paymentAdmin
       .from("subscriptions")
@@ -128,38 +159,25 @@ export async function POST(request: Request) {
       })
       .eq("order_id", orderId)
       .eq("payment_provider", "pakasir")
-      .select("id")
+      .select("id,tenant_id,owner_id,order_id,plan,months,amount,status,payment_method,payment_provider,payment_url,pakasir_txn_id,created_at,invoice_email_sent_at,invoice_email_attempted_at,pakasir_status_checked_at,billing_pending_lock")
       .maybeSingle();
     if (updateError || !savedPayment) throw new Error("Payment link belum dapat disimpan.");
 
-    const dashboardUrl = new URL("/dashboard/billing", PUBLIC_SITE_URL).toString();
-    const supportUrl = supportWhatsAppUrl("Halo admin Menuku, saya ingin konfirmasi invoice " + orderId + ".");
-    const paymentType = active
-      ? "Upgrade dari " + plans[active.plan as "premium" | "business"].name
-      : "Paket baru";
-    const safePaymentUrl = escapeHtml(pakasir.paymentUrl);
-    const invoiceHtml = [
-      '<div style="font-family:Arial,sans-serif;max-width:620px;color:#29251f">',
-      "<h2>Invoice pembayaran Menuku</h2>",
-      "<p>Invoice kamu sudah siap. Selesaikan pembayaran melalui halaman Pakasir.</p>",
-      "<p><b>Invoice:</b> " + escapeHtml(orderId),
-      "<br><b>Paket:</b> " + escapeHtml(plans[plan].name),
-      "<br><b>Jenis:</b> " + escapeHtml(paymentType),
-      "<br><b>Durasi:</b> " + months + " bulan",
-      "<br><b>Total:</b> Rp" + amount.toLocaleString("id-ID") + "</p>",
-      '<p><a href="' + safePaymentUrl + '">Lanjutkan pembayaran di Pakasir</a></p>',
-      '<p><a href="' + escapeHtml(dashboardUrl) + '">Buka Billing</a> · ',
-      '<a href="' + escapeHtml(supportUrl) + '">Chat admin WhatsApp</a></p></div>',
-    ].join("");
-    if (user.email) {
-      try {
-        await sendEmail({ to: user.email, subject: "Invoice Menuku " + orderId, html: invoiceHtml });
-      } catch (caught) {
-        console.error("[pakasir] failed to send invoice email", caught);
-      }
-    }
+    const invoice = savedPayment as Parameters<typeof sendBillingInvoiceEmail>[0]["invoice"];
+    const emailSent = await sendBillingInvoiceEmail({
+      admin: paymentAdmin,
+      invoice,
+      email: user.email,
+      paymentUrl: pakasir.paymentUrl,
+    });
 
-    return NextResponse.json({ ok: true, orderId, paymentUrl: pakasir.paymentUrl });
+    return NextResponse.json({
+      ok: true,
+      orderId,
+      paymentUrl: pakasir.paymentUrl,
+      confirmationUrl: billingConfirmationUrl(orderId, plan, emailSent ? "sent" : "failed"),
+      emailSent,
+    });
   } catch (caught) {
     await paymentAdmin
       .from("subscriptions")

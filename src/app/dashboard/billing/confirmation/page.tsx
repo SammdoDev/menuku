@@ -3,21 +3,24 @@ import { AlertCircle, ArrowLeft, CheckCircle2, Clock3, Copy, FileText } from "lu
 import { getCurrentMerchant } from "../../../../lib/merchant";
 import { plans, rupiah, type PlanCode } from "../../../../lib/plans";
 import { supportWhatsAppUrl } from "../../../../lib/site";
+import { canonicalPakasirPaymentUrl } from "../../../../lib/billing-invoices";
 import Countdown from "./countdown";
+import InvoiceEmailButton from "../invoice-email-button";
 
 export default async function BillingConfirmationPage({
   searchParams,
 }: {
-  searchParams: Promise<{ order?: string; plan?: string }>;
+  searchParams: Promise<{ order?: string; plan?: string; email?: string }>;
 }) {
   const { user, tenant, supabase } = await getCurrentMerchant();
   if (!user || !tenant) return null;
   const params = await searchParams;
   const order = params.order || "";
+  const emailStatus = params.email;
   const plan = params.plan === "premium" || params.plan === "business" ? params.plan : "premium";
   const { data: invoice } = await supabase
     .from("subscriptions")
-    .select("order_id,plan,previous_plan,months,amount,status,created_at,payment_url,payment_method")
+    .select("order_id,plan,previous_plan,months,amount,status,created_at,payment_url,payment_method,payment_provider")
     .eq("tenant_id", tenant.id)
     .eq("order_id", order)
     .maybeSingle();
@@ -26,6 +29,9 @@ export default async function BillingConfirmationPage({
   const paid = invoice?.status === "active";
   const failed = invoice?.status === "failed";
   const manual = invoice?.payment_method === "manual";
+  const paymentUrl = invoice?.payment_provider === "pakasir"
+    ? canonicalPakasirPaymentUrl(invoice)
+    : invoice?.payment_url || null;
   const StatusIcon = paid ? CheckCircle2 : failed ? AlertCircle : Clock3;
   const statusClass = paid ? "text-emerald-600" : failed ? "text-red-600" : "text-amber-600";
   return (
@@ -42,6 +48,22 @@ export default async function BillingConfirmationPage({
           </div>
           <FileText className="text-brand" size={28} />
         </div>
+        {emailStatus === "sent" && (
+          <p className="mb-5 rounded-xl bg-emerald-50 p-3 text-xs leading-5 text-emerald-800">
+            Instruksi pembayaran sudah dikirim ke email akunmu. Kamu juga bisa membayar dari halaman ini.
+          </p>
+        )}
+        {emailStatus === "failed" && (
+          <p className="mb-5 rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-900">
+            Email instruksi belum berhasil dikirim. Invoice tetap tersimpan; kamu bisa melanjutkan
+            pembayaran dari tombol di bawah.
+          </p>
+        )}
+        {emailStatus === "failed" && invoice?.status === "pending" && (
+          <div className="mb-5">
+            <InvoiceEmailButton />
+          </div>
+        )}
         {!manual && !paid && !failed && (
           <div className="rounded-2xl bg-orange-50 p-5">
             <div className="flex items-center gap-3">
@@ -61,9 +83,9 @@ export default async function BillingConfirmationPage({
               : "Bayar dengan QRIS di halaman Pakasir. Status paket diperbarui otomatis setelah pembayaran terkonfirmasi."
             }
           </p>
-          {!manual && !paid && !failed && invoice?.payment_url && (
+          {!manual && !paid && !failed && paymentUrl && (
             <a
-              href={invoice.payment_url}
+              href={paymentUrl}
               target="_blank"
               rel="noreferrer"
               className="bg-brand mt-4 inline-flex min-h-11 items-center justify-center rounded-xl px-5 text-sm font-extrabold text-white"
@@ -102,12 +124,14 @@ export default async function BillingConfirmationPage({
           </p>
           <p className="text-muted leading-6">
             {invoice?.status === "active"
-              ? "Paket kamu sudah aktif. Invoice juga dikirim ke email akun."
+              ? "Paket kamu sudah aktif."
               : failed
                 ? "Transaksi ini gagal atau kedaluwarsa. Kembali ke billing untuk membuat invoice baru."
                 : manual
                   ? "Setelah transfer, admin akan mencocokkan nominal dan mengaktifkan paketmu."
-                  : "Selesaikan pembayaran di halaman Pakasir. Status paket akan diperbarui otomatis setelah pembayaran terkonfirmasi."}
+                  : paymentUrl
+                    ? "Selesaikan pembayaran di halaman Pakasir. Status paket akan diperbarui otomatis setelah pembayaran terkonfirmasi."
+                    : "Invoice sedang disiapkan. Muat ulang halaman ini sebentar lagi."}
           </p>
         </div>
         <a

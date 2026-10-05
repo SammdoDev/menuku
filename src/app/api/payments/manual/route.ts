@@ -3,6 +3,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getCurrentMerchant } from "../../../../lib/merchant";
 import { plans } from "../../../../lib/plans";
+import {
+  billingConfirmationUrl,
+  getPendingInvoice,
+  sendBillingInvoiceEmail,
+} from "../../../../lib/billing-invoices";
+import { createSupabaseAdminClient } from "../../../../lib/supabase/admin";
 
 const rank = { free: 0, premium: 1, business: 2 } as const;
 
@@ -21,6 +27,44 @@ export async function POST(request: Request) {
     .object({ plan: z.enum(["premium", "business"]) })
     .safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Paket tidak valid." }, { status: 400 });
+
+  const paymentAdmin = createSupabaseAdminClient();
+  const continuePendingInvoice = async () => {
+    const invoice = await getPendingInvoice(paymentAdmin, tenant.id);
+    if (!invoice) return null;
+    if (invoice.status === "active") {
+      return NextResponse.json({
+        ok: true,
+        existing: true,
+        alreadyPaid: true,
+        orderId: invoice.order_id,
+        confirmationUrl: billingConfirmationUrl(invoice.order_id, invoice.plan),
+      });
+    }
+    const emailSent = invoice.payment_provider === "pakasir" && !invoice.payment_url
+      ? null
+      : await sendBillingInvoiceEmail({
+          admin: paymentAdmin,
+          invoice,
+          email: user.email,
+          paymentUrl: invoice.payment_url,
+        });
+    return NextResponse.json({
+      ok: true,
+      existing: true,
+      orderId: invoice.order_id,
+      paymentUrl: invoice.payment_url,
+      confirmationUrl: billingConfirmationUrl(
+        invoice.order_id,
+        invoice.plan,
+        emailSent === null ? undefined : emailSent ? "sent" : "failed",
+      ),
+      emailSent,
+    });
+  };
+
+  const pendingResponse = await continuePendingInvoice();
+  if (pendingResponse) return pendingResponse;
 
   const plan = parsed.data.plan;
   const requestedMonths = Number(new URL(request.url).searchParams.get("months") || 1);
@@ -67,15 +111,35 @@ export async function POST(request: Request) {
     status: "pending",
     payment_method: "manual",
     payment_provider: "manual",
+    billing_pending_lock: true,
   });
-  if (error)
+  if (error) {
+    if (error.code === "23505") {
+      const concurrentResponse = await continuePendingInvoice();
+      if (concurrentResponse) return concurrentResponse;
+    }
     return NextResponse.json({ error: "Invoice transfer belum dapat dicatat." }, { status: 500 });
+  }
 
-  const query = new URLSearchParams({ order: orderId, plan });
+  const { data: invoice, error: invoiceError } = await paymentAdmin
+    .from("subscriptions")
+    .select("id,tenant_id,owner_id,order_id,plan,months,amount,status,payment_method,payment_provider,payment_url,pakasir_txn_id,created_at,invoice_email_sent_at,invoice_email_attempted_at,pakasir_status_checked_at,billing_pending_lock")
+    .eq("order_id", orderId)
+    .maybeSingle();
+  if (invoiceError || !invoice) {
+    return NextResponse.json({ error: "Invoice transfer belum dapat dibaca." }, { status: 500 });
+  }
+  const emailSent = await sendBillingInvoiceEmail({
+    admin: paymentAdmin,
+    invoice,
+    email: user.email,
+  });
+
   return NextResponse.json({
     ok: true,
     orderId,
     amount,
-    confirmationUrl: `/dashboard/billing/confirmation?${query.toString()}`,
+    confirmationUrl: billingConfirmationUrl(orderId, plan, emailSent ? "sent" : "failed"),
+    emailSent,
   });
 }
