@@ -10,7 +10,7 @@ import { getCurrentMerchant } from "../queries/current-merchant";
 
 import { getPlanRules } from "@/features/billing/plans";
 
-import { RESERVED_STORE_SLUGS } from "../store-paths";
+import { getStorefrontPath, RESERVED_STORE_SLUGS } from "../store-paths";
 
 function slugify(value: string) {
   return value
@@ -66,8 +66,9 @@ export async function createLinkAction(formData: FormData) {
   });
   if (error) redirect("/dashboard/links?error=Link+belum+dapat+disimpan.");
   revalidatePath("/dashboard/links");
-  revalidatePath(`/${tenant!.slug}`);
+  revalidatePath(getStorefrontPath(tenant!.slug));
   revalidatePath("/dashboard");
+  revalidatePath("/sitemap.xml");
 }
 
 export async function toggleLinkAction(formData: FormData) {
@@ -81,7 +82,8 @@ export async function toggleLinkAction(formData: FormData) {
     .eq("id", id.data!)
     .eq("tenant_id", tenant!.id);
   revalidatePath("/dashboard/links");
-  revalidatePath(`/${tenant!.slug}`);
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }
 
 export async function deleteLinkAction(formData: FormData) {
@@ -90,6 +92,7 @@ export async function deleteLinkAction(formData: FormData) {
   const { tenant, supabase } = await requireTenant();
   await supabase.from("custom_links").delete().eq("id", id.data!).eq("tenant_id", tenant!.id);
   revalidatePath("/dashboard/links");
-  revalidatePath(`/${tenant!.slug}`);
+  revalidatePath(getStorefrontPath(tenant!.slug));
   revalidatePath("/dashboard");
+  revalidatePath("/sitemap.xml");
 }

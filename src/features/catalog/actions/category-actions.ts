@@ -10,7 +10,7 @@ import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
 
 import { getPlanRules } from "@/features/billing/plans";
 
-import { RESERVED_STORE_SLUGS } from "@/features/stores/store-paths";
+import { getStorefrontPath, RESERVED_STORE_SLUGS } from "@/features/stores/store-paths";
 
 function slugify(value: string) {
   return value
@@ -61,6 +61,8 @@ export async function createCategoryAction(formData: FormData) {
     redirect("/dashboard/categories?error=Kategori+dengan+nama+tersebut+sudah+ada.");
   if (error) redirect("/dashboard/categories?error=Kategori+belum+dapat+disimpan.");
   revalidatePath("/dashboard/categories");
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }
 
 export async function updateCategoryAction(formData: FormData) {
@@ -94,7 +96,8 @@ export async function updateCategoryAction(formData: FormData) {
   if (error) redirect("/dashboard/categories?error=Kategori+belum+dapat+diperbarui.");
   revalidatePath("/dashboard/categories");
   revalidatePath("/dashboard/menu");
-  revalidatePath(`/${tenant!.slug}`);
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }
 
 export async function toggleCategoryAction(formData: FormData) {
@@ -109,6 +112,8 @@ export async function toggleCategoryAction(formData: FormData) {
     .eq("tenant_id", tenant!.id);
   revalidatePath("/dashboard/categories");
   revalidatePath("/dashboard/menu");
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }
 
 export async function deleteCategoryAction(formData: FormData) {
@@ -118,4 +123,6 @@ export async function deleteCategoryAction(formData: FormData) {
   await supabase.from("categories").delete().eq("id", id.data!).eq("tenant_id", tenant!.id);
   revalidatePath("/dashboard/categories");
   revalidatePath("/dashboard/menu");
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }

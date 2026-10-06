@@ -59,6 +59,7 @@ export async function approveSubscriptionAction(formData: FormData) {
       html: `<h2>Pembayaran Menuku berhasil diverifikasi</h2><p>Halo ${owner.name || ""}, paket <b>${subscription.plan}</b> untuk ${tenant?.name || "bisnis kamu"} aktif sampai <b>${expiresAt.toLocaleDateString("id-ID")}</b>.</p><p>Nominal: Rp${Number(subscription.amount).toLocaleString("id-ID")}</p>`,
     });
   revalidatePath("/admin");
+  revalidatePath("/sitemap.xml");
 }
 
 export async function remindSubscriptionAction(formData: FormData) {
@@ -106,4 +107,5 @@ export async function toggleCommunityVisibilityAction(formData: FormData) {
 
   revalidatePath("/admin");
   revalidatePath("/community");
+  revalidatePath("/sitemap.xml");
 }

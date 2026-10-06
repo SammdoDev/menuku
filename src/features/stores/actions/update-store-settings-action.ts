@@ -10,12 +10,8 @@ import { getCurrentMerchant } from "../queries/current-merchant";
 
 import { getPlanRules } from "@/features/billing/plans";
 
-import { RESERVED_STORE_SLUGS } from "../store-paths";
-import {
-  isValidOpeningTime,
-  openingHourDays,
-  type OpeningHours,
-} from "../opening-hours";
+import { getStorefrontPath, RESERVED_STORE_SLUGS } from "../store-paths";
+import { isValidOpeningTime, openingHourDays, type OpeningHours } from "../opening-hours";
 
 function slugify(value: string) {
   return value
@@ -153,7 +149,8 @@ export async function updateStoreSettingsAction(formData: FormData) {
   if (error) fail("Pengaturan belum dapat disimpan. Coba lagi.");
 
   revalidatePath("/dashboard/settings");
-  revalidatePath(`/${previousSlug}`);
-  revalidatePath(`/${value.slug}`);
+  revalidatePath(getStorefrontPath(previousSlug));
+  revalidatePath(getStorefrontPath(value.slug));
+  revalidatePath("/sitemap.xml");
   redirect("/dashboard/settings?success=Pengaturan+berhasil+disimpan.");
 }

@@ -16,4 +16,13 @@ export const RESERVED_STORE_SLUGS = new Set([
   "help",
   "pricing",
   "settings",
+  "en",
+  "ja",
+  "ms",
+  "zh",
 ]);
+
+export function getStorefrontPath(slug: string) {
+  const encodedSlug = encodeURIComponent(slug);
+  return RESERVED_STORE_SLUGS.has(slug) ? `/store/${encodedSlug}` : `/${encodedSlug}`;
+}

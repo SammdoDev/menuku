@@ -10,7 +10,7 @@ import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
 
 import { getPlanRules } from "@/features/billing/plans";
 
-import { RESERVED_STORE_SLUGS } from "@/features/stores/store-paths";
+import { getStorefrontPath, RESERVED_STORE_SLUGS } from "@/features/stores/store-paths";
 
 function slugify(value: string) {
   return value
@@ -90,6 +90,8 @@ export async function createProductAction(formData: FormData) {
   if (error) redirect("/dashboard/menu?error=Menu+belum+dapat+disimpan.");
   revalidatePath("/dashboard/menu");
   revalidatePath("/dashboard");
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }
 
 export async function updateProductAction(formData: FormData) {
@@ -151,7 +153,8 @@ export async function updateProductAction(formData: FormData) {
   if (error) redirect("/dashboard/menu?error=Menu+belum+dapat+diperbarui.");
   revalidatePath("/dashboard/menu");
   revalidatePath("/dashboard");
-  revalidatePath(`/${tenant!.slug}`);
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }
 
 export async function toggleProductAction(formData: FormData) {
@@ -168,6 +171,8 @@ export async function toggleProductAction(formData: FormData) {
     .eq("tenant_id", tenant!.id);
   revalidatePath("/dashboard/menu");
   revalidatePath("/dashboard");
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }
 
 export async function deleteProductAction(formData: FormData) {
@@ -177,4 +182,6 @@ export async function deleteProductAction(formData: FormData) {
   await supabase.from("products").delete().eq("id", id.data!).eq("tenant_id", tenant!.id);
   revalidatePath("/dashboard/menu");
   revalidatePath("/dashboard");
+  revalidatePath(getStorefrontPath(tenant!.slug));
+  revalidatePath("/sitemap.xml");
 }

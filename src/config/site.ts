@@ -1,3 +1,5 @@
+import { getStorefrontPath } from "@/features/stores/store-paths";
+
 export const INDEXABLE_SITE_URL = "https://www.digimenu.my.id";
 
 function getPublicSiteUrl() {
@@ -20,7 +22,7 @@ export const PUBLIC_SITE_URL = getPublicSiteUrl();
 export const SUPPORT_WHATSAPP = process.env.NEXT_PUBLIC_SUPPORT_WHATSAPP || "6282264274973";
 
 export function publicStoreUrl(slug: string) {
-  return `${PUBLIC_SITE_URL}/${encodeURIComponent(slug)}`;
+  return `${PUBLIC_SITE_URL}${getStorefrontPath(slug)}`;
 }
 
 export function supportWhatsAppUrl(message = "Halo admin Menuku, saya ingin bertanya.") {

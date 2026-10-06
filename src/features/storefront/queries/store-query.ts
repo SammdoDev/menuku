@@ -1,19 +1,28 @@
 import "server-only";
 
+import { cache } from "react";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { PublicStore } from "../types";
 
-export async function getStoreBySlug(slug: string): Promise<PublicStore | null> {
+async function loadPublishedStoreBySlug(slug: string): Promise<PublicStore | null> {
   const supabase = await createSupabaseServerClient();
-  const { data: tenant } = await supabase
+  const { data: tenant, error: tenantError } = await supabase
     .from("tenants")
     .select(
       "id,name,slug,description,logo_url,banner_url,promo_enabled,promo_title,promo_description,promo_image_url,promo_link_url,plan,whatsapp,instagram,address,maps_url,opening_hours,primary_color,background_color,layout_type,show_price,show_address,show_opening_hours,is_published,is_active",
     )
     .eq("slug", slug)
+    .eq("is_active", true)
+    .eq("is_published", true)
     .maybeSingle<PublicStore["tenant"]>();
-  if (!tenant || !tenant.is_active) return null;
-  const [{ data: categories }, { data: products }, { data: links }] = await Promise.all([
+  if (tenantError) {
+    throw new Error(`Failed to load storefront tenant for slug "${slug}".`, {
+      cause: tenantError,
+    });
+  }
+  if (!tenant || !tenant.is_active || !tenant.is_published) return null;
+
+  const [categoriesResult, productsResult, linksResult] = await Promise.all([
     supabase
       .from("categories")
       .select("id,name,slug,description")
@@ -35,5 +44,29 @@ export async function getStoreBySlug(slug: string): Promise<PublicStore | null> 
       .eq("is_active", true)
       .order("sort_order"),
   ]);
-  return { tenant, categories: categories ?? [], products: products ?? [], links: links ?? [] };
+
+  if (categoriesResult.error) {
+    throw new Error(`Failed to load categories for storefront "${slug}".`, {
+      cause: categoriesResult.error,
+    });
+  }
+  if (productsResult.error) {
+    throw new Error(`Failed to load products for storefront "${slug}".`, {
+      cause: productsResult.error,
+    });
+  }
+  if (linksResult.error) {
+    throw new Error(`Failed to load links for storefront "${slug}".`, {
+      cause: linksResult.error,
+    });
+  }
+
+  return {
+    tenant,
+    categories: categoriesResult.data ?? [],
+    products: productsResult.data ?? [],
+    links: linksResult.data ?? [],
+  };
 }
+
+export const getStoreBySlug = cache(loadPublishedStoreBySlug);

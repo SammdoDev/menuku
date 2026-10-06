@@ -9,6 +9,7 @@ import { z } from "zod";
 import { getCurrentMerchant } from "../queries/current-merchant";
 
 import { getPlanRules } from "@/features/billing/plans";
+import { getStorefrontPath } from "@/features/stores/store-paths";
 
 import { RESERVED_STORE_SLUGS } from "../store-paths";
 
@@ -31,12 +32,14 @@ async function requireTenant() {
 export async function togglePublishAction(formData: FormData) {
   const published = formData.get("published") === "true";
   const { tenant, supabase } = await requireTenant();
-  await supabase
+  const { error } = await supabase
     .from("tenants")
     .update({ is_published: !published })
     .eq("id", tenant!.id)
     .eq("owner_id", tenant!.owner_id);
+  if (error) throw new Error("Failed to update storefront publication status.", { cause: error });
   revalidatePath("/dashboard");
-  revalidatePath(`/${tenant!.slug}`);
+  revalidatePath(getStorefrontPath(tenant!.slug));
   revalidatePath("/dashboard/publish");
+  revalidatePath("/sitemap.xml");
 }

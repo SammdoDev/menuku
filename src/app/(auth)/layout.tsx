@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import FeaturePage from "@/features/onboarding/components/onboarding-page";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default FeaturePage;
+export default function AuthLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return children;
+}
