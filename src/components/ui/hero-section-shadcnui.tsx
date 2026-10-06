@@ -1,23 +1,5 @@
-"use client";
-
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowDown, ArrowRight, Check, Sparkles } from "lucide-react";
 import { Highlight } from "@/components/ui/hero-highlight";
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.13, delayChildren: 0.1 },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
 
 type HeroSectionProps = {
   eyebrow: string;
@@ -40,92 +22,46 @@ export function HeroSection({
   secondaryLabel,
   points,
 }: HeroSectionProps) {
-  const reduceMotion = useReducedMotion();
-  const [activeHighlightIndex, setActiveHighlightIndex] = useState(0);
   const highlights = rotatingHighlights.length ? rotatingHighlights : [highlight];
-  const widestHighlight = highlights.reduce(
-    (widest, phrase) => (phrase.length > widest.length ? phrase : widest),
-    highlight,
-  );
-
-  useEffect(() => {
-    if (reduceMotion || highlights.length < 2) return;
-
-    const rotation = window.setInterval(() => {
-      setActiveHighlightIndex((index) => (index + 1) % highlights.length);
-    }, 7200);
-
-    return () => window.clearInterval(rotation);
-  }, [highlights.length, reduceMotion]);
-
-  const activeHighlight = highlights[activeHighlightIndex] ?? highlight;
+  const activeHighlight = highlights[0] ?? highlight;
 
   return (
-    <motion.div
-      animate="visible"
-      className="relative z-10 lg:col-span-6"
-      initial="hidden"
-      variants={containerVariants}
-    >
-      <motion.p
-        className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#efc7b5] bg-white/85 px-3 py-2 text-[10px] font-black tracking-[.13em] text-[#a03417] shadow-sm sm:text-xs"
-        variants={itemVariants}
-      >
+    <div className="relative z-10 lg:col-span-6">
+      <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#efc7b5] bg-white/85 px-3 py-2 text-[10px] font-black tracking-[.13em] text-[#a03417] shadow-sm sm:text-xs">
         <Sparkles aria-hidden="true" size={14} /> {eyebrow}
-      </motion.p>
-      <motion.h1
-        className="display-font max-w-2xl text-[2.8rem] leading-[.99] font-black tracking-[-.06em] sm:text-6xl lg:text-[4.35rem]"
-        variants={itemVariants}
-      >
+      </p>
+      <h1 className="display-font max-w-2xl text-[2.8rem] leading-[.99] font-black tracking-[-.06em] sm:text-6xl lg:text-[4.35rem]">
         {title}{" "}
         <span className="relative inline-grid max-w-full align-baseline">
-          <span aria-hidden="true" className="invisible col-start-1 row-start-1 max-w-full">
-            {widestHighlight}
+          <span className="max-w-full">
+            <Highlight>{activeHighlight}</Highlight>
           </span>
-          <AnimatePresence initial={false} mode="wait">
-            <motion.span
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              className="col-start-1 row-start-1 max-w-full"
-              exit={{ opacity: 0, y: -5, filter: "blur(3px)" }}
-              initial={{ opacity: 0, y: 7, filter: "blur(3px)" }}
-              key={activeHighlight}
-              transition={{ duration: 0.58, ease: "easeInOut" }}
-            >
-              <Highlight>{activeHighlight}</Highlight>
-            </motion.span>
-          </AnimatePresence>
         </span>
-      </motion.h1>
-      <motion.p
-        className="text-muted mt-6 max-w-xl text-sm leading-7 sm:text-base sm:leading-8"
-        variants={itemVariants}
-      >
+      </h1>
+      <p className="text-muted mt-6 max-w-xl text-sm leading-7 sm:text-base sm:leading-8">
         {description}
-      </motion.p>
-      <motion.div className="mt-8 flex flex-wrap items-center gap-3" variants={itemVariants}>
-        <Link
+      </p>
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        <a
           className="bg-brand hover:bg-brand-dark inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-5 text-sm font-extrabold text-white shadow-lg shadow-[#b13b19]/15 transition hover:-translate-y-0.5"
           href="/register"
         >
           {primaryLabel} <ArrowRight aria-hidden="true" size={16} />
-        </Link>
+        </a>
         <a
           className="border-line inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border bg-white/90 px-5 text-sm font-bold transition hover:border-[#c7a493]"
           href="#galeri"
         >
           {secondaryLabel} <ArrowDown aria-hidden="true" size={15} />
         </a>
-      </motion.div>
-      <motion.div
-        className="text-muted mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs"
-        variants={itemVariants}
-      >
+      </div>
+      <div className="text-muted mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs">
         {points.map((point) => (
           <span className="inline-flex items-center gap-2" key={point}>
             <Check aria-hidden="true" className="text-[#b13b19]" size={15} /> {point}
           </span>
         ))}
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

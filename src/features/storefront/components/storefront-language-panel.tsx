@@ -7,6 +7,7 @@ import { Check, Globe2, X } from "lucide-react";
 import { languageOptions } from "@/i18n/language-options";
 import type { Locale } from "@/i18n/config";
 import { getContrastTextColor } from "../helpers";
+import { LanguageFlag } from "@/components/ui/language-autocomplete";
 
 export default function StorefrontLanguagePanel({
   open,
@@ -112,8 +113,8 @@ export default function StorefrontLanguagePanel({
                     onClose();
                   }}
                 >
-                  <span aria-hidden="true" className="text-lg leading-none">
-                    {option.flag}
+                  <span aria-hidden="true" className="inline-flex shrink-0">
+                    <LanguageFlag flag={option.flag} />
                   </span>
                   <span className="min-w-0 flex-1 truncate">{option.label}</span>
                   {selected && <Check size={15} aria-hidden="true" />}

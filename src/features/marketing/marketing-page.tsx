@@ -1,25 +1,21 @@
-"use client";
-
-import MarketingMotionProvider from "./components/landing-motion";
 import MarketingNavbar from "./components/marketing-navbar";
-import MarketingCtaSection from "./sections/cta-section";
-import MarketingFaqSection from "./sections/faq-section";
-import MarketingFeaturesSection from "./sections/features-section";
-import MarketingFooterSection from "./sections/footer-section";
-import MarketingGallerySection from "./sections/gallery-section";
-import MarketingHero from "./sections/hero-section";
-import MarketingPaymentSection from "./sections/payment-section";
-import MarketingPricingSection from "./sections/pricing-section";
-import MarketingStepsSection from "./sections/steps-section";
+import MarketingCtaSection from "./sections/cta/cta-section";
+import MarketingFaqSection from "./sections/faq/faq-section";
+import MarketingFeaturesSection from "./sections/features/features-section";
+import MarketingFooterSection from "./sections/footer/footer-section";
+import MarketingGallerySection from "./sections/gallery/gallery-section";
+import MarketingHero from "./sections/hero/hero-section";
+import MarketingPaymentSection from "./sections/payment/payment-section";
+import MarketingPricingSection from "./sections/pricing/pricing-section";
+import MarketingStepsSection from "./sections/steps/steps-section";
 import type { LandingPlanPrice } from "./types";
-import MarketingStorySection from "./sections/story-section";
-import { useLocale } from "../../i18n/use-locale";
+import MarketingStorySection from "./sections/story/story-section";
 import { getMessages } from "../../i18n/messages";
+import type { Locale } from "@/i18n/config";
 
-type MarketingPageProps = { planPrices: LandingPlanPrice[] };
+type MarketingPageProps = { planPrices: LandingPlanPrice[]; locale: Locale };
 
-function MarketingPage({ planPrices }: MarketingPageProps) {
-  const { locale, setLocale } = useLocale();
+function MarketingPage({ planPrices, locale }: MarketingPageProps) {
   const constants = getMessages(locale);
   const currencyLocaleMap = {
     id: "id-ID",
@@ -38,25 +34,23 @@ function MarketingPage({ planPrices }: MarketingPageProps) {
   );
 
   return (
-    <MarketingMotionProvider>
-      <main className="bg-paper text-ink min-h-screen overflow-hidden">
-        <MarketingNavbar constants={constants} locale={locale} onLocaleChange={setLocale} />
-        <MarketingHero constants={constants} />
-        <MarketingGallerySection constants={constants} />
-        <MarketingStorySection constants={constants} locale={locale} />
-        <MarketingFeaturesSection constants={constants} />
-        <MarketingStepsSection constants={constants} />
-        <MarketingPricingSection
-          constants={constants}
-          currency={currency}
-          planPrices={planPrices}
-        />
-        <MarketingPaymentSection constants={constants} />
-        <MarketingFaqSection constants={constants} />
-        <MarketingCtaSection constants={constants} />
-        <MarketingFooterSection constants={constants} />
-      </main>
-    </MarketingMotionProvider>
+    <main lang={locale} className="bg-paper text-ink min-h-screen overflow-hidden">
+      <MarketingNavbar constants={constants} locale={locale} />
+      <MarketingHero constants={constants} />
+      <MarketingGallerySection constants={constants} />
+      <MarketingStorySection constants={constants} />
+      <MarketingFeaturesSection constants={constants} />
+      <MarketingStepsSection constants={constants} />
+      <MarketingPricingSection
+        constants={constants}
+        currency={currency}
+        planPrices={planPrices}
+      />
+      <MarketingPaymentSection constants={constants} />
+      <MarketingFaqSection constants={constants} />
+      <MarketingCtaSection constants={constants} />
+      <MarketingFooterSection constants={constants} />
+    </main>
   );
 }
 

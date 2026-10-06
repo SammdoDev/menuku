@@ -17,7 +17,7 @@ src/
     billing/      Plans, invoice data, payment reconciliation, and invoice email
     catalog/      Products, categories, and related actions
     dashboard/    Shared dashboard shell and motion
-    marketing/    Landing page, sections, and marketing components
+    marketing/    Landing page composition, grouped sections, and shared marketing components
     onboarding/   Store setup flow
     stores/       Store profile, settings, publishing, and business links
     storefront/   Public store pages, display components, and analytics tracking
@@ -28,6 +28,8 @@ src/
 ```
 
 The `@/*` import alias resolves to `src/*`. Next.js route conventions stay in `src/app`: keep `page.tsx`, `layout.tsx`, `route.ts`, `loading.tsx`, `error.tsx`, `not-found.tsx`, `sitemap.ts`, and `robots.ts` there. Move reusable feature implementation out of route files and into the matching `src/features/<feature>/` folder.
+
+The marketing landing page is composed in `src/features/marketing/marketing-page.tsx`. Each landing section has its own folder under `sections/`; keep the section component at that folder's root (for example, `sections/pricing/pricing-section.tsx`) and place components it uses in that section's `components/` directory (for example, `sections/pricing/components/pricing-plan-card.tsx`). Components reused by several sections stay under `marketing/components/`.
 
 ## Naming
 
