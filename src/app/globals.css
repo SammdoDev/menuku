@@ -59,6 +59,16 @@
   contain-intrinsic-size: auto 56rem;
 }
 
+.storefront-language-panel {
+  max-height: min(65vh, calc(100vh - 5rem - env(safe-area-inset-bottom)));
+}
+
+@supports (height: 100dvh) {
+  .storefront-language-panel {
+    max-height: min(65dvh, calc(100dvh - 5rem - env(safe-area-inset-bottom)));
+  }
+}
+
 @keyframes chart-breathe {
   0%,
   100% {

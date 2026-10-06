@@ -8,93 +8,62 @@ const featureCards = [
     feature: "menu",
     layout: "sm:col-span-2 lg:col-span-6 lg:row-span-2",
   },
-  {
-    icon: MapPin,
-    feature: "store",
-    layout: "lg:col-span-6",
-  },
-  {
-    icon: Link2,
-    feature: "links",
-    layout: "lg:col-span-3",
-  },
-  {
-    icon: Activity,
-    feature: "analytics",
-    layout: "lg:col-span-3",
-  },
+  { icon: MapPin, feature: "store", layout: "lg:col-span-6" },
+  { icon: Link2, feature: "links", layout: "lg:col-span-3" },
+  { icon: Activity, feature: "analytics", layout: "lg:col-span-3" },
 ] as const;
-
 const linkIcons = [
   { Icon: Globe2, color: "bg-[#e6f4ea] text-[#24834c]" },
   { Icon: Instagram, color: "bg-[#fce8df] text-[#b13b19]" },
   { Icon: MapPin, color: "bg-[#eee9f8] text-[#6655a2]" },
   { Icon: Link2, color: "bg-[#f1eee8] text-[#29251f]" },
 ];
-
-type FeatureGridProps = {
-  constants: LandingConstants;
-};
+type FeatureGridProps = { constants: LandingConstants };
 
 function MarketingFeatureGrid({ constants }: FeatureGridProps) {
   return (
-    <div className="mt-10 grid auto-rows-[minmax(240px,auto)] gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(190px,auto)] lg:grid-cols-12" data-stagger>
-      {featureCards.map(({ icon: Icon, feature, layout }) => {
+    <div className="mt-10 grid auto-rows-[minmax(240px,auto)] gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(190px,auto)] lg:grid-cols-12">
+      {featureCards.map(({ icon: Icon, feature, layout }, index) => {
         const isMenu = feature === "menu";
-
         return (
-          <div key={feature} className={`min-w-0 ${layout}`}>
+          <div key={feature} className={`min-w-0 ${layout}`} data-feature-item>
             <article
-              className={`group relative isolate h-full overflow-hidden rounded-[1.7rem] border p-5 transition duration-500 hover:shadow-2xl motion-safe:hover:-translate-y-1 motion-reduce:transition-none sm:p-6 ${
-                isMenu
-                  ? "min-h-[420px] border-[#39342d] bg-[#29251f] text-white shadow-xl shadow-[#29251f]/10"
-                  : "min-h-[240px] border-[#e9dfd7] bg-white text-[#29251f] shadow-lg shadow-[#674c3e]/[.035] hover:border-[#d2a28c] hover:shadow-[#674c3e]/[.09] lg:min-h-0"
-              }`}
+              data-feature-card
+              data-motion-active="false"
+              className={`marketing-feature-card group relative isolate h-full overflow-hidden rounded-[1.7rem] border p-5 transition duration-500 hover:shadow-2xl motion-safe:hover:-translate-y-1 motion-reduce:transition-none sm:p-6 ${isMenu ? "min-h-[420px] border-[#39342d] bg-[#29251f] text-white shadow-xl shadow-[#29251f]/10" : "min-h-[240px] border-[#e9dfd7] bg-white text-[#29251f] shadow-lg shadow-[#674c3e]/[.035] hover:border-[#d2a28c] hover:shadow-[#674c3e]/[.09] lg:min-h-0"}`}
             >
               <div
                 aria-hidden="true"
-                className={`pointer-events-none absolute -right-12 -bottom-20 size-56 rounded-full blur-3xl motion-safe:animate-[ambient-glow-drift_14s_ease-in-out_infinite] ${
-                  isMenu ? "bg-[#ff6534]/20" : "bg-[#f8d8c6]/35"
-                }`}
+                className={`feature-glow-motion pointer-events-none absolute -right-12 -bottom-20 size-56 rounded-full blur-3xl ${isMenu ? "bg-[#ff6534]/20" : "bg-[#f8d8c6]/35"}`}
+                style={{ animationDelay: `${index * -2}s` }}
               />
-
               <div
-                className={`relative z-10 grid h-full items-center gap-4 ${
-                  isMenu
-                    ? "grid-cols-1 sm:grid-cols-[.82fr_1.18fr]"
-                    : "grid-cols-[minmax(0,1fr)_minmax(70px,.52fr)]"
-                }`}
+                className={`relative z-10 grid h-full items-center gap-4 ${isMenu ? "grid-cols-1 sm:grid-cols-[.82fr_1.18fr]" : "grid-cols-[minmax(0,1fr)_minmax(70px,.52fr)]"}`}
               >
                 <div className="min-w-0">
                   <span
-                    className={`grid size-11 place-items-center rounded-[.95rem] shadow-sm transition-transform duration-300 motion-safe:group-hover:scale-105 motion-safe:group-hover:-rotate-6 motion-reduce:transition-none ${
-                      isMenu
-                        ? "bg-[#b13b19] text-white shadow-[#b13b19]/20"
-                        : "bg-[#fff0e8] text-[#b13b19]"
-                    }`}
+                    className={`grid size-11 place-items-center rounded-[.95rem] shadow-sm transition-transform duration-300 motion-safe:group-hover:scale-105 motion-safe:group-hover:-rotate-6 motion-reduce:transition-none ${isMenu ? "bg-[#ff6534] text-white shadow-[#ff6534]/20" : "bg-[#fff0e8] text-[#b13b19]"}`}
                   >
-                    <span className="inline-flex">
+                    <span
+                      className="feature-icon-motion inline-flex"
+                      style={{ animationDelay: `${index * -0.6}s` }}
+                    >
                       <Icon aria-hidden="true" size={20} />
                     </span>
                   </span>
-
                   <div className="mt-4">
                     <h3 className="display-font text-lg leading-snug font-black sm:text-xl">
                       {constants.feature[feature].title}
                     </h3>
-
                     <p
-                      className={`mt-2 text-xs leading-5 sm:text-[13px] sm:leading-6 ${
-                        isMenu ? "text-white/60" : "text-muted"
-                      }`}
+                      className={`mt-2 text-xs leading-5 sm:text-[13px] sm:leading-6 ${isMenu ? "text-white/60" : "text-muted"}`}
                     >
                       {constants.feature[feature].copy}
                     </p>
                   </div>
                 </div>
-
                 {feature === "menu" && (
-                  <div aria-hidden="true" className="w-full">
+                  <div aria-hidden="true" className="feature-menu-motion w-full">
                     <div className="w-full rotate-[-3deg] rounded-2xl border border-white/70 bg-white p-3 shadow-[0_20px_50px_-22px_rgba(0,0,0,.6)] transition-transform duration-700 motion-safe:group-hover:scale-[1.03] motion-safe:group-hover:rotate-0 motion-reduce:transition-none sm:p-4">
                       <div className="flex items-center gap-1.5 border-b border-[#eee8e1] pb-2.5">
                         <span className="size-1.5 rounded-full bg-[#ff9d79]" />
@@ -102,12 +71,12 @@ function MarketingFeatureGrid({ constants }: FeatureGridProps) {
                         <span className="size-1.5 rounded-full bg-[#b7d09e]" />
                         <span className="ml-auto h-1.5 w-12 rounded-full bg-[#eee8e1]" />
                       </div>
-
                       <div className="mt-3 grid gap-2.5">
                         {[0, 1, 2].map((row) => (
                           <div
                             key={row}
-                            className="flex items-center gap-2.5"
+                            className="feature-row-motion flex items-center gap-2.5"
+                            style={{ animationDelay: `${row * -0.7}s` }}
                           >
                             <span
                               className="size-8 shrink-0 rounded-lg bg-center bg-no-repeat"
@@ -117,12 +86,10 @@ function MarketingFeatureGrid({ constants }: FeatureGridProps) {
                                 backgroundSize: "300% auto",
                               }}
                             />
-
                             <span className="grid flex-1 gap-1.5">
                               <span className="h-1.5 w-3/4 rounded-full bg-[#d9d3cc]" />
                               <span className="h-1 w-1/2 rounded-full bg-[#eee8e1]" />
                             </span>
-
                             <span className="h-2 w-8 rounded-full bg-[#f2a27e]" />
                           </div>
                         ))}
@@ -130,55 +97,50 @@ function MarketingFeatureGrid({ constants }: FeatureGridProps) {
                     </div>
                   </div>
                 )}
-
                 {feature === "store" && (
                   <div
                     aria-hidden="true"
                     className="relative aspect-[1.1] min-h-24 overflow-hidden rounded-2xl bg-[#f5f2eb] shadow-inner"
                   >
                     <div
-                      className="absolute -inset-3 opacity-70"
+                      className="feature-map-motion absolute -inset-3 opacity-70"
                       style={{
                         backgroundImage:
                           "linear-gradient(28deg, transparent 45%, white 46%, white 54%, transparent 55%), linear-gradient(110deg, transparent 42%, white 43%, white 50%, transparent 51%), linear-gradient(0deg, transparent 48%, #dce5d4 49%, #dce5d4 55%, transparent 56%)",
                         backgroundSize: "72px 58px, 90px 72px, 100% 100%",
                       }}
                     />
-
                     <div className="absolute top-5 left-1/2 size-9 -translate-x-1/2">
-                      <span className="absolute inset-0 rounded-full border border-[#b13b19]/50 bg-[#b13b19]/10" />
-
-                      <span className="relative grid size-9 place-items-center rounded-full bg-[#b13b19] text-white shadow-lg shadow-[#b13b19]/25">
+                      <span className="feature-ring-motion absolute inset-0 rounded-full border border-[#b13b19]/50 bg-[#b13b19]/10" />
+                      <span className="feature-pin-motion relative grid size-9 place-items-center rounded-full bg-[#b13b19] text-white shadow-lg shadow-[#b13b19]/25">
                         <MapPin size={16} />
                       </span>
                     </div>
-
                     <span className="absolute right-3 bottom-3 flex items-center gap-1 rounded-full border border-white bg-white/95 px-2 py-1 text-[9px] font-bold text-[#477047] shadow-sm">
-                      <span className="inline-flex">
+                      <span className="feature-clock-motion inline-flex">
                         <Clock3 size={11} />
                       </span>
                       <span className="h-1.5 w-12 rounded-full bg-[#dce8cd]" />
                     </span>
                   </div>
                 )}
-
                 {feature === "links" && (
                   <div aria-hidden="true" className="grid grid-cols-2 justify-items-center gap-2">
                     {linkIcons.map(({ Icon: LinkIcon, color }, index) => (
                       <span
                         key={index}
-                        className={`grid size-9 place-items-center rounded-xl shadow-sm ${color}`}
+                        className={`feature-link-motion grid size-9 place-items-center rounded-xl shadow-sm ${color}`}
+                        style={{ animationDelay: `${index * -0.45}s` }}
                       >
                         <LinkIcon size={16} />
                       </span>
                     ))}
                   </div>
                 )}
-
                 {feature === "analytics" && (
                   <div aria-hidden="true" className="w-full self-end">
                     <div className="mb-2 flex items-center justify-end gap-1.5">
-                      <span className="size-1.5 rounded-full bg-[#ff6534]" />
+                      <span className="feature-icon-motion size-1.5 rounded-full bg-[#ff6534]" />
                       <span className="h-1.5 w-12 rounded-full bg-[#eee8e1]" />
                     </div>
                     <MarketingAnalyticsBars />
@@ -189,7 +151,31 @@ function MarketingFeatureGrid({ constants }: FeatureGridProps) {
           </div>
         );
       })}
-
+      <style>{`
+        .feature-icon-motion { animation: feature-icon-breathe 3.5s ease-in-out infinite; }
+        .feature-menu-motion { animation: feature-menu-drift 6s ease-in-out infinite; }
+        .feature-row-motion { animation: feature-row-highlight 4.5s ease-in-out infinite; }
+        .feature-map-motion { animation: feature-map-pan 9s ease-in-out infinite; }
+        .feature-pin-motion { animation: feature-pin-bounce 2.8s ease-in-out infinite; }
+        .feature-ring-motion { animation: feature-location-ring 2.8s ease-out infinite; }
+        .feature-clock-motion { animation: feature-clock-tilt 4s ease-in-out infinite; }
+        .feature-link-motion { animation: feature-link-wave 3.2s ease-in-out infinite; }
+        .feature-glow-motion { animation: feature-glow-drift 10s ease-in-out infinite; }
+        .marketing-feature-card:not([data-motion-active="true"]) * { animation-play-state: paused !important; }
+        @keyframes feature-icon-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes feature-menu-drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        @keyframes feature-row-highlight { 0%, 100% { opacity: 1; } 50% { opacity: 0.65; } }
+        @keyframes feature-map-pan { 0%, 100% { transform: translate(-4px, 3px); } 50% { transform: translate(5px, -4px); } }
+        @keyframes feature-pin-bounce { 0%, 100% { transform: translateY(0); } 45% { transform: translateY(-5px); } 65% { transform: translateY(0); } }
+        @keyframes feature-location-ring { 0% { transform: scale(0.8); opacity: 0.6; } 75%, 100% { transform: scale(2); opacity: 0; } }
+        @keyframes feature-clock-tilt { 0%, 100% { transform: rotate(0deg); } 35% { transform: rotate(-12deg); } 65% { transform: rotate(12deg); } }
+        @keyframes feature-link-wave { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-4px) rotate(-4deg); } }
+        @keyframes feature-glow-drift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-8px, -6px); } }
+        @media (prefers-reduced-motion: reduce) {
+          .marketing-feature-card * { animation: none !important; }
+          .feature-ring-motion { opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 }

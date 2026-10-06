@@ -16,12 +16,9 @@ import StorefrontOpeningHours from "./storefront-opening-hours";
 import { getContrastTextColor } from "../helpers";
 import { trackStorefront } from "../track-storefront";
 import { useStorefrontLocale } from "../storefront-locale";
-import { LanguageFlag } from "@/components/ui/language-autocomplete";
 
 export type StorefrontNavActive = "menu" | "browse" | "hours" | "language" | "share" | "chat";
-
 export type StorefrontNavPanel = "browse" | "hours" | "language" | null;
-
 type StorefrontNavItemProps = {
   label: string;
   icon: LucideIcon;
@@ -30,7 +27,6 @@ type StorefrontNavItemProps = {
   onClick: () => void;
   href?: string;
 };
-
 type StorefrontBottomNavProps = {
   onMenu: () => void;
   onBrowse: () => void;
@@ -62,19 +58,14 @@ function StorefrontNavItem({
         backgroundColor: primaryColor,
       }
     : { color: primaryColor };
-
-  const className = `flex min-h-[3.5rem] min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-1 text-[9px] leading-none font-bold transition duration-200 ease-out hover:bg-brand/10 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[.96] motion-reduce:transition-none ${
-    active ? "shadow-sm" : ""
-  }`;
-
+  const className = `flex min-h-[3.5rem] min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-1 text-[9px] leading-none font-bold transition duration-200 ease-out hover:bg-brand/10 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[.96] motion-reduce:transition-none ${active ? "shadow-sm" : ""}`;
   const content = (
     <>
       <Icon size={18} className="shrink-0" aria-hidden="true" />
       <span className="max-w-full truncate">{label}</span>
     </>
   );
-
-  if (href) {
+  if (href)
     return (
       <a
         href={href}
@@ -88,8 +79,6 @@ function StorefrontNavItem({
         {content}
       </a>
     );
-  }
-
   return (
     <button
       type="button"
@@ -121,18 +110,14 @@ function StorefrontBottomNav({
   showOpeningHours,
 }: StorefrontBottomNavProps) {
   const { locale, setLocale, language, messages } = useStorefrontLocale();
-
   const selectedLanguage =
     languageOptions.find((option) => option.value === locale) ?? languageOptions[0];
-
   const languageOpen = panel === "language";
-
   const navStyle = {
     "--color-brand": primaryColor,
     backgroundColor: `color-mix(in srgb, ${backgroundColor} 22%, white)`,
     borderColor: `color-mix(in srgb, ${primaryColor} 25%, transparent)`,
   } as CSSProperties;
-
   const languageStyle: CSSProperties =
     active === "language"
       ? {
@@ -143,35 +128,28 @@ function StorefrontBottomNav({
 
   function toggleOpeningHours() {
     const nextOpen = panel !== "hours";
-
     onPanelChange(nextOpen ? "hours" : null);
     onActiveChange(nextOpen ? "hours" : "menu");
   }
-
   function toggleLanguagePanel() {
     const nextOpen = panel !== "language";
-
     onPanelChange(nextOpen ? "language" : null);
     onActiveChange(nextOpen ? "language" : "menu");
   }
-
   function handleShare() {
     onPanelChange(null);
     onActiveChange("share");
     onShare();
   }
-
   function handleChat() {
     onPanelChange(null);
     onActiveChange("chat");
     trackStorefront(slug, "whatsapp_click");
   }
-
   const closeOpeningHours = useCallback(() => {
     onPanelChange(null);
     onActiveChange("menu");
   }, [onActiveChange, onPanelChange]);
-
   const closeLanguagePanel = useCallback(() => {
     onPanelChange(null);
     onActiveChange("menu");
@@ -183,9 +161,7 @@ function StorefrontBottomNav({
         data-storefront-bottom-nav
         aria-label={messages.nav.aria}
         style={navStyle}
-        className={`fixed inset-x-0 bottom-0 z-40 flex items-center gap-0 border-t px-1.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom))] shadow-[0_-8px_28px_#00000012] backdrop-blur-xl sm:inset-x-auto sm:bottom-5 sm:left-1/2 sm:w-[calc(100vw_-_2rem)] sm:max-w-md sm:-translate-x-1/2 sm:border sm:px-3 sm:py-2 sm:shadow-[0_14px_50px_rgba(0,0,0,.16)] ${
-          panel ? "sm:rounded-t-none sm:rounded-b-3xl" : "sm:rounded-3xl"
-        }`}
+        className={`fixed inset-x-0 bottom-0 z-40 flex items-center gap-0 border-t px-1.5 pt-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom))] shadow-[0_-8px_28px_#00000012] backdrop-blur-xl sm:inset-x-auto sm:bottom-5 sm:left-1/2 sm:w-[calc(100vw_-_2rem)] sm:max-w-md sm:-translate-x-1/2 sm:border sm:px-3 sm:py-2 sm:shadow-[0_14px_50px_rgba(0,0,0,.16)] ${panel ? "sm:rounded-t-none sm:rounded-b-3xl" : "sm:rounded-3xl"}`}
       >
         <StorefrontNavItem
           label={messages.nav.menu}
@@ -194,7 +170,6 @@ function StorefrontBottomNav({
           primaryColor={primaryColor}
           onClick={onMenu}
         />
-
         <StorefrontNavItem
           label={messages.nav.browse}
           icon={Search}
@@ -202,7 +177,6 @@ function StorefrontBottomNav({
           primaryColor={primaryColor}
           onClick={onBrowse}
         />
-
         {showOpeningHours && (
           <StorefrontNavItem
             label={messages.nav.hours}
@@ -212,7 +186,6 @@ function StorefrontBottomNav({
             onClick={toggleOpeningHours}
           />
         )}
-
         <StorefrontNavItem
           label={messages.nav.share}
           icon={Share2}
@@ -220,8 +193,7 @@ function StorefrontBottomNav({
           primaryColor={primaryColor}
           onClick={handleShare}
         />
-
-        {whatsapp && (
+        {whatsapp ? (
           <StorefrontNavItem
             label={messages.nav.chat}
             icon={MessageCircle}
@@ -230,14 +202,11 @@ function StorefrontBottomNav({
             href={whatsapp}
             onClick={handleChat}
           />
-        )}
-
+        ) : null}
         <button
           type="button"
           data-storefront-language-trigger
-          className={`hover:bg-brand/10 focus-visible:outline-brand flex min-h-[3.5rem] min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-1 text-[9px] leading-none font-bold transition duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-1 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[.96] motion-reduce:transition-none ${
-            active === "language" ? "shadow-sm" : ""
-          }`}
+          className={`hover:bg-brand/10 focus-visible:outline-brand flex min-h-[3.5rem] min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-1 text-[9px] leading-none font-bold transition duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-1 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 motion-safe:active:scale-[.96] motion-reduce:transition-none ${active === "language" ? "shadow-sm" : ""}`}
           style={languageStyle}
           onClick={toggleLanguagePanel}
           title={`${language.label}: ${selectedLanguage.label}`}
@@ -250,7 +219,6 @@ function StorefrontBottomNav({
           <span className="max-w-full truncate">{selectedLanguage.shortLabel}</span>
         </button>
       </nav>
-
       <StorefrontLanguagePanel
         open={languageOpen}
         label={language.label}
@@ -261,7 +229,6 @@ function StorefrontBottomNav({
         onValueChange={setLocale}
         onClose={closeLanguagePanel}
       />
-
       {showOpeningHours && (
         <StorefrontOpeningHours
           openingHours={openingHours}
@@ -272,19 +239,6 @@ function StorefrontBottomNav({
           onClose={closeOpeningHours}
         />
       )}
-
-      <style>{`
-        @keyframes storefront-language-flag-in {
-          from {
-            opacity: 0;
-            transform: translateY(3px) scale(0.85);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-      `}</style>
     </>
   );
 }

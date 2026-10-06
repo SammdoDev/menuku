@@ -21,7 +21,15 @@ function MarketingMotionProvider({ children }: { children: React.ReactNode }) {
       syncTouch: false,
     });
     const updateScrollTrigger = () => ScrollTrigger.update();
-    const refreshScrollTrigger = () => ScrollTrigger.refresh();
+    let refreshFrame: number | undefined;
+    let disposed = false;
+    const refreshScrollTrigger = () => {
+      if (disposed || refreshFrame !== undefined) return;
+      refreshFrame = window.requestAnimationFrame(() => {
+        refreshFrame = undefined;
+        if (!disposed) ScrollTrigger.refresh();
+      });
+    };
     let hasUserScrolled = false;
 
     function markUserScroll() {
@@ -47,7 +55,13 @@ function MarketingMotionProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener("menuku:translations-updated", refreshScrollTrigger);
 
     const updateLenis = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.lagSmoothing(0);
     gsap.ticker.add(updateLenis);
+    const deferredSections = root.current.querySelectorAll<HTMLElement>(".marketing-deferred");
+    const resizeObserver =
+      "ResizeObserver" in window ? new ResizeObserver(refreshScrollTrigger) : undefined;
+    deferredSections.forEach((section) => resizeObserver?.observe(section));
+    document.fonts?.ready.then(refreshScrollTrigger);
 
     const context = gsap.context(() => {
       gsap
@@ -127,8 +141,12 @@ function MarketingMotionProvider({ children }: { children: React.ReactNode }) {
     return () => {
       context.revert();
       gsap.ticker.remove(updateLenis);
+      gsap.ticker.lagSmoothing(500, 33);
       lenis.off("scroll", updateScrollTrigger);
       lenis.destroy();
+      resizeObserver?.disconnect();
+      disposed = true;
+      if (refreshFrame !== undefined) window.cancelAnimationFrame(refreshFrame);
       window.removeEventListener("wheel", markUserScroll);
       window.removeEventListener("touchmove", markUserScroll);
       window.removeEventListener("keydown", markKeyboardScroll);

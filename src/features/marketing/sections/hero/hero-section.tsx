@@ -3,9 +3,7 @@ import { HeroHighlight } from "@/components/ui/hero-highlight";
 import HeroMenuPreview from "./components/hero-menu-preview";
 import type { LandingConstants } from "../../types";
 
-type HeroSectionProps = {
-  constants: LandingConstants;
-};
+type HeroSectionProps = { constants: LandingConstants };
 
 function MarketingHero({ constants }: HeroSectionProps) {
   return (
@@ -23,7 +21,6 @@ function MarketingHero({ constants }: HeroSectionProps) {
             secondaryLabel={constants.hero.secondary}
           />
         </div>
-
         <HeroMenuPreview constants={constants} />
       </section>
     </HeroHighlight>

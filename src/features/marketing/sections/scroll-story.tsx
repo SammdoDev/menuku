@@ -1,14 +1,13 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowUpRight, Link2, QrCode } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { Locale } from "@/i18n/config";
 
 gsap.registerPlugin(ScrollTrigger);
-
 type ScrollScene = { title: string; copy: string };
-
 type ScrollStoryProps = {
   eyebrow: string;
   title: string;
@@ -17,6 +16,7 @@ type ScrollStoryProps = {
   scenes: ScrollScene[];
   locale: Locale;
 };
+const thumbnailPositions = ["0% center", "50% center", "100% center"];
 
 function MarketingScrollStory({
   eyebrow,
@@ -27,148 +27,261 @@ function MarketingScrollStory({
   locale,
 }: ScrollStoryProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const activeTitleRef = useRef<HTMLHeadingElement>(null);
-  const activeCopyRef = useRef<HTMLParagraphElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeScene = scenes[activeIndex] ?? scenes[0];
+  const currentIndex = Math.min(activeIndex, Math.max(scenes.length - 1, 0));
+  const progress = scenes.length ? (currentIndex + 1) / scenes.length : 0;
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    if (!section || scenes.length < 2) return;
-
-    const context = gsap.context(() => {
-      const sceneElements = gsap.utils.toArray<HTMLElement>("[data-scroll-scene]", section);
-      const marker = window.innerHeight * 0.64;
-      const visibleIndex = sceneElements.findIndex((scene) => {
-        const bounds = scene.getBoundingClientRect();
-        return bounds.top <= marker && bounds.bottom >= marker;
-      });
-      const initialIndex = visibleIndex >= 0 ? visibleIndex : 0;
-      setActiveIndex(initialIndex);
-
-      sceneElements.forEach((scene, index) => {
-        ScrollTrigger.create({
-          trigger: scene,
-          start: () => (window.matchMedia("(max-width: 1023px)").matches ? "top 82%" : "top 64%"),
-          end: "bottom 38%",
-          onEnter: () => setActiveIndex(index),
-          onEnterBack: () => setActiveIndex(index),
-        });
-      });
-    }, section);
-
-    return () => context.revert();
+    if (!section) return;
+    const media = gsap.matchMedia();
+    media.add(
+      {
+        desktop: "(min-width: 1024px)",
+        mobile: "(max-width: 1023px)",
+        reducedMotion: "(prefers-reduced-motion: reduce)",
+      },
+      (mediaContext) => {
+        const { desktop, reducedMotion } = mediaContext.conditions ?? {};
+        const context = gsap.context(() => {
+          const elements = gsap.utils.toArray<HTMLElement>("[data-story-scene]", section);
+          let previousIndex = -1;
+          function updateActiveScene() {
+            const marker = window.innerHeight * (desktop ? 0.58 : 0.68);
+            let nextIndex = 0;
+            elements.forEach((element, index) => {
+              if (element.getBoundingClientRect().top <= marker) nextIndex = index;
+            });
+            if (nextIndex !== previousIndex) {
+              previousIndex = nextIndex;
+              setActiveIndex(nextIndex);
+            }
+          }
+          if (elements.length) {
+            ScrollTrigger.create({
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              onUpdate: updateActiveScene,
+              onRefresh: updateActiveScene,
+            });
+            updateActiveScene();
+          }
+          if (reducedMotion) return;
+          gsap.from("[data-story-header]", {
+            y: 24,
+            autoAlpha: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: { trigger: section, start: "top 85%", once: true },
+          });
+          gsap.from("[data-story-preview]", {
+            y: 28,
+            autoAlpha: 0,
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section.querySelector("[data-story-preview]") ?? section,
+              start: "top 90%",
+              once: true,
+            },
+          });
+          elements.forEach((element) => {
+            const content = element.querySelector("[data-story-content]");
+            if (!content) return;
+            gsap.fromTo(
+              content,
+              { y: 20, autoAlpha: 0.45 },
+              {
+                y: 0,
+                autoAlpha: 1,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: element,
+                  start: "top 92%",
+                  end: "top 62%",
+                  scrub: 0.3,
+                },
+              },
+            );
+          });
+        }, section);
+        return () => context.revert();
+      },
+    );
+    return () => media.revert();
   }, [locale, scenes]);
 
   useLayoutEffect(() => {
-    const titleElement = activeTitleRef.current;
-    const copyElement = activeCopyRef.current;
-    if (
-      !titleElement ||
-      !copyElement ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return;
-
-    gsap.fromTo(
-      [titleElement, copyElement],
-      { autoAlpha: 0, y: 14, filter: "blur(6px)" },
-      {
-        autoAlpha: 1,
-        y: 0,
-        filter: "blur(0px)",
-        duration: 0.42,
-        stagger: 0.05,
-        ease: "power2.out",
-      },
-    );
-  }, [activeIndex]);
+    const preview = previewRef.current;
+    if (!preview) return;
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const context = gsap.context(() => {
+        gsap.fromTo(
+          "[data-menu-row]",
+          { y: 8, opacity: 0.65 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.45,
+            stagger: 0.06,
+            ease: "power2.out",
+          },
+        );
+      }, preview);
+      return () => context.revert();
+    });
+    return () => media.revert();
+  }, [currentIndex, locale]);
 
   return (
     <section
-      className="relative overflow-hidden bg-[#29251f] py-16 text-white sm:py-24"
-      id="cerita"
       ref={sectionRef}
+      id="cerita"
+      className="bg-[#f7f3ed] py-16 text-[#29251f] sm:py-24 lg:py-28"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute top-8 -right-36 size-[28rem] rounded-full bg-[#b13b19]/20 blur-[100px]"
-      />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-        <div className="mb-9 max-w-2xl sm:mb-12">
-          <p className="mb-3 text-[10px] font-black tracking-[.17em] text-[#ffb99c]">{eyebrow}</p>
-          <h2 className="display-font text-3xl leading-tight font-black sm:text-5xl">{title}</h2>
-          <p className="mt-4 max-w-xl text-sm leading-6 text-white/60 sm:text-base sm:leading-7">
-            {copy}
-          </p>
-        </div>
-
-        <div className="grid items-start gap-5 lg:grid-cols-12 lg:gap-12">
-          <aside
-            aria-hidden="true"
-            className="sticky top-20 z-10 rounded-[1.7rem] border border-white/10 bg-[#34302a]/95 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl sm:p-7 lg:top-28 lg:col-span-5 lg:p-8"
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div className="border-b border-[#29251f]/15 pb-9 sm:pb-12">
+          <p
+            className="mb-5 flex items-center gap-3 text-[10px] font-bold tracking-[0.16em] text-[#a03417] uppercase"
+            data-story-header
           >
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-[9px] font-black tracking-[.16em] text-white/45">
-                MENUKU / {String(activeIndex + 1).padStart(2, "0")}
-              </span>
-              <span className="flex gap-1.5">
-                {scenes.map((scene, index) => (
-                  <span
-                    className={`h-1 rounded-full transition-all duration-300 ${index === activeIndex ? "w-8 bg-[#ff845b]" : "w-3 bg-white/20"}`}
-                    key={scene.title}
-                  />
-                ))}
-              </span>
-            </div>
-            <div className="my-7 h-px bg-white/10 sm:my-10" />
-            <h3
-              className="display-font min-h-24 text-3xl leading-[1.04] font-black tracking-[-.04em] sm:min-h-32 sm:text-5xl"
-              ref={activeTitleRef}
+            <span className="h-px w-8 bg-current" aria-hidden="true" />
+            {eyebrow}
+          </p>
+          <div className="grid gap-5 lg:grid-cols-12 lg:items-end lg:gap-12">
+            <h2
+              className="display-font max-w-3xl text-4xl leading-[1.05] font-black tracking-[-0.045em] sm:text-5xl lg:col-span-7 lg:text-6xl"
+              data-story-header
             >
-              {activeScene?.title}
-            </h3>
+              {title}
+            </h2>
             <p
-              className="mt-4 min-h-12 max-w-md text-sm leading-6 text-white/60 sm:mt-5 sm:text-base"
-              ref={activeCopyRef}
+              className="max-w-lg text-sm leading-7 text-[#29251f]/65 sm:text-base lg:col-span-5 lg:pb-1"
+              data-story-header
             >
-              {activeScene?.copy}
+              {copy}
             </p>
-            <div className="mt-8 flex items-center gap-3 text-[10px] font-bold text-white/45 sm:mt-12">
-              <span className="grid size-8 place-items-center rounded-full border border-white/15 text-white/75">
-                ↓
-              </span>
+          </div>
+        </div>
+        <div className="mt-9 grid items-start gap-10 sm:mt-12 lg:grid-cols-12 lg:gap-16">
+          <aside className="min-w-0 lg:sticky lg:top-28 lg:col-span-5">
+            <div
+              className="relative overflow-hidden rounded-[1.75rem] bg-[#29251f] p-5 sm:p-7"
+              data-story-preview
+            >
+              <div ref={previewRef} aria-hidden="true" className="relative">
+                <div className="mb-6 flex items-center justify-between">
+                  <span className="flex items-center gap-2 text-[10px] font-bold tracking-[0.16em] text-white/70">
+                    <span className="size-1.5 rounded-full bg-[#ff9b78]" />
+                    MENUKU
+                  </span>
+                  <ArrowUpRight size={17} className="text-white/40" strokeWidth={1.5} />
+                </div>
+                <div className="mx-auto max-w-sm rounded-2xl bg-[#fffaf6] p-4 shadow-xl shadow-black/15 sm:p-5">
+                  <div className="flex items-center gap-3 border-b border-[#29251f]/10 pb-4">
+                    <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#b13b19] text-sm font-black text-white">
+                      M
+                    </span>
+                    <div className="flex-1 space-y-2">
+                      <span className="block h-2 w-24 rounded-full bg-[#29251f]/80" />
+                      <span className="block h-1.5 w-16 rounded-full bg-[#29251f]/20" />
+                    </div>
+                    <QrCode size={23} className="text-[#29251f]/65" strokeWidth={1.5} />
+                  </div>
+                  <div className="flex gap-2 py-4">
+                    <span className="h-5 w-14 rounded-full bg-[#b13b19]" />
+                    <span className="h-5 w-12 rounded-full bg-[#eee7de]" />
+                    <span className="h-5 w-16 rounded-full bg-[#eee7de]" />
+                  </div>
+                  <div className="space-y-3">
+                    {thumbnailPositions.map((position, index) => (
+                      <div
+                        key={position}
+                        className="flex items-center gap-3 rounded-xl border border-[#29251f]/5 bg-white p-2"
+                        data-menu-row
+                      >
+                        <span
+                          className="size-12 shrink-0 rounded-lg bg-center bg-no-repeat sm:size-14"
+                          style={{
+                            backgroundImage: "url('/landing-menu-food-strip.webp')",
+                            backgroundPosition: position,
+                            backgroundSize: "300% auto",
+                          }}
+                        />
+                        <div className="flex-1 space-y-2">
+                          <span
+                            className="block h-1.5 rounded-full bg-[#29251f]/65"
+                            style={{ width: `${72 - index * 10}%` }}
+                          />
+                          <span className="block h-1 w-4/5 rounded-full bg-[#29251f]/15" />
+                          <span className="block h-1.5 w-10 rounded-full bg-[#b13b19]/60" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 flex items-center justify-between rounded-lg bg-[#f1ece5] px-3 py-2.5">
+                    <span className="h-1.5 w-24 rounded-full bg-[#29251f]/20" />
+                    <Link2 size={15} className="text-[#b13b19]" strokeWidth={1.8} />
+                  </div>
+                </div>
+                <div className="mt-6 flex items-center gap-4">
+                  <span className="font-mono text-xs text-[#ffb99c]">
+                    {String(scenes.length ? currentIndex + 1 : 0).padStart(2, "0")}
+                  </span>
+                  <div className="h-px flex-1 overflow-hidden bg-white/15">
+                    <span
+                      className="block h-full origin-left bg-[#ffb99c] transition-transform duration-500 motion-reduce:transition-none"
+                      style={{ transform: `scaleX(${progress})` }}
+                    />
+                  </div>
+                  <span className="font-mono text-xs text-white/40">
+                    {String(scenes.length).padStart(2, "0")}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 hidden items-center gap-2 text-xs text-[#29251f]/55 lg:flex">
+              <ArrowDown size={14} strokeWidth={1.5} aria-hidden="true" />
               <span>{scrollHint}</span>
             </div>
           </aside>
-
-          <div className="lg:col-span-7">
-            {scenes.map((scene, index) => (
-              <article
-                aria-current={index === activeIndex ? "step" : undefined}
-                className={`flex min-h-[34svh] items-end border-t px-1 pt-10 pb-7 transition-colors duration-500 sm:min-h-[39svh] sm:px-4 sm:pb-10 ${index === activeIndex ? "border-[#ff845b]/75" : "border-white/15"}`}
-                data-scroll-scene
-                key={scene.title}
-              >
-                <div className="grid w-full grid-cols-[3.3rem_1fr] items-start gap-3 sm:grid-cols-[4.5rem_1fr] sm:gap-5">
-                  <span
-                    className={`display-font pt-1 text-sm font-bold transition-colors ${index === activeIndex ? "text-[#ff9b78]" : "text-white/30"}`}
+          <div className="min-w-0 lg:col-span-7">
+            {scenes.map((scene, index) => {
+              const isActive = index === currentIndex;
+              return (
+                <article
+                  key={`${index}-${scene.title}`}
+                  aria-current={isActive ? "step" : undefined}
+                  data-story-scene
+                  className={`relative border-b py-8 transition-colors duration-300 first:pt-0 last:border-b-0 motion-reduce:transition-none sm:py-10 lg:flex lg:min-h-[35svh] lg:items-center lg:py-12 ${isActive ? "border-[#b13b19]/35" : "border-[#29251f]/15"}`}
+                >
+                  <div
+                    className="grid w-full grid-cols-[2.5rem_1fr] gap-4 sm:grid-cols-[3rem_1fr] sm:gap-6"
+                    data-story-content
                   >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h3
-                      className={`display-font text-xl leading-tight font-black transition-colors sm:text-2xl ${index === activeIndex ? "text-white" : "text-white/55"}`}
+                    <span
+                      className={`mt-1 flex size-9 items-center justify-center rounded-full border font-mono text-[11px] transition-colors duration-300 motion-reduce:transition-none sm:size-10 ${isActive ? "border-[#b13b19] bg-[#b13b19] text-white" : "border-[#29251f]/20 text-[#29251f]/55"}`}
                     >
-                      {scene.title}
-                    </h3>
-                    <p className="mt-2 max-w-lg text-xs leading-5 text-white/45 sm:text-sm sm:leading-6">
-                      {scene.copy}
-                    </p>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="max-w-lg">
+                      <h3
+                        className={`display-font text-2xl leading-[1.15] font-black tracking-[-0.025em] transition-colors duration-300 motion-reduce:transition-none sm:text-3xl lg:text-4xl ${isActive ? "text-[#a03417]" : "text-[#29251f]"}`}
+                      >
+                        {scene.title}
+                      </h3>
+                      <p className="mt-4 text-sm leading-7 text-[#29251f]/65 sm:text-base sm:leading-8">
+                        {scene.copy}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </div>

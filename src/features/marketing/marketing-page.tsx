@@ -1,4 +1,4 @@
-import MarketingNavbar from "./components/marketing-navbar";
+import MarketingNavbar from "./components/navbar-component-enhance";
 import MarketingMotionProvider from "./components/landing-motion";
 import MarketingCtaSection from "./sections/cta/cta-section";
 import MarketingFaqSection from "./sections/faq/faq-section";
