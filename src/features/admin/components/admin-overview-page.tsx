@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Activity, ArrowUpRight, Eye, Store, Users } from "lucide-react";
-import { getAdminContext } from "@/features/admin/queries/admin-context";
+import { getAdminContext } from "../queries/admin-context";
 import {
   approveSubscriptionAction,
   remindSubscriptionAction,
   toggleCommunityVisibilityAction,
-} from "@/features/admin/actions/admin-actions";
+} from "../actions/admin-actions";
 
 type Tenant = {
   id: string;

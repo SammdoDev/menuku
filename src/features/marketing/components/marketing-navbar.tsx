@@ -4,7 +4,7 @@ import Link from "next/link";
 import Brand from "@/components/brand/brand";
 import LanguageAutocomplete from "@/components/ui/language-autocomplete";
 import type { Locale } from "@/i18n/config";
-import type { LandingConstants } from "@/features/marketing/types";
+import type { LandingConstants } from "../types";
 
 type NavbarComponentEnhanceProps = {
   constants: LandingConstants;

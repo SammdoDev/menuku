@@ -1,5 +1,5 @@
 import { MenuSquare, Share2, UserRound } from "lucide-react";
-import type { LandingConstants } from "@/features/marketing/types";
+import type { LandingConstants } from "../types";
 
 const steps = [
   { number: "01", step: "one", icon: UserRound },

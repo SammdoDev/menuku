@@ -1,6 +1,6 @@
 import { formatRupiah } from "@/lib/format";
-import type { Item } from "@/features/storefront/types";
-import { useStorefrontLocale } from "@/features/storefront/storefront-locale";
+import type { Item } from "../types";
+import { useStorefrontLocale } from "../storefront-locale";
 
 export default function StorefrontFeatured({
   items,

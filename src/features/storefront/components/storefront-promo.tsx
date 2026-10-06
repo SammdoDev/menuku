@@ -1,7 +1,7 @@
 import { ArrowUpRight, Megaphone } from "lucide-react";
-import type { PublicStore } from "@/features/storefront/types";
+import type { PublicStore } from "../types";
 import { normalizeImageUrl } from "@/lib/image-url";
-import { useStorefrontLocale } from "@/features/storefront/storefront-locale";
+import { useStorefrontLocale } from "../storefront-locale";
 
 export default function StorefrontPromo({ tenant }: { tenant: PublicStore["tenant"] }) {
   const { messages } = useStorefrontLocale();

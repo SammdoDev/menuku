@@ -1,13 +1,13 @@
 import "server-only";
 
-import { plans } from "@/features/billing/plans";
+import { plans } from "./plans";
 import {
   buildBillingInvoiceEmail,
   buildInvoiceExpiredEmail,
   buildPaymentReceiptEmail,
-} from "@/features/billing/email-templates";
-import type { BillingAdminClient } from "@/features/billing/server-types";
-import type { PendingInvoice } from "@/features/billing/types";
+} from "./email-templates";
+import type { BillingAdminClient } from "./server-types";
+import type { PendingInvoice } from "./types";
 import { sendEmail } from "@/lib/email";
 
 const EMAIL_RETRY_DELAY_MS = 5 * 60 * 1000;

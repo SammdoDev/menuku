@@ -1,5 +1,5 @@
-import type { Item, PublicStore } from "@/features/storefront/types";
-import { getFallbackProductImage } from "@/features/storefront/helpers";
+import type { Item, PublicStore } from "./types";
+import { getFallbackProductImage } from "./helpers";
 
 export function mapProducts(store: PublicStore): Item[] {
   const categories = new Map(store.categories.map((category) => [category.id, category.name]));

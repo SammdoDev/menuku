@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
-import type { LandingConstants, LandingPlanPrice } from "@/features/marketing/types";
+import type { LandingConstants, LandingPlanPrice } from "../types";
 
 type PricingSectionProps = {
   constants: LandingConstants;

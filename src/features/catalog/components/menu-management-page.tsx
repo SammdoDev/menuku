@@ -5,9 +5,9 @@ import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
 import {
   deleteProductAction,
   toggleProductAction,
-} from "@/features/catalog/actions/product-actions";
-import ProductEditButton from "@/features/catalog/components/product-edit-button";
-import ProductForm from "@/features/catalog/components/product-form";
+} from "../actions/product-actions";
+import ProductEditButton from "./product-edit-button";
+import ProductForm from "./product-form";
 import AuthToast from "@/features/auth/components/auth-toast";
 
 type Props = { searchParams: Promise<{ error?: string }> };

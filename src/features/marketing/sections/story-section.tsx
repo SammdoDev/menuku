@@ -1,5 +1,5 @@
-import MarketingScrollStory from "@/features/marketing/sections/scroll-story";
-import type { LandingConstants, LandingLocale } from "@/features/marketing/types";
+import MarketingScrollStory from "./scroll-story";
+import type { LandingConstants, LandingLocale } from "../types";
 
 type StorySectionProps = { constants: LandingConstants; locale: LandingLocale };
 function MarketingStorySection({ constants, locale }: StorySectionProps) {

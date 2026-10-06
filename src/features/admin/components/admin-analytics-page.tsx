@@ -1,4 +1,4 @@
-import { getAdminContext } from "@/features/admin/queries/admin-context";
+import { getAdminContext } from "../queries/admin-context";
 
 export default async function AdminAnalyticsPage() {
   const admin = await getAdminContext();

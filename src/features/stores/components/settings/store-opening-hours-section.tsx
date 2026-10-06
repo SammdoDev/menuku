@@ -1,6 +1,6 @@
 import { Clock3 } from "lucide-react";
 import { Input } from "@/components/ui/text-input";
-import { openingHourDays, parseOpeningHours } from "@/features/stores/opening-hours";
+import { openingHourDays, parseOpeningHours } from "../../opening-hours";
 
 function StoreOpeningHoursSection({ openingHours }: { openingHours: unknown }) {
   const hours = parseOpeningHours(openingHours);

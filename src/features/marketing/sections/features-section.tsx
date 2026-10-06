@@ -1,7 +1,7 @@
 import { Activity, Clock3, Globe2, Instagram, Link2, MapPin, MenuSquare } from "lucide-react";
-import MarketingAnalyticsBars from "@/features/marketing/components/analytics-bars";
-import MarketingMenuThumbnail from "@/features/marketing/components/menu-thumbnail";
-import type { LandingConstants } from "@/features/marketing/types";
+import MarketingAnalyticsBars from "../components/analytics-bars";
+import MarketingMenuThumbnail from "../components/menu-thumbnail";
+import type { LandingConstants } from "../types";
 
 const featureCards = [
   { icon: MenuSquare, feature: "menu" },

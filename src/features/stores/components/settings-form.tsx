@@ -1,15 +1,15 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { Tenant } from "@/features/stores/types";
-import { updateStoreSettingsAction } from "@/features/stores/actions/update-store-settings-action";
-import StoreAppearanceSection from "@/features/stores/components/settings/store-appearance-section";
-import StoreDetailsSection from "@/features/stores/components/settings/store-details-section";
-import StoreOpeningHoursSection from "@/features/stores/components/settings/store-opening-hours-section";
-import StoreProfileSection from "@/features/stores/components/settings/store-profile-section";
-import StorePromoSection from "@/features/stores/components/settings/store-promo-section";
-import StoreUrlSection from "@/features/stores/components/settings/store-url-section";
-import useSettingsImageUpload from "@/features/stores/hooks/use-settings-image-upload";
+import type { Tenant } from "../types";
+import { updateStoreSettingsAction } from "../actions/update-store-settings-action";
+import StoreAppearanceSection from "./settings/store-appearance-section";
+import StoreDetailsSection from "./settings/store-details-section";
+import StoreOpeningHoursSection from "./settings/store-opening-hours-section";
+import StoreProfileSection from "./settings/store-profile-section";
+import StorePromoSection from "./settings/store-promo-section";
+import StoreUrlSection from "./settings/store-url-section";
+import useSettingsImageUpload from "../hooks/use-settings-image-upload";
 import ImageCropDialog from "@/components/ui/image-crop-dialog";
 import PersistentForm from "@/components/ui/persistent-form";
 import { SubmitButton } from "@/components/ui/submit-button";

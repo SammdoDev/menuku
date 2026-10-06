@@ -1,17 +1,19 @@
+"use client";
+
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronRight, Search, Star, X } from "lucide-react";
-import { NumericInput } from "@/components/ui/numeric-input";
 import { Autocomplete } from "@/components/ui/autocomplete";
-import { getContrastTextColor } from "@/features/storefront/helpers";
-import { ALL_CATEGORY } from "@/features/storefront/constants";
+import { formatRupiah } from "@/lib/format";
+import { ALL_CATEGORY } from "../constants";
+import { getContrastTextColor } from "../helpers";
 import {
   formatStorefrontMessage,
   useStorefrontLocale,
-} from "@/features/storefront/storefront-locale";
-import { formatRupiah } from "@/lib/format";
-import type { Item } from "@/features/storefront/types";
+} from "../storefront-locale";
+import type { Item } from "../types";
+import { NumericInput } from "../../../components/ui/numeric-input";
 
 type AvailabilityFilter = "all" | "available" | "sold-out";
 type SortOption = "default" | "name" | "price-low" | "price-high";

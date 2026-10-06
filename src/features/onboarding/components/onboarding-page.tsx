@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { CheckCircle2, Store } from "lucide-react";
 import Brand from "@/components/brand/brand";
 import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
-import OnboardingForm from "@/features/onboarding/components/onboarding-form";
+import OnboardingForm from "./onboarding-form";
 
 export default async function OnboardingPage({
   searchParams,

@@ -8,7 +8,7 @@ import {
   Store,
   UsersRound,
 } from "lucide-react";
-import { getAdminContext } from "@/features/admin/queries/admin-context";
+import { getAdminContext } from "../queries/admin-context";
 import { supportWhatsAppUrl } from "@/config/site";
 
 type Tenant = {

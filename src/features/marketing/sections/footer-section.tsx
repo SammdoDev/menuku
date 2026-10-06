@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Brand from "@/components/brand/brand";
 import { supportWhatsAppUrl } from "@/config/site";
-import type { LandingConstants } from "@/features/marketing/types";
+import type { LandingConstants } from "../types";
 
 type FooterSectionProps = { constants: LandingConstants };
 function MarketingFooterSection({ constants }: FooterSectionProps) {

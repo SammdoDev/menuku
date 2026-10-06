@@ -6,16 +6,16 @@ import { redirect } from "next/navigation";
 
 import { z } from "zod";
 
-import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
+import { getCurrentMerchant } from "../queries/current-merchant";
 
 import { getPlanRules } from "@/features/billing/plans";
 
-import { RESERVED_STORE_SLUGS } from "@/features/stores/store-paths";
+import { RESERVED_STORE_SLUGS } from "../store-paths";
 import {
   isValidOpeningTime,
   openingHourDays,
   type OpeningHours,
-} from "@/features/stores/opening-hours";
+} from "../opening-hours";
 
 function slugify(value: string) {
   return value

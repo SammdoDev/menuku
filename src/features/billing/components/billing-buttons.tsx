@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Banknote, QrCode } from "lucide-react";
-import type { PlanCode } from "@/features/billing/plans";
+import type { PlanCode } from "../plans";
 import { Autocomplete } from "@/components/ui/autocomplete";
 
 export default function BillingButtons({

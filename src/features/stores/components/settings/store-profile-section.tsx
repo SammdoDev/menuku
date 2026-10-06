@@ -3,7 +3,7 @@
 import { Camera, ImagePlus, LoaderCircle, Trash2 } from "lucide-react";
 import type { ChangeEvent } from "react";
 import { Input } from "@/components/ui/text-input";
-import type { UploadKind } from "@/features/stores/hooks/use-settings-image-upload";
+import type { UploadKind } from "../../hooks/use-settings-image-upload";
 
 type StoreProfileSectionProps = {
   name: string;

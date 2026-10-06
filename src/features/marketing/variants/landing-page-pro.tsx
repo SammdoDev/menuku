@@ -20,7 +20,7 @@ import {
   Zap,
 } from "lucide-react";
 import Brand from "@/components/brand/brand";
-import MarketingMotionProvider from "@/features/marketing/components/landing-motion";
+import MarketingMotionProvider from "../components/landing-motion";
 import { plans } from "@/features/billing/plans";
 import { formatRupiah } from "@/lib/format";
 import { supportWhatsAppUrl } from "@/config/site";

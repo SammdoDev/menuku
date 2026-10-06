@@ -1,8 +1,8 @@
 import { ArrowUpRight, Check, Globe2 } from "lucide-react";
 import { HeroSection as HeroCopy } from "@/components/ui/hero-section-shadcnui";
 import { HeroHighlight } from "@/components/ui/hero-highlight";
-import MarketingMenuThumbnail from "@/features/marketing/components/menu-thumbnail";
-import type { LandingConstants } from "@/features/marketing/types";
+import MarketingMenuThumbnail from "../components/menu-thumbnail";
+import type { LandingConstants } from "../types";
 
 type HeroSectionProps = { constants: LandingConstants };
 function MarketingHero({ constants }: HeroSectionProps) {

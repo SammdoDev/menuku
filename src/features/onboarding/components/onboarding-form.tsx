@@ -5,7 +5,7 @@ import { useState, type ChangeEvent } from "react";
 import { Autocomplete } from "@/components/ui/autocomplete";
 import { Input, SlugInput, Textarea } from "@/components/ui/text-input";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { createTenantAction } from "@/features/onboarding/actions/create-tenant-action";
+import { createTenantAction } from "../actions/create-tenant-action";
 import { optimizeImage, readImageUploadResponse } from "@/lib/image-upload-client";
 import { normalizeImageUrl } from "@/lib/image-url";
 import { PUBLIC_SITE_URL } from "@/config/site";

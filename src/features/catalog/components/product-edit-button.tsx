@@ -2,7 +2,7 @@
 
 import { Pencil, X } from "lucide-react";
 import { useState } from "react";
-import ProductForm from "@/features/catalog/components/product-form";
+import ProductForm from "./product-form";
 
 type Product = {
   id: string;

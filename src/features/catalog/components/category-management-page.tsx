@@ -7,8 +7,8 @@ import {
   createCategoryAction,
   deleteCategoryAction,
   toggleCategoryAction,
-} from "@/features/catalog/actions/category-actions";
-import CategoryEditButton from "@/features/catalog/components/category-edit-button";
+} from "../actions/category-actions";
+import CategoryEditButton from "./category-edit-button";
 import AuthToast from "@/features/auth/components/auth-toast";
 import PersistentForm from "@/components/ui/persistent-form";
 

@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { PublicStore } from "@/features/storefront/types";
+import type { PublicStore } from "../types";
 
 export async function getStoreBySlug(slug: string): Promise<PublicStore | null> {
   const supabase = await createSupabaseServerClient();

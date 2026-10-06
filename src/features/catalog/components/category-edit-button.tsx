@@ -4,7 +4,7 @@ import { Pencil, X } from "lucide-react";
 import { useState } from "react";
 import { Input, Textarea } from "@/components/ui/text-input";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { updateCategoryAction } from "@/features/catalog/actions/category-actions";
+import { updateCategoryAction } from "../actions/category-actions";
 import PersistentForm from "@/components/ui/persistent-form";
 
 export default function CategoryEditButton({

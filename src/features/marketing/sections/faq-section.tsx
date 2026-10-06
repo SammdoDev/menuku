@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { supportWhatsAppUrl } from "@/config/site";
-import type { LandingConstants } from "@/features/marketing/types";
+import type { LandingConstants } from "../types";
 
 const faqItems = ["one", "two", "three", "four", "five"] as const;
 

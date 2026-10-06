@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { AlertCircle, ArrowLeft, CheckCircle2, Clock3, Copy, FileText } from "lucide-react";
 import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
-import { plans, type PlanCode } from "@/features/billing/plans";
+import { plans, type PlanCode } from "../plans";
 import { formatRupiah } from "@/lib/format";
 import { supportWhatsAppUrl } from "@/config/site";
-import { canonicalPakasirPaymentUrl } from "@/features/billing/invoice-data";
-import Countdown from "@/features/billing/components/countdown";
-import InvoiceEmailButton from "@/features/billing/components/invoice-email-button";
+import { canonicalPakasirPaymentUrl } from "../invoice-data";
+import Countdown from "./countdown";
+import InvoiceEmailButton from "./invoice-email-button";
 
 export default async function BillingConfirmationPage({
   searchParams,

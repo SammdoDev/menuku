@@ -12,8 +12,8 @@ import {
   TrendingUp,
   Zap,
 } from "lucide-react";
-import DashboardShell from "@/features/dashboard/components/dashboard-shell";
-import DashboardMotion from "@/features/dashboard/components/dashboard-motion";
+import DashboardShell from "./dashboard-shell";
+import DashboardMotion from "./dashboard-motion";
 import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
 import { publicStoreUrl } from "@/config/site";
 

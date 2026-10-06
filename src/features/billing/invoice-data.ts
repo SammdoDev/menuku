@@ -1,8 +1,8 @@
 import "server-only";
 
 import { PUBLIC_SITE_URL } from "@/config/site";
-import type { BillingAdminClient } from "@/features/billing/server-types";
-import type { PendingInvoice } from "@/features/billing/types";
+import type { BillingAdminClient } from "./server-types";
+import type { PendingInvoice } from "./types";
 
 export const PAKASIR_INVOICE_TTL_MS = 24 * 60 * 60 * 1000;
 

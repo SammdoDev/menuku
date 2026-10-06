@@ -4,11 +4,11 @@ import { useCallback, type CSSProperties } from "react";
 import { Clock3, Globe2, LayoutGrid, MessageCircle, Search, Share2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { languageOptions } from "@/i18n/language-options";
-import StorefrontLanguagePanel from "@/features/storefront/components/storefront-language-panel";
-import StorefrontOpeningHours from "@/features/storefront/components/storefront-opening-hours";
-import { getContrastTextColor } from "@/features/storefront/helpers";
-import { trackStorefront } from "@/features/storefront/track-storefront";
-import { useStorefrontLocale } from "@/features/storefront/storefront-locale";
+import StorefrontLanguagePanel from "./storefront-language-panel";
+import StorefrontOpeningHours from "./storefront-opening-hours";
+import { getContrastTextColor } from "../helpers";
+import { trackStorefront } from "../track-storefront";
+import { useStorefrontLocale } from "../storefront-locale";
 
 export type StorefrontNavActive = "menu" | "browse" | "hours" | "language" | "share" | "chat";
 export type StorefrontNavPanel = "browse" | "hours" | "language" | null;

@@ -3,12 +3,12 @@ import DashboardShell from "@/features/dashboard/components/dashboard-shell";
 import { Autocomplete } from "@/components/ui/autocomplete";
 import { Input } from "@/components/ui/text-input";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
+import { getCurrentMerchant } from "../queries/current-merchant";
 import {
   createLinkAction,
   deleteLinkAction,
   toggleLinkAction,
-} from "@/features/stores/actions/store-link-actions";
+} from "../actions/store-link-actions";
 import AuthToast from "@/features/auth/components/auth-toast";
 import PersistentForm from "@/components/ui/persistent-form";
 

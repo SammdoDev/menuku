@@ -1,28 +1,28 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
-import type { PublicStore } from "@/features/storefront/types";
-import StorefrontBottomNav from "@/features/storefront/components/storefront-bottom-nav";
+import type { PublicStore } from "./types";
+import StorefrontBottomNav from "./components/storefront-bottom-nav";
 import type {
   StorefrontNavActive,
   StorefrontNavPanel,
-} from "@/features/storefront/components/storefront-bottom-nav";
-import StorefrontDetail from "@/features/storefront/components/storefront-detail";
-import StorefrontFeatured from "@/features/storefront/components/storefront-featured";
-import StorefrontHeader from "@/features/storefront/components/storefront-header";
-import StorefrontMenu from "@/features/storefront/components/storefront-menu";
-import StorefrontPromo from "@/features/storefront/components/storefront-promo";
-import StorefrontToast from "@/features/storefront/components/storefront-toast";
-import { mapProducts } from "@/features/storefront/mapper";
-import { buildWhatsAppUrl } from "@/features/storefront/helpers";
-import type { Item } from "@/features/storefront/types";
-import { trackStorefront } from "@/features/storefront/track-storefront";
-import { ALL_CATEGORY } from "@/features/storefront/constants";
+} from "./components/storefront-bottom-nav";
+import StorefrontDetail from "./components/storefront-detail";
+import StorefrontFeatured from "./components/storefront-featured";
+import StorefrontHeader from "./components/storefront-header";
+import StorefrontMenu from "./components/storefront-menu";
+import StorefrontPromo from "./components/storefront-promo";
+import StorefrontToast from "./components/storefront-toast";
+import { mapProducts } from "./mapper";
+import { buildWhatsAppUrl } from "./helpers";
+import type { Item } from "./types";
+import { trackStorefront } from "./track-storefront";
+import { ALL_CATEGORY } from "./constants";
 import {
   formatStorefrontMessage,
   StorefrontLocaleProvider,
   useStorefrontLocale,
-} from "@/features/storefront/storefront-locale";
+} from "./storefront-locale";
 
 export default function Storefront({ store }: { store: PublicStore }) {
   return (

@@ -1,12 +1,12 @@
 import { ExternalLink, Instagram, MapPin, MessageCircle, Share2 } from "lucide-react";
-import type { PublicStore } from "@/features/storefront/types";
+import type { PublicStore } from "../types";
 import { normalizeImageUrl } from "@/lib/image-url";
-import { buildWhatsAppUrl, getContrastTextColor } from "@/features/storefront/helpers";
-import { trackStorefront } from "@/features/storefront/track-storefront";
+import { buildWhatsAppUrl, getContrastTextColor } from "../helpers";
+import { trackStorefront } from "../track-storefront";
 import {
   formatStorefrontMessage,
   useStorefrontLocale,
-} from "@/features/storefront/storefront-locale";
+} from "../storefront-locale";
 
 export default function StorefrontHeader({
   store,

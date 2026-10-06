@@ -1,8 +1,8 @@
 import "server-only";
 
-import { plans } from "@/features/billing/plans";
-import { billingConfirmationUrl, pakasirInvoiceExpiresAt } from "@/features/billing/invoice-data";
-import type { PendingInvoice } from "@/features/billing/types";
+import { plans } from "./plans";
+import { billingConfirmationUrl, pakasirInvoiceExpiresAt } from "./invoice-data";
+import type { PendingInvoice } from "./types";
 import { formatRupiah } from "@/lib/format";
 import { PUBLIC_SITE_URL, supportWhatsAppUrl } from "@/config/site";
 

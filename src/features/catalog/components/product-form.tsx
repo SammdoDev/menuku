@@ -9,7 +9,7 @@ import { SubmitButton } from "@/components/ui/submit-button";
 import {
   createProductAction,
   updateProductAction,
-} from "@/features/catalog/actions/product-actions";
+} from "../actions/product-actions";
 import { optimizeImage, readImageUploadResponse } from "@/lib/image-upload-client";
 import { normalizeImageUrl } from "@/lib/image-url";
 import ImageCropDialog from "@/components/ui/image-crop-dialog";

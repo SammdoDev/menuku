@@ -2,8 +2,8 @@
 
 import type { ChangeEvent } from "react";
 import { Input, Textarea } from "@/components/ui/text-input";
-import type { UploadKind } from "@/features/stores/hooks/use-settings-image-upload";
-import type { Tenant } from "@/features/stores/types";
+import type { UploadKind } from "../../hooks/use-settings-image-upload";
+import type { Tenant } from "../../types";
 
 type StorePromoSectionProps = {
   tenant: Tenant;

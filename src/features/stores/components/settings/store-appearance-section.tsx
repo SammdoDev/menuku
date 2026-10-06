@@ -3,7 +3,7 @@
 import { Check, Palette } from "lucide-react";
 import type { CSSProperties } from "react";
 import { Input } from "@/components/ui/text-input";
-import type { Tenant } from "@/features/stores/types";
+import type { Tenant } from "../../types";
 
 type StoreAppearanceSectionProps = {
   tenant: Tenant;

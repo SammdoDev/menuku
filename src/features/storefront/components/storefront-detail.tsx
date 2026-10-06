@@ -1,15 +1,15 @@
 "use client";
 import { useEffect } from "react";
 import { ExternalLink, MessageCircle, X } from "lucide-react";
-import type { PublicStore } from "@/features/storefront/types";
+import type { PublicStore } from "../types";
 import { formatRupiah } from "@/lib/format";
-import { buildWhatsAppUrl, getContrastTextColor } from "@/features/storefront/helpers";
-import type { Item } from "@/features/storefront/types";
-import { trackStorefront } from "@/features/storefront/track-storefront";
+import { buildWhatsAppUrl, getContrastTextColor } from "../helpers";
+import type { Item } from "../types";
+import { trackStorefront } from "../track-storefront";
 import {
   formatStorefrontMessage,
   useStorefrontLocale,
-} from "@/features/storefront/storefront-locale";
+} from "../storefront-locale";
 
 export default function StorefrontDetail({
   product,

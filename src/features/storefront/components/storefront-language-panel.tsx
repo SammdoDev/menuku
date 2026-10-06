@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Check, Globe2, X } from "lucide-react";
 import { languageOptions } from "@/i18n/language-options";
 import type { Locale } from "@/i18n/config";
-import { getContrastTextColor } from "@/features/storefront/helpers";
+import { getContrastTextColor } from "../helpers";
 
 export default function StorefrontLanguagePanel({
   open,

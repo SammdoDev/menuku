@@ -1,6 +1,6 @@
 import { Autocomplete } from "@/components/ui/autocomplete";
 import { Input, Textarea } from "@/components/ui/text-input";
-import type { Tenant } from "@/features/stores/types";
+import type { Tenant } from "../../types";
 
 type StoreDetailsSectionProps = { tenant: Tenant };
 

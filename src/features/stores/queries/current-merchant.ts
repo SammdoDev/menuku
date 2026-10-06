@@ -3,7 +3,7 @@ import "server-only";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { cache } from "react";
-import type { Tenant } from "@/features/stores/types";
+import type { Tenant } from "../types";
 
 export const getCurrentMerchant = cache(async function getCurrentMerchant() {
   const supabase = await createSupabaseServerClient();

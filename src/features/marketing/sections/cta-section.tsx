@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import type { LandingConstants } from "@/features/marketing/types";
+import type { LandingConstants } from "../types";
 
 type CtaSectionProps = { constants: LandingConstants };
 function MarketingCtaSection({ constants }: CtaSectionProps) {

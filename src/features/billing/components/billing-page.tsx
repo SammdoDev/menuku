@@ -2,13 +2,13 @@ import { Check, CreditCard, Sparkles } from "lucide-react";
 import Link from "next/link";
 import DashboardShell from "@/features/dashboard/components/dashboard-shell";
 import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
-import { plans, type PlanCode } from "@/features/billing/plans";
+import { plans, type PlanCode } from "../plans";
 import { formatRupiah } from "@/lib/format";
-import { billingConfirmationUrl } from "@/features/billing/invoice-data";
-import { getPendingInvoice } from "@/features/billing/pending-invoice-query";
+import { billingConfirmationUrl } from "../invoice-data";
+import { getPendingInvoice } from "../pending-invoice-query";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import BillingButtons from "@/features/billing/components/billing-buttons";
-import InvoiceEmailButton from "@/features/billing/components/invoice-email-button";
+import BillingButtons from "./billing-buttons";
+import InvoiceEmailButton from "./invoice-email-button";
 
 export default async function BillingPage() {
   const { user, tenant, supabase } = await getCurrentMerchant();

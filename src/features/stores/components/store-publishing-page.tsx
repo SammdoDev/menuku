@@ -3,9 +3,9 @@ import { ExternalLink, Globe2, ShieldCheck } from "lucide-react";
 import DashboardShell from "@/features/dashboard/components/dashboard-shell";
 import { Input } from "@/components/ui/text-input";
 import { SubmitButton } from "@/components/ui/submit-button";
-import { getCurrentMerchant } from "@/features/stores/queries/current-merchant";
+import { getCurrentMerchant } from "../queries/current-merchant";
 import { publicStoreUrl } from "@/config/site";
-import { togglePublishAction } from "@/features/stores/actions/publish-store-action";
+import { togglePublishAction } from "../actions/publish-store-action";
 
 export default async function StorePublishingPage() {
   const { tenant } = await getCurrentMerchant();

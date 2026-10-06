@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getAdminContext } from "@/features/admin/queries/admin-context";
+import { getAdminContext } from "../queries/admin-context";
 import { sendEmail } from "@/lib/email";
 
 export async function approveSubscriptionAction(formData: FormData) {

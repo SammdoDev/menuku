@@ -4,11 +4,11 @@ import { useEffect, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Clock3, X } from "lucide-react";
-import { getContrastTextColor } from "@/features/storefront/helpers";
+import { getContrastTextColor } from "../helpers";
 import {
   formatStorefrontMessage,
   useStorefrontLocale,
-} from "@/features/storefront/storefront-locale";
+} from "../storefront-locale";
 import {
   formatOpeningTime,
   openingHourDays,

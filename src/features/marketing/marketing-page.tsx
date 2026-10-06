@@ -1,28 +1,35 @@
 "use client";
 
-import MarketingMotionProvider from "@/features/marketing/components/landing-motion";
-import MarketingNavbar from "@/features/marketing/components/marketing-navbar";
-import MarketingCtaSection from "@/features/marketing/sections/cta-section";
-import MarketingFaqSection from "@/features/marketing/sections/faq-section";
-import MarketingFeaturesSection from "@/features/marketing/sections/features-section";
-import MarketingFooterSection from "@/features/marketing/sections/footer-section";
-import MarketingGallerySection from "@/features/marketing/sections/gallery-section";
-import MarketingHero from "@/features/marketing/sections/hero-section";
-import MarketingPaymentSection from "@/features/marketing/sections/payment-section";
-import MarketingPricingSection from "@/features/marketing/sections/pricing-section";
-import MarketingStepsSection from "@/features/marketing/sections/steps-section";
-import MarketingStorySection from "@/features/marketing/sections/story-section";
-import { getMessages } from "@/i18n/messages";
-import { useLocale } from "@/i18n/use-locale";
-import type { LandingPlanPrice } from "@/features/marketing/types";
+import MarketingMotionProvider from "./components/landing-motion";
+import MarketingNavbar from "./components/marketing-navbar";
+import MarketingCtaSection from "./sections/cta-section";
+import MarketingFaqSection from "./sections/faq-section";
+import MarketingFeaturesSection from "./sections/features-section";
+import MarketingFooterSection from "./sections/footer-section";
+import MarketingGallerySection from "./sections/gallery-section";
+import MarketingHero from "./sections/hero-section";
+import MarketingPaymentSection from "./sections/payment-section";
+import MarketingPricingSection from "./sections/pricing-section";
+import MarketingStepsSection from "./sections/steps-section";
+import type { LandingPlanPrice } from "./types";
+import MarketingStorySection from "./sections/story-section";
+import { useLocale } from "../../i18n/use-locale";
+import { getMessages } from "../../i18n/messages";
 
 type MarketingPageProps = { planPrices: LandingPlanPrice[] };
 
 function MarketingPage({ planPrices }: MarketingPageProps) {
   const { locale, setLocale } = useLocale();
   const constants = getMessages(locale);
+  const currencyLocaleMap = {
+    id: "id-ID",
+    en: "en-US",
+    ms: "ms-MY",
+    zh: "zh-CN",
+    ja: "ja-JP",
+  } as const;
   const currency = new Intl.NumberFormat(
-    { id: "id-ID", en: "en-US", ms: "ms-MY", zh: "zh-CN", ja: "ja-JP" }[locale],
+    currencyLocaleMap[locale as keyof typeof currencyLocaleMap] ?? currencyLocaleMap.id,
     {
       style: "currency",
       currency: "IDR",

@@ -1,5 +1,5 @@
 import { Banknote, Check, Clock3, QrCode } from "lucide-react";
-import type { LandingConstants } from "@/features/marketing/types";
+import type { LandingConstants } from "../types";
 
 type PaymentSectionProps = { constants: LandingConstants };
 function MarketingPaymentSection({ constants }: PaymentSectionProps) {
