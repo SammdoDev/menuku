@@ -14,7 +14,7 @@ function MarketingFaqSection({ constants }: FaqSectionProps) {
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 right-[16%] size-72 rounded-full bg-[#ffb88e]/20 blur-[90px]"
+        className="pointer-events-none absolute -top-24 right-[16%] size-72 rounded-full bg-[#ffb88e]/20 blur-[90px] motion-safe:animate-[ambient-glow-drift_16s_ease-in-out_infinite]"
       />
       <div className="relative z-10 lg:col-span-4">
         <p className="mb-3 text-[10px] font-black tracking-[.15em] text-[#b13b19]">

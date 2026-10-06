@@ -1,4 +1,5 @@
 import MarketingNavbar from "./components/marketing-navbar";
+import MarketingMotionProvider from "./components/landing-motion";
 import MarketingCtaSection from "./sections/cta/cta-section";
 import MarketingFaqSection from "./sections/faq/faq-section";
 import MarketingFeaturesSection from "./sections/features/features-section";
@@ -34,23 +35,25 @@ function MarketingPage({ planPrices, locale }: MarketingPageProps) {
   );
 
   return (
-    <main lang={locale} className="bg-paper text-ink min-h-screen overflow-hidden">
-      <MarketingNavbar constants={constants} locale={locale} />
-      <MarketingHero constants={constants} />
-      <MarketingGallerySection constants={constants} />
-      <MarketingStorySection constants={constants} />
-      <MarketingFeaturesSection constants={constants} />
-      <MarketingStepsSection constants={constants} />
-      <MarketingPricingSection
-        constants={constants}
-        currency={currency}
-        planPrices={planPrices}
-      />
-      <MarketingPaymentSection constants={constants} />
-      <MarketingFaqSection constants={constants} />
-      <MarketingCtaSection constants={constants} />
-      <MarketingFooterSection constants={constants} />
-    </main>
+    <MarketingMotionProvider>
+      <main lang={locale} className="bg-paper text-ink min-h-screen overflow-hidden">
+        <MarketingNavbar constants={constants} locale={locale} />
+        <MarketingHero constants={constants} />
+        <MarketingGallerySection constants={constants} />
+        <MarketingStorySection constants={constants} locale={locale} />
+        <MarketingFeaturesSection constants={constants} />
+        <MarketingStepsSection constants={constants} />
+        <MarketingPricingSection
+          constants={constants}
+          currency={currency}
+          planPrices={planPrices}
+        />
+        <MarketingPaymentSection constants={constants} />
+        <MarketingFaqSection constants={constants} />
+        <MarketingCtaSection constants={constants} />
+        <MarketingFooterSection constants={constants} />
+      </main>
+    </MarketingMotionProvider>
   );
 }
 

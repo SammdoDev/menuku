@@ -22,7 +22,7 @@ function HeroMenuPreview({ constants }: HeroMenuPreviewProps) {
 
   return (
     <div className="relative mx-auto w-full max-w-[480px] min-w-0 lg:col-span-5" data-hero-preview>
-      <div className="overflow-hidden rounded-2xl border border-[#ded5c9] bg-[#fffdf8] shadow-[0_20px_50px_-30px_rgba(57,42,28,0.35)]">
+      <div className="motion-safe:animate-[menu-card-float_10s_ease-in-out_infinite] overflow-hidden rounded-2xl border border-[#ded5c9] bg-[#fffdf8] shadow-[0_20px_50px_-30px_rgba(57,42,28,0.35)]">
         <HeroPreviewUrl url={constants.hero.preview.url} />
 
         <div className="px-5 pt-6 pb-5 sm:px-7 sm:pt-8 sm:pb-7">

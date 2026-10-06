@@ -10,6 +10,7 @@ function MarketingStepsSection({ constants }: StepsSectionProps) {
     <section
       id="cara"
       className="marketing-deferred bg-charcoal relative isolate scroll-mt-24 overflow-hidden py-20 text-white sm:py-24"
+      data-reveal
     >
       <div
         aria-hidden="true"

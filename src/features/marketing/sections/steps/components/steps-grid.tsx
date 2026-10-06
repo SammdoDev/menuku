@@ -13,7 +13,7 @@ type StepsGridProps = {
 
 function MarketingStepsGrid({ constants }: StepsGridProps) {
   return (
-    <div className="relative mt-12 grid gap-4 md:grid-cols-3 md:gap-5" data-steps-grid>
+    <div className="relative mt-12 grid gap-4 md:grid-cols-3 md:gap-5" data-steps-grid data-stagger>
       <div
         aria-hidden="true"
         className="absolute top-6 right-[16.5%] left-[16.5%] hidden h-px bg-gradient-to-r from-[#ff6534]/50 via-white/20 to-[#ff6534]/50 md:block"
@@ -25,7 +25,7 @@ function MarketingStepsGrid({ constants }: StepsGridProps) {
           <article className="group relative isolate h-full min-h-[290px] overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#302c26]/90 p-5 transition duration-500 hover:-translate-y-1 hover:border-[#ff6534]/45 hover:shadow-2xl hover:shadow-black/20 motion-reduce:transform-none motion-reduce:transition-none sm:p-7">
             <div
               aria-hidden="true"
-              className={`pointer-events-none absolute -right-10 -bottom-16 size-56 rounded-full blur-[70px] transition-transform duration-500 motion-safe:group-hover:scale-125 motion-reduce:transition-none ${
+              className={`pointer-events-none absolute -right-10 -bottom-16 size-56 rounded-full blur-[70px] transition-transform duration-500 motion-safe:animate-[ambient-glow-drift_15s_ease-in-out_infinite] motion-safe:group-hover:scale-125 motion-reduce:transition-none ${
                 index === 0
                   ? "bg-[#ff6534]/20"
                   : index === 1

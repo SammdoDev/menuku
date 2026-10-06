@@ -10,6 +10,7 @@ function MarketingFeaturesSection({ constants }: FeaturesSectionProps) {
     <section
       id="fitur"
       className="marketing-deferred relative isolate scroll-mt-24 overflow-hidden px-4 py-20 sm:px-6 sm:py-24 lg:px-10"
+      data-reveal
     >
       <div
         aria-hidden="true"

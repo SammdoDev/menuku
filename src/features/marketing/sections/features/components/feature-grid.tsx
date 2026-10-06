@@ -38,7 +38,7 @@ type FeatureGridProps = {
 
 function MarketingFeatureGrid({ constants }: FeatureGridProps) {
   return (
-    <div className="mt-10 grid auto-rows-[minmax(240px,auto)] gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(190px,auto)] lg:grid-cols-12">
+    <div className="mt-10 grid auto-rows-[minmax(240px,auto)] gap-4 sm:grid-cols-2 lg:auto-rows-[minmax(190px,auto)] lg:grid-cols-12" data-stagger>
       {featureCards.map(({ icon: Icon, feature, layout }) => {
         const isMenu = feature === "menu";
 
@@ -53,7 +53,7 @@ function MarketingFeatureGrid({ constants }: FeatureGridProps) {
             >
               <div
                 aria-hidden="true"
-                className={`pointer-events-none absolute -right-12 -bottom-20 size-56 rounded-full blur-3xl ${
+                className={`pointer-events-none absolute -right-12 -bottom-20 size-56 rounded-full blur-3xl motion-safe:animate-[ambient-glow-drift_14s_ease-in-out_infinite] ${
                   isMenu ? "bg-[#ff6534]/20" : "bg-[#f8d8c6]/35"
                 }`}
               />
